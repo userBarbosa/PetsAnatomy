@@ -1,0 +1,29 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch MongoConnect",
+            "request": "launch",
+            "mainClass": "services.MongoConnect",
+            "projectName": "PetsAnatomy_d18c10aa"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "vmArgs": "--module-path C:/Users/MarcosBarbosa/Java-libs/javafx-sdk-17.0.0.1/lib --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "App",
+            "projectName": "PetsAnatomy_d18c10aa"
+        }
+    ]
+}
