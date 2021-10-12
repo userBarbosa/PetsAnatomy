@@ -1,4 +1,4 @@
-package services;
+package dao;
 
 public class AppointmentService {
     
