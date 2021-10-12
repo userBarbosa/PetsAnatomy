@@ -4,7 +4,15 @@ import java.util.Date;
 
 public class Animal {
     String id, name, clientId, species, family, bloodtype, obs;
-    Date birthdate, lastVisit;
+    Date birthdate, lastVisit, created;
+
+    public Date getCreated() {
+        return this.created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
     boolean treatment;
 
     public String getId() {

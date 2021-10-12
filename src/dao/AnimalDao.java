@@ -4,7 +4,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import entity.Animal;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -20,7 +19,7 @@ public class AnimalDao {
     animals = database.getCollection("animals");
   }
 
-  void insert(Animal animal) {
+  Document newDocument(Animal animal){
     Document patient = new Document("name", animal.getName())
       .append("clientId", animal.getClientId())
       .append("species", animal.getSpecies())
@@ -29,18 +28,23 @@ public class AnimalDao {
       .append("obs", animal.getObs())
       .append("birthdate", animal.getBirthdate())
       .append("lastVisit", animal.getLastVisit())
-      .append("treatment", animal.getTreatment());
-
-    animals.insertOne(patient);
+      .append("treatment", animal.getTreatment())
+      .append("created", animal.getTreatment());
+      return patient;
   }
 
-  FindIterable<Document> returnAll() {
-    FindIterable<Document> query = animals.find();
-    return query;
+  void insert(Animal animal) {
+    Document patient = newDocument(animal);
+    animals.insertOne(patient);
   }
 
   FindIterable<Document> search(String field, String data) {
     FindIterable<Document> query = animals.find(new Document(field, data));
+    return query;
+  }
+
+  FindIterable<Document> returnAll() {
+    FindIterable<Document> query = animals.find();
     return query;
   }
 
@@ -57,11 +61,14 @@ public class AnimalDao {
     return query;
   }
 
-  void updateByID(String id, String field, String UpdatedData) {
-    animals.updateOne(Filters.eq("_id", id), Updates.set(field, UpdatedData));
+  void update(String id, Animal animal) {
+    Document patient = newDocument(animal);
+    animals.updateMany(
+      Filters.eq("_id", id),
+      patient);
   }
 
-  void deleteByID(String id) {
+  void delete(String id) {
     animals.deleteOne(Filters.eq("_id", id));
   }
 }

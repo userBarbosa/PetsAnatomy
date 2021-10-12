@@ -1,6 +1,6 @@
 package control;
 
-public class AppointmentController {
+public class AppointmentControl {
     void Create(){}
     void Read(){}
     void Update(){}
