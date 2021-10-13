@@ -18,7 +18,7 @@ public class EmployeeDao {
     employees = database.getCollection("employees");
   }
 
-  Document newDocument(Employee employee) {
+  Document newDoc(Employee employee) {
     Document worker = new Document("fullname", employee.getFullname())
       .append("identificationNumber", "")
       .append("email", employee.getEmail())
@@ -33,7 +33,7 @@ public class EmployeeDao {
   }
 
   void insert(Employee employee) {
-    Document worker = newDocument(employee);
+    Document worker = newDoc(employee);
     employees.insertOne(worker);
   }
 
@@ -46,7 +46,7 @@ public class EmployeeDao {
   }
 
   void update(String id, Employee employee) {
-    Document worker = newDocument(employee);
+    Document worker = newDoc(employee);
     employees.updateMany(Filters.eq("_id", id), worker);
   }
 

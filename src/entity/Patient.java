@@ -2,7 +2,7 @@ package entity;
 
 import java.util.Date;
 
-public class Animal {
+public class Patient {
     String id, name, clientId, species, family, bloodtype, obs;
     Date birthdate, lastVisit, created;
 

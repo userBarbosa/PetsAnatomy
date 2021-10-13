@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+/bin/
 
 # Log file
 *.log
@@ -24,3 +25,9 @@ hs_err_pid*
 
 # authorization
 AuthMDB.java
+
+# eclipse
+/.metadata
+
+# vscode
+/.vscode

@@ -1,20 +1,14 @@
 package dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.naming.spi.DirStateFactory.Result;
-
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import entity.Animal;
+import entity.Patient;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-public class AnimalDao {
+public class PatientDao {
 
   MongoDatabase database;
   MongoCollection<Document> animals;
@@ -25,7 +19,7 @@ public class AnimalDao {
     animals = database.getCollection("animals");
   }
 
-  Document newDoc(Animal animal){
+  Document newDocument(Patient animal){
     Document patient = new Document("name", animal.getName())
       .append("clientId", animal.getClientId())
       .append("species", animal.getSpecies())
@@ -39,29 +33,22 @@ public class AnimalDao {
       return patient;
   }
 
-  public void insert(Animal animal) {
-    Document patient = newDoc(animal);
+  void insert(Patient animal) {
+    Document patient = newDocument(animal);
     animals.insertOne(patient);
   }
 
-  public Document search(String field, String data) {
-    try {
-      connection();
-
-      FindIterable<Document> query = animals.find(new Document(field, data));
-
-    } catch (Exception e) {
-      System.err.println(e);
-    }
-    return null;
+  FindIterable<Document> search(String field, String data) {
+    FindIterable<Document> query = animals.find(new Document(field, data));
+    return query;
   }
 
-  public FindIterable<Document> returnAll() {
+  FindIterable<Document> returnAll() {
     FindIterable<Document> query = animals.find();
     return query;
   }
 
-  public FindIterable<Document> searchByDate(
+  FindIterable<Document> searchByDate(
     String field,
     String searchDateGte,
     String searchDateLte
@@ -74,14 +61,14 @@ public class AnimalDao {
     return query;
   }
 
-  public void update(String id, Animal animal) {
-    Document patient = newDoc(animal);
+  void update(String id, Patient animal) {
+    Document patient = newDocument(animal);
     animals.updateMany(
       Filters.eq("_id", id),
       patient);
   }
 
-  public void delete(String id) {
+  void delete(String id) {
     animals.deleteOne(Filters.eq("_id", id));
   }
 }

@@ -18,7 +18,7 @@ public class ClientDao {
     clients = database.getCollection("clients");
   }
 
-  Document newDocument(Client client) {
+  Document newDoc(Client client) {
     Document customer = new Document("fullname", client.getFullname())
       .append("identificationNumber", "")
       .append("email", client.getEmail())
@@ -32,7 +32,7 @@ public class ClientDao {
   }
 
   void insert(Client client) {
-    Document customer = newDocument(client);
+    Document customer = newDoc(client);
     clients.insertOne(customer);
   }
 
@@ -45,7 +45,7 @@ public class ClientDao {
   }
 
   void update(String id, Client client) {
-    Document customer = newDocument(client);
+    Document customer = newDoc(client);
     clients.updateMany(Filters.eq("_id", id), customer);
   }
 
