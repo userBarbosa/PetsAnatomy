@@ -1,7 +1,13 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.naming.spi.DirStateFactory.Result;
+
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import entity.Animal;
@@ -19,7 +25,7 @@ public class AnimalDao {
     animals = database.getCollection("animals");
   }
 
-  Document newDocument(Animal animal){
+  Document newDoc(Animal animal){
     Document patient = new Document("name", animal.getName())
       .append("clientId", animal.getClientId())
       .append("species", animal.getSpecies())
@@ -33,22 +39,29 @@ public class AnimalDao {
       return patient;
   }
 
-  void insert(Animal animal) {
-    Document patient = newDocument(animal);
+  public void insert(Animal animal) {
+    Document patient = newDoc(animal);
     animals.insertOne(patient);
   }
 
-  FindIterable<Document> search(String field, String data) {
-    FindIterable<Document> query = animals.find(new Document(field, data));
-    return query;
+  public Document search(String field, String data) {
+    try {
+      connection();
+
+      FindIterable<Document> query = animals.find(new Document(field, data));
+
+    } catch (Exception e) {
+      System.err.println(e);
+    }
+    return null;
   }
 
-  FindIterable<Document> returnAll() {
+  public FindIterable<Document> returnAll() {
     FindIterable<Document> query = animals.find();
     return query;
   }
 
-  FindIterable<Document> searchByDate(
+  public FindIterable<Document> searchByDate(
     String field,
     String searchDateGte,
     String searchDateLte
@@ -61,14 +74,14 @@ public class AnimalDao {
     return query;
   }
 
-  void update(String id, Animal animal) {
-    Document patient = newDocument(animal);
+  public void update(String id, Animal animal) {
+    Document patient = newDoc(animal);
     animals.updateMany(
       Filters.eq("_id", id),
       patient);
   }
 
-  void delete(String id) {
+  public void delete(String id) {
     animals.deleteOne(Filters.eq("_id", id));
   }
 }

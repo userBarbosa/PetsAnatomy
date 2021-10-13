@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch AnimalControl",
+            "request": "launch",
+            "mainClass": "control.AnimalControl",
+            "projectName": "PetsAnatomy_d18c10aa"
+        },
+        {
+            "type": "java",
             "name": "Launch MongoConnect",
             "request": "launch",
             "mainClass": "services.MongoConnect",
