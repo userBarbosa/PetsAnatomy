@@ -1,7 +1,6 @@
 package control;
 
 import dao.PatientDao;
-import entity.Client;
 import entity.Patient;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -21,18 +20,19 @@ public class PatientController {
   public static void main(String[] args) {
     PatientController ac = new PatientController();
     // ac.read();
-    // cDao
-    // Patient cato = new Patient("Lily", null, "Cat", "Felidae", "A", ac.convertToDate(2021, 1, 16), new Date());
+    Patient cato = new Patient("Lily", new ObjectId(), "Cat", "Felidae", "A", ac.convertToDate(2021, 1, 16), new Date());
     // ac.create(cato);
-    ac.read();
+    // ac.delete(new ObjectId("6165d09336d596508be4ada8"));
+    ac.update(new ObjectId("616ba03f0e4bfe7860e55b5f"), cato);
   }
 
-  void create(Patient patient) {
-    pDao.insert(patient);
+  void create(Patient patient, ObjectId ownerId) {
+    pDao.insert(patient, ownerId);
   }
 
   void read() {
-    // Document query = aDao.findByID(new ObjectId("6165d09336d596508be4ada8"));
+    // FOR QUERY BY ID, ONLY USE '_id' OR 'ownerId'
+    // Document query = aDao.findByID("_id", new ObjectId("6165d09336d596508be4ada8"));
     List<Document> query = (List<Document>) pDao.findByDate(
       "created",
       "2021.10.01",

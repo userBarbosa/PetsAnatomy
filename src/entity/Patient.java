@@ -5,13 +5,13 @@ import org.bson.types.ObjectId;
 
 public class Patient {
 
-  ObjectId id, clientId;
+  ObjectId id, ownerId;
   String name, species, family, bloodtype, obs;
   Date birthdate, lastVisit, created;
 
   public Patient(
     String name,
-    ObjectId clientId,
+    ObjectId ownerId,
     String species,
     String family,
     String bloodtype,
@@ -19,7 +19,7 @@ public class Patient {
     Date created
   ) {
     this.id = new ObjectId();
-    this.clientId = clientId;
+    this.ownerId = ownerId;
     this.name = name;
     this.species = species;
     this.family = family;
@@ -57,12 +57,12 @@ public class Patient {
     this.name = name;
   }
 
-  public ObjectId getClientId() {
-    return this.clientId;
+  public ObjectId getOwnerId() {
+    return this.ownerId;
   }
 
-  public void setClientId(ObjectId clientId) {
-    this.clientId = clientId;
+  public void setOwnerId(ObjectId ownerId) {
+    this.ownerId = ownerId;
   }
 
   public String getSpecies() {

@@ -29,7 +29,6 @@ public class PatientDao {
   Document newDoc(Patient patient) {
     Document pat = new Document("_id", patient.getId())
       .append("name", patient.getName())
-      .append("clientId", patient.getClientId())
       .append("species", patient.getSpecies())
       .append("family", patient.getFamily())
       .append("bloodtype", patient.getBloodtype())
@@ -41,9 +40,10 @@ public class PatientDao {
     return pat;
   }
 
-  public void insert(Patient patient) {
+  public void insert(Patient patient, ObjectId ownerId) {
     connection();
-    patients.insertOne(newDoc(patient));
+    patients.insertOne(newDoc(patient)
+    .append("ownerId", ownerId));
   }
 
   public Document findByField(String field, String data) {
@@ -58,11 +58,11 @@ public class PatientDao {
     return null;
   }
 
-  public Document findByID(ObjectId objectId) {
+  public Document findByID(String field, ObjectId objectId) {
     try {
       connection();
 
-      Document query = patients.find(new Document("_id", objectId)).first();
+      Document query = patients.find(new Document(field, objectId)).first();
       return query;
     } catch (Exception e) {
       System.err.println(e);
@@ -116,6 +116,7 @@ public class PatientDao {
   public void update(ObjectId id, Patient patient) {
     connection();
     Document pat = newDoc(patient);
+    pat.replace("_id", id);
     patients.updateMany(Filters.eq("_id", id), pat);
   }
 

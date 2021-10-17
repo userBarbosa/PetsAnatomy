@@ -2,7 +2,7 @@ package entity;
 
 import java.util.Date;
 
-public class Client {
+public class Owner {
     String id, email, fullname, telephoneNumber, patientId, identificationNumber, address;
     Date created, lastVisit;
 
