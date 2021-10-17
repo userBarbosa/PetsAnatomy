@@ -21,6 +21,7 @@ public class PatientController {
   public static void main(String[] args) {
     PatientController ac = new PatientController();
     // ac.read();
+    // cDao
     // Patient cato = new Patient("Lily", null, "Cat", "Felidae", "A", ac.convertToDate(2021, 1, 16), new Date());
     // ac.create(cato);
     ac.read();
