@@ -1,16 +1,14 @@
 package dao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import entity.Owner;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -114,13 +112,12 @@ public class OwnerDao {
   void update(String id, Owner owner) {
     connection();
     Document customer = newDoc(owner);
-    
+
     customer.put("updated", new Date());
 
     BasicDBObject update = new BasicDBObject("$set", customer);
 
     owners.updateOne(new BasicDBObject("_id", id), update);
-
   }
 
   void delete(String id) {

@@ -3,7 +3,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.bson.types.ObjectId;
 
 public class Owner {

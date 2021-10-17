@@ -2,7 +2,6 @@ package control;
 
 import dao.PatientDao;
 import entity.Patient;
-
 import java.util.Date;
 import java.util.List;
 import org.bson.Document;
@@ -72,7 +71,6 @@ public class PatientController {
   void delete(ObjectId id) {
     pDao.delete(id);
   }
-  
   /* private Date convertToDate(int year, int month, int day) {
     Date date = Date.from(
       LocalDate

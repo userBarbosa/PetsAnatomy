@@ -4,7 +4,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 
 public class Patient {
-  
+
   ObjectId id, ownerId;
   String name, species, family, bloodtype, obs;
   Date birthdate, lastVisit, created, updated;
@@ -41,7 +41,6 @@ public class Patient {
   public void setUpdated(Date updated) {
     this.updated = updated;
   }
-
 
   public ObjectId getId() {
     return this.id;
