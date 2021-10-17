@@ -1,101 +1,137 @@
 package entity;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
+import org.bson.types.ObjectId;
 
 public class Patient {
-    String id, name, clientId, species, family, bloodtype, obs;
-    Date birthdate, lastVisit, created;
 
-    public Date getCreated() {
-        return this.created;
-    }
+  ObjectId id, clientId;
+  String name, species, family, bloodtype, obs;
+  Date birthdate, lastVisit, created;
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-    boolean treatment;
+  public Patient(
+    String name,
+    ObjectId clientId,
+    String species,
+    String family,
+    String bloodtype,
+    Date birthdate,
+    Date created
+  ) {
+    this.id = new ObjectId();
+    this.clientId = clientId;
+    this.name = name;
+    this.species = species;
+    this.family = family;
+    this.bloodtype = bloodtype;
+    this.obs = null;
+    this.birthdate = birthdate;
+    this.lastVisit = null;
+    this.created = created;
+    this.treatment = false;
+  }
 
-    public String getId() {
-        return this.id;
-    }
+  public Date getCreated() {
+    return this.created;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  boolean treatment;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public ObjectId getId() {
+    return this.id;
+  }
 
-    public String getClientId() {
-        return this.clientId;
-    }
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    public String getSpecies() {
-        return this.species;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setSpecies(String species) {
-        this.species = species;
-    }
+  public ObjectId getClientId() {
+    return this.clientId;
+  }
 
-    public String getFamily() {
-        return this.family;
-    }
+  public void setClientId(ObjectId clientId) {
+    this.clientId = clientId;
+  }
 
-    public void setFamily(String family) {
-        this.family = family;
-    }
+  public String getSpecies() {
+    return this.species;
+  }
 
-    public String getBloodtype() {
-        return this.bloodtype;
-    }
+  public void setSpecies(String species) {
+    this.species = species;
+  }
 
-    public void setBloodtype(String bloodtype) {
-        this.bloodtype = bloodtype;
-    }
+  public String getFamily() {
+    return this.family;
+  }
 
-    public String getObs() {
-        return this.obs;
-    }
+  public void setFamily(String family) {
+    this.family = family;
+  }
 
-    public void setObs(String obs) {
-        this.obs = obs;
-    }
+  public String getBloodtype() {
+    return this.bloodtype;
+  }
 
-    public Date getBirthdate() {
-        return this.birthdate;
-    }
+  public void setBloodtype(String bloodtype) {
+    this.bloodtype = bloodtype;
+  }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
+  public String getObs() {
+    return this.obs;
+  }
 
-    public Date getLastVisit() {
-        return this.lastVisit;
-    }
+  public void setObs(String obs) {
+    this.obs = obs;
+  }
 
-    public void setLastVisit(Date lastVisit) {
-        this.lastVisit = lastVisit;
-    }
+  public Date getBirthdate() {
+    return this.birthdate;
+  }
 
-    public boolean isTreatment() {
-        return this.treatment;
-    }
+  public void setBirthdate(Date birthdate) {
+    this.birthdate = birthdate;
+  }
 
-    public boolean getTreatment() {
-        return this.treatment;
-    }
+  public Date getLastVisit() {
+    return this.lastVisit;
+  }
 
-    public void setTreatment(boolean treatment) {
-        this.treatment = treatment;
-    }
+  public void setLastVisit(Date lastVisit) {
+    this.lastVisit = lastVisit;
+  }
+
+  public boolean isTreatment() {
+    return this.treatment;
+  }
+
+  public boolean getTreatment() {
+    return this.treatment;
+  }
+
+  public void setTreatment(boolean treatment) {
+    this.treatment = treatment;
+  }
+
+  private Date convertToDate() {
+    Date date = Date.from(
+      LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+    );
+
+    return date;
+  }
 }

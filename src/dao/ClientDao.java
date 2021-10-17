@@ -23,7 +23,7 @@ public class ClientDao {
       .append("identificationNumber", "")
       .append("email", client.getEmail())
       .append("telephoneNumber", client.getTelephoneNumber())
-      .append("animalId", client.getAnimalId())
+      .append("patientId", client.getpatientId())
       .append("identificationNumber", client.getIdentificationNumber())
       .append("address", client.getAddress())
       .append("created", client.getCreated())

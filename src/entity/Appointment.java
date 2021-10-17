@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Appointment {
     Date date;
-    String id, animalId, clientId, employeeId, obs;
+    String id, patientId, clientId, employeeId, obs;
     int state;
     //telephone number?
 
@@ -24,12 +24,12 @@ public class Appointment {
         this.id = id;
     }
 
-    public String getAnimalId() {
-        return this.animalId;
+    public String getpatientId() {
+        return this.patientId;
     }
 
-    public void setAnimalId(String animalId) {
-        this.animalId = animalId;
+    public void setpatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getClientId() {
