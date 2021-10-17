@@ -2,9 +2,12 @@ package entity;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 public class Appointment {
     Date date;
-    String id, animalId, clientId, employeeId, obs;
+    ObjectId id, patientId, ownerId, employeeId; 
+    String obs;
     int state;
     //telephone number?
 
@@ -16,35 +19,35 @@ public class Appointment {
         this.date = date;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public String getAnimalId() {
-        return this.animalId;
+    public ObjectId getpatientId() {
+        return this.patientId;
     }
 
-    public void setAnimalId(String animalId) {
-        this.animalId = animalId;
+    public void setpatientId(ObjectId patientId) {
+        this.patientId = patientId;
     }
 
-    public String getClientId() {
-        return this.clientId;
+    public ObjectId getOwnerId() {
+        return this.ownerId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setOwnerId(ObjectId ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public String getEmployeeId() {
+    public ObjectId getEmployeeId() {
         return this.employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(ObjectId employeeId) {
         this.employeeId = employeeId;
     }
 

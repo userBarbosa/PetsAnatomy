@@ -2,8 +2,8 @@ package entity;
 
 import java.util.Date;
 
-public class Client {
-    String id, email, fullname, telephoneNumber, animalId, identificationNumber, address;
+public class Owner {
+    String id, email, fullname, telephoneNumber, patientId, identificationNumber, address;
     Date created, lastVisit;
 
     public String getId() {
@@ -38,12 +38,12 @@ public class Client {
         this.telephoneNumber = telephoneNumber;
     }
 
-    public String getAnimalId() {
-        return this.animalId;
+    public String getpatientId() {
+        return this.patientId;
     }
 
-    public void setAnimalId(String animalId) {
-        this.animalId = animalId;
+    public void setpatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getIdentificationNumber() {

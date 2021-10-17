@@ -1,74 +1,127 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import entity.Patient;
+
 import org.bson.Document;
-import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import entity.Patient;
 
 public class PatientDao {
 
   MongoDatabase database;
-  MongoCollection<Document> animals;
+  MongoCollection<Document> patients;
 
   void connection() {
     MongoConnect mc = new MongoConnect();
     database = mc.database;
-    animals = database.getCollection("animals");
+    patients = database.getCollection("patients");
   }
 
-  Document newDocument(Patient animal){
-    Document patient = new Document("name", animal.getName())
-      .append("clientId", animal.getClientId())
-      .append("species", animal.getSpecies())
-      .append("family", animal.getFamily())
-      .append("bloodtype", animal.getBloodtype())
-      .append("obs", animal.getObs())
-      .append("birthdate", animal.getBirthdate())
-      .append("lastVisit", animal.getLastVisit())
-      .append("treatment", animal.getTreatment())
-      .append("created", animal.getTreatment());
-      return patient;
+  Document newDoc(Patient patient) {
+    Document pat = new Document("_id", patient.getId())
+      .append("name", patient.getName())
+      .append("species", patient.getSpecies())
+      .append("family", patient.getFamily())
+      .append("bloodtype", patient.getBloodtype())
+      .append("obs", patient.getObs())
+      .append("birthdate", patient.getBirthdate())
+      .append("lastVisit", patient.getLastVisit())
+      .append("treatment", patient.getTreatment())
+      .append("created", patient.getCreated());
+    return pat;
   }
 
-  void insert(Patient animal) {
-    Document patient = newDocument(animal);
-    animals.insertOne(patient);
+  public void insert(Patient patient, ObjectId ownerId) {
+    connection();
+    patients.insertOne(newDoc(patient)
+    .append("ownerId", ownerId));
   }
 
-  FindIterable<Document> search(String field, String data) {
-    FindIterable<Document> query = animals.find(new Document(field, data));
+  public Document findByField(String field, String data) {
+    try {
+      connection();
+
+      Document query = patients.find(new Document(field, data)).first();
+      return query;
+    } catch (Exception e) {
+      System.err.println(e);
+    }
+    return null;
+  }
+
+  public Document findByID(String field, ObjectId objectId) {
+    try {
+      connection();
+
+      Document query = patients.find(new Document(field, objectId)).first();
+      return query;
+    } catch (Exception e) {
+      System.err.println(e);
+    }
+    return null;
+  }
+
+  public FindIterable<Document> returnAll() {
+    connection();
+    FindIterable<Document> query = patients.find();
     return query;
   }
 
-  FindIterable<Document> returnAll() {
-    FindIterable<Document> query = animals.find();
-    return query;
-  }
-
-  FindIterable<Document> searchByDate(
+  // STILL NOT WORKING, ARE ERRORS ON THE QUERY
+  public List<Document> findByDate(
     String field,
-    String searchDateGte,
-    String searchDateLte
+    String dateGte,
+    String dateLte
   ) {
-    Bson filter = Filters.and(
-      Filters.gte(field, searchDateGte),
-      Filters.lte(field, searchDateLte)
+    /* db.patients.find({
+      created: {
+        $gte: {ISODate(dateGte)},
+        $lte: {ISODate(dateLte)}
+      }
+    }) */
+    connection();
+
+    BasicDBObject betweenDates = new BasicDBObject(
+      field,
+      new Document("$gte", dateGte).append("$lte", dateLte)
     );
-    FindIterable<Document> query = animals.find(filter);
-    return query;
+
+    System.out.println("--> " + betweenDates);
+
+    List<Document> docPat = new ArrayList<Document>();
+
+    MongoCursor<Document> cursor = patients.find(betweenDates).iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        System.out.println("--> " + cursor.next());
+        docPat.add(cursor.next());
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return docPat;
   }
 
-  void update(String id, Patient animal) {
-    Document patient = newDocument(animal);
-    animals.updateMany(
-      Filters.eq("_id", id),
-      patient);
+  public void update(ObjectId id, Patient patient) {
+    connection();
+    Document pat = newDoc(patient);
+    pat.replace("_id", id);
+    patients.updateMany(Filters.eq("_id", id), pat);
   }
 
-  void delete(String id) {
-    animals.deleteOne(Filters.eq("_id", id));
+  public void delete(ObjectId id) {
+    connection();
+    patients.deleteOne(Filters.eq("_id", id));
   }
 }

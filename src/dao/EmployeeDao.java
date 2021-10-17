@@ -37,7 +37,7 @@ public class EmployeeDao {
     employees.insertOne(worker);
   }
 
-  FindIterable<Document> search(String field, String data) {
+  FindIterable<Document> findByField(String field, String data) {
     return employees.find(new Document(field, data));
   }
 
