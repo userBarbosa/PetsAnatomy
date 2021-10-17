@@ -28,6 +28,8 @@ AuthMDB.java
 
 # eclipse
 /.metadata
+/.classpath
+/.settings
 
 # vscode
 /.vscode
