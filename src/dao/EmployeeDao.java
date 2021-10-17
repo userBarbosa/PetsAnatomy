@@ -27,7 +27,6 @@ public class EmployeeDao {
       .append("role", employee.getRole())
       .append("bankDetails", employee.getBankDetails())
       .append("active", employee.getActive())
-      .append("isAdmin", employee.getIsAdmin())
       .append("created", employee.getCreated());
     return worker;
   }

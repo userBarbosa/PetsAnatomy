@@ -1,19 +1,16 @@
 package dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-
+import entity.Patient;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-
-import entity.Patient;
 
 public class PatientDao {
 
@@ -27,7 +24,7 @@ public class PatientDao {
   }
 
   Document newDoc(Patient patient) {
-    Document pat = new Document("_id", patient.getId())
+    Document pat = new Document("ownerId", patient.getOwnerId())
       .append("name", patient.getName())
       .append("species", patient.getSpecies())
       .append("family", patient.getFamily())
@@ -35,15 +32,20 @@ public class PatientDao {
       .append("obs", patient.getObs())
       .append("birthdate", patient.getBirthdate())
       .append("lastVisit", patient.getLastVisit())
-      .append("treatment", patient.getTreatment())
-      .append("created", patient.getCreated());
+      .append("treatment", patient.getTreatment());
     return pat;
   }
 
   public void insert(Patient patient, ObjectId ownerId) {
     connection();
-    patients.insertOne(newDoc(patient)
-    .append("ownerId", ownerId));
+
+    Document pat = newDoc(patient);
+
+    pat.put("_id", new ObjectId());
+    pat.put("created", new Date());
+    pat.replace("ownerId", ownerId);
+
+    patients.insertOne(pat);
   }
 
   public Document findByField(String field, String data) {
@@ -70,32 +72,29 @@ public class PatientDao {
     return null;
   }
 
-  public FindIterable<Document> returnAll() {
+  public List<Document> returnAll() {
     connection();
-    FindIterable<Document> query = patients.find();
+    List<Document> query = new ArrayList<Document>();
+
+    MongoCursor<Document> cursor = patients.find().iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        System.out.println("--> " + cursor.next());
+        query.add(cursor.next());
+      }
+    } finally {
+      cursor.close();
+    }
     return query;
   }
 
-  // STILL NOT WORKING, ARE ERRORS ON THE QUERY
-  public List<Document> findByDate(
-    String field,
-    String dateGte,
-    String dateLte
-  ) {
-    /* db.patients.find({
-      created: {
-        $gte: {ISODate(dateGte)},
-        $lte: {ISODate(dateLte)}
-      }
-    }) */
+  public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
     connection();
-
     BasicDBObject betweenDates = new BasicDBObject(
       field,
       new Document("$gte", dateGte).append("$lte", dateLte)
     );
-
-    System.out.println("--> " + betweenDates);
 
     List<Document> docPat = new ArrayList<Document>();
 
@@ -103,7 +102,6 @@ public class PatientDao {
 
     try {
       while (cursor.hasNext()) {
-        System.out.println("--> " + cursor.next());
         docPat.add(cursor.next());
       }
     } finally {
@@ -115,9 +113,13 @@ public class PatientDao {
 
   public void update(ObjectId id, Patient patient) {
     connection();
+
     Document pat = newDoc(patient);
-    pat.replace("_id", id);
-    patients.updateMany(Filters.eq("_id", id), pat);
+    pat.put("updated", new Date());
+
+    BasicDBObject update = new BasicDBObject("$set", pat);
+
+    patients.updateOne(new BasicDBObject("_id", id), update);
   }
 
   public void delete(ObjectId id) {

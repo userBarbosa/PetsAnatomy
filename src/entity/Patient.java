@@ -7,7 +7,8 @@ public class Patient {
 
   ObjectId id, ownerId;
   String name, species, family, bloodtype, obs;
-  Date birthdate, lastVisit, created;
+  Date birthdate, lastVisit, created, updated;
+  boolean treatment;
 
   public Patient(
     String name,
@@ -15,31 +16,31 @@ public class Patient {
     String species,
     String family,
     String bloodtype,
-    Date birthdate,
-    Date created
+    Date birthdate
   ) {
-    this.id = new ObjectId();
     this.ownerId = ownerId;
     this.name = name;
     this.species = species;
     this.family = family;
     this.bloodtype = bloodtype;
-    this.obs = null;
     this.birthdate = birthdate;
+    this.obs = null;
     this.lastVisit = null;
-    this.created = created;
     this.treatment = false;
+    this.created = new Date();
   }
 
   public Date getCreated() {
     return this.created;
   }
 
-  public void setCreated(Date created) {
-    this.created = created;
+  public Date getUpdated() {
+    return this.updated;
   }
 
-  boolean treatment;
+  public void setUpdated(Date updated) {
+    this.updated = updated;
+  }
 
   public ObjectId getId() {
     return this.id;

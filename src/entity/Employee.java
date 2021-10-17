@@ -1,97 +1,96 @@
 package entity;
 
 import java.util.Date;
+import org.bson.types.ObjectId;
 
 public class Employee {
-    String id, email, fullname, password, role, telephoneNumber, bankDetails;
-    boolean active, isAdmin;
-    Date created;
 
-    public String getId() {
-        return this.id;
-    }
+  ObjectId id;
+  boolean active;
+  String email, fullname, password, role, telephoneNumber, bankDetails;
+  Date created, birthDate;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public ObjectId getId() {
+    return this.id;
+  }
 
-    public String getEmail() {
-        return this.email;
-    }
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public boolean isActive() {
+    return this.active;
+  }
 
-    public String getFullname() {
-        return this.fullname;
-    }
+  public boolean getActive() {
+    return this.active;
+  }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 
-    public String getPassword() {
-        return this.password;
-    }
+  public String getEmail() {
+    return this.email;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getRole() {
-        return this.role;
-    }
+  public String getFullname() {
+    return this.fullname;
+  }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+  public void setFullname(String fullname) {
+    this.fullname = fullname;
+  }
 
-    public String getTelephoneNumber() {
-        return this.telephoneNumber;
-    }
+  public String getPassword() {
+    return this.password;
+  }
 
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public String getBankDetails() {
-        return this.bankDetails;
-    }
+  public String getRole() {
+    return this.role;
+  }
 
-    public void setBankDetails(String bankDetails) {
-        this.bankDetails = bankDetails;
-    }
+  public void setRole(String role) {
+    this.role = role;
+  }
 
-    public boolean isActive() {
-        return this.active;
-    }
+  public String getTelephoneNumber() {
+    return this.telephoneNumber;
+  }
 
-    public boolean getActive() {
-        return this.active;
-    }
+  public void setTelephoneNumber(String telephoneNumber) {
+    this.telephoneNumber = telephoneNumber;
+  }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+  public String getBankDetails() {
+    return this.bankDetails;
+  }
 
-    public boolean isIsAdmin() {
-        return this.isAdmin;
-    }
+  public void setBankDetails(String bankDetails) {
+    this.bankDetails = bankDetails;
+  }
 
-    public boolean getIsAdmin() {
-        return this.isAdmin;
-    }
+  public Date getCreated() {
+    return this.created;
+  }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
-    public Date getCreated() {
-        return this.created;
-    }
+  public Date getBirthDate() {
+    return this.birthDate;
+  }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
 }
