@@ -1,20 +1,21 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import entity.patient;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-public class patientDao {
+import entity.Patient;
+
+public class PatientDao {
 
   MongoDatabase database;
   MongoCollection<Document> patients;
@@ -25,8 +26,8 @@ public class patientDao {
     patients = database.getCollection("patients");
   }
 
-  Document newDoc(patient patient) {
-    Document patient1 = new Document("_id", patient.getId())
+  Document newDoc(Patient patient) {
+    Document pat = new Document("_id", patient.getId())
       .append("name", patient.getName())
       .append("clientId", patient.getClientId())
       .append("species", patient.getSpecies())
@@ -37,10 +38,10 @@ public class patientDao {
       .append("lastVisit", patient.getLastVisit())
       .append("treatment", patient.getTreatment())
       .append("created", patient.getCreated());
-    return patient1;
+    return pat;
   }
 
-  public void insert(patient patient) {
+  public void insert(Patient patient) {
     connection();
     patients.insertOne(newDoc(patient));
   }
@@ -78,40 +79,48 @@ public class patientDao {
   // STILL NOT WORKING, ARE ERRORS ON THE QUERY
   public List<Document> findByDate(
     String field,
-    String searchDateGte,
-    String searchDateLte
+    String dateGte,
+    String dateLte
   ) {
+    /* db.patients.find({
+      created: {
+        $gte: {ISODate(dateGte)},
+        $lte: {ISODate(dateLte)}
+      }
+    }) */
     connection();
 
     BasicDBObject betweenDates = new BasicDBObject(
       field,
-      new Document("$gte", searchDateGte).append("$lte", searchDateLte)
+      new Document("$gte", dateGte).append("$lte", dateLte)
     );
 
     System.out.println("--> " + betweenDates);
 
-    List<Document> docpatient1 = new ArrayList<Document>();
+    List<Document> docPat = new ArrayList<Document>();
 
     MongoCursor<Document> cursor = patients.find(betweenDates).iterator();
 
     try {
       while (cursor.hasNext()) {
         System.out.println("--> " + cursor.next());
-        docpatient1.add(cursor.next());
+        docPat.add(cursor.next());
       }
     } finally {
       cursor.close();
     }
 
-    return docpatient1;
+    return docPat;
   }
 
-  public void update(String id, patient patient) {
-    Document patient1 = newDoc(patient);
-    patients.updateMany(Filters.eq("_id", id), patient1);
+  public void update(ObjectId id, Patient patient) {
+    connection();
+    Document pat = newDoc(patient);
+    patients.updateMany(Filters.eq("_id", id), pat);
   }
 
-  public void delete(String id) {
+  public void delete(ObjectId id) {
+    connection();
     patients.deleteOne(Filters.eq("_id", id));
   }
 }

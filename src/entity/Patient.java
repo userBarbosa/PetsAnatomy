@@ -1,7 +1,5 @@
 package entity;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import org.bson.types.ObjectId;
 
@@ -125,13 +123,5 @@ public class Patient {
 
   public void setTreatment(boolean treatment) {
     this.treatment = treatment;
-  }
-
-  private Date convertToDate() {
-    Date date = Date.from(
-      LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
-    );
-
-    return date;
   }
 }
