@@ -1,32 +1,19 @@
 package control;
 
-import org.bson.types.ObjectId;
 import dao.EmployeeDAO;
 import dao.EmployeeDAOImpl;
 import entity.Employee;
+import org.bson.types.ObjectId;
 
 public class EmployeeControl {
-	
-    private EmployeeDAO service = new EmployeeDAOImpl();
 
-	public void create(Employee employee) {
-		
-		
-	}
+  private EmployeeDAO service = new EmployeeDAOImpl();
 
-	public void read() {
-		
-		
-	}
+  public void create(Employee employee) {}
 
-	public void update(ObjectId id, Employee employee) {
-		
-		
-	}
+  public void read() {}
 
-	public void delete(ObjectId id) {
-		
-		
-	}
+  public void update(ObjectId id, Employee employee) {}
 
+  public void delete(ObjectId id) {}
 }

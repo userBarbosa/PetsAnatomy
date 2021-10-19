@@ -8,8 +8,32 @@ public class Appointment {
     Date date;
     ObjectId id, patientId, ownerId, employeeId; 
     String obs;
-    int state;
-    //telephone number?
+    int state, financialState;
+    double value;
+
+    public ObjectId getPatientId() {
+        return this.patientId;
+    }
+
+    public void setPatientId(ObjectId patientId) {
+        this.patientId = patientId;
+    }
+
+    public int getFinancialState() {
+        return this.financialState;
+    }
+
+    public void setFinancialState(int financialState) {
+        this.financialState = financialState;
+    }
+
+    public double getValue() {
+        return this.value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
 
     public Date getDate() {
         return this.date;
