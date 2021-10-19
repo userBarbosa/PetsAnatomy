@@ -3,7 +3,7 @@ package boundary;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Adoption extends Application {
+public class PatientBoundary extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {

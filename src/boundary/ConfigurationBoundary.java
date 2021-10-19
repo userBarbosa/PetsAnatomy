@@ -3,7 +3,7 @@ package boundary;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Appointment extends Application {
+public class ConfigurationBoundary extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
