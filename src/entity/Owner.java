@@ -113,4 +113,8 @@ public class Owner {
   public List<ObjectId> getPatientsId() {
     return this.patientsId;
   }
+
+  public void setPatientsId(ObjectId id) {
+    this.patientsId.add(id);
+  }
 }

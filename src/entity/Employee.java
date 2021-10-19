@@ -1,6 +1,9 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 
 public class Employee {
@@ -9,6 +12,16 @@ public class Employee {
   boolean active;
   String email, fullname, password, role, telephoneNumber, bankDetails;
   Date created, birthDate;
+  List<String> specialty = new ArrayList<String>();
+  
+
+  public List<String> getSpecialty() {
+    return this.specialty;
+  }
+
+  public void addSpecialty(String specialtyToAdd) {
+    this.specialty.add(specialtyToAdd);
+  }
 
   public ObjectId getId() {
     return this.id;
