@@ -3,17 +3,40 @@ package entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.bson.types.ObjectId;
 
 public class Employee {
 
   ObjectId id;
   boolean active;
-  String email, fullname, password, role, telephoneNumber, bankDetails;
+  String email, username, fullname, password, role, telephoneNumber, bankDetails;
   Date created, birthDate;
   List<String> specialty = new ArrayList<String>();
-  
+
+  public Employee(
+    String email,
+    String username,
+    String fullname,
+    String password
+  ) {
+    this.email = email;
+    this.username = username;
+    this.fullname = fullname;
+    this.password = password;
+    this.created = new Date();
+  }
+
+  public String getUsername() {
+    return this.username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setSpecialty(List<String> specialty) {
+    this.specialty = specialty;
+  }
 
   public List<String> getSpecialty() {
     return this.specialty;

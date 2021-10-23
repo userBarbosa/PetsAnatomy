@@ -49,8 +49,8 @@ public class OwnerDAOImpl implements OwnerDAO {
   public Document findByField(String field, String data) {
     try {
       connection();
-
-      Document query = owners.find(new Document(field, data)).first();
+      String regexQuery = "/^" + data + "/";
+      Document query = owners.find(new Document(field, regexQuery)).first();
       return query;
     } catch (Exception e) {
       System.err.println(e);

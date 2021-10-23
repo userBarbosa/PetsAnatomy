@@ -22,7 +22,7 @@ public class SignUpBoundary extends Application {
     private TextField tfPassword = new TextField();
     private TextField tfConfirmPassword = new TextField();
     private Button btnSignUp = new Button("Cadastrar");
-    private Button btnLogin = new Button("Já é cadastrado? Login");
+    private Button btnLogin = new Button("JÃ¡ Ã© cadastrado? Login");
     private Label lblTitle = new Label("PetsAnatomy");
     
 	@Override
