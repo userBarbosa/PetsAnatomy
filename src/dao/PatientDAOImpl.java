@@ -80,7 +80,6 @@ public class PatientDAOImpl implements PatientDAO {
 
     try {
       while (cursor.hasNext()) {
-        System.out.println("--> " + cursor.next());
         query.add(cursor.next());
       }
     } finally {
