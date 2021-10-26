@@ -3,7 +3,7 @@ package dao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+
 import com.mongodb.client.model.Filters;
 import entity.Employee;
 import java.util.ArrayList;
@@ -15,13 +15,16 @@ import security.Config;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-  MongoDatabase database;
-  MongoCollection<Document> employees;
+	MongoCollection<Document> employees;
+  
+	public EmployeeDAOImpl() {
+    connection();
+  }
+
 
   void connection() {
     MongoConnect mc = new MongoConnect();
-    database = mc.database;
-    employees = database.getCollection("employees");
+    employees = mc.database.getCollection("employees");
   }
 
   Document newDoc(Employee employee) {
@@ -39,8 +42,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public void insert(Employee employee) {
-    connection();
-
     Document worker = newDoc(employee);
 
     worker.put("_id", new ObjectId());
@@ -51,8 +52,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public Document findByID(ObjectId id) {
     try {
-      connection();
-
       Document query = employees.find(new Document("_id", id)).first();
       return query;
     } catch (Exception e) {
@@ -63,9 +62,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public Document findByField(String field, String data) {
     try {
-      connection();
-      String regexQuery = "/^" + data + "/";
-      Document query = employees.find(new Document(field, regexQuery)).first();
+      // String regexQuery = "/^" + data + "/";
+      Document query = employees.find(new Document(field, data)).first();
       return query;
     } catch (Exception e) {
       e.printStackTrace();
@@ -75,8 +73,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public boolean findLoginData(String username, String password) {
     try {
-      connection();
-
       Document query = employees
         .find(new Document("username", username))
         .first();
@@ -92,9 +88,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public boolean findToCreateUser(String username, String email) {
     try {
-      connection();
-      if (employees.find(new Document("username", username)) != null && employees.find(new Document("email", email)) != null) {
-				return true;
+      if (
+        employees.find(new Document("username", username)) != null &&
+        employees.find(new Document("email", email)) != null
+      ) {
+        return true;
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -103,8 +101,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    connection();
-
     BasicDBObject betweenDates = new BasicDBObject(
       field,
       new Document("$gte", dateGte).append("$lte", dateLte)
@@ -142,7 +138,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public void update(ObjectId id, Employee employee) {
-    connection();
 
     Document worker = newDoc(employee);
     worker.put("updated", new Date());
@@ -154,7 +149,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public void delete(ObjectId id) {
-    connection();
     employees.deleteOne(Filters.eq("_id", id));
   }
 }

@@ -14,13 +14,15 @@ import org.bson.types.ObjectId;
 
 public class PatientDAOImpl implements PatientDAO {
 
-  MongoDatabase database;
   MongoCollection<Document> patients;
+
+  public PatientDAOImpl() {
+    connection();
+  }
 
   void connection() {
     MongoConnect mc = new MongoConnect();
-    database = mc.database;
-    patients = database.getCollection("patients");
+    patients = mc.database.getCollection("patients");
   }
 
   Document newDoc(Patient patient) {
@@ -37,8 +39,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   public void insert(Patient patient, ObjectId ownerId) {
-    connection();
-
     Document pat = newDoc(patient);
 
     pat.put("_id", new ObjectId());
@@ -50,8 +50,6 @@ public class PatientDAOImpl implements PatientDAO {
 
   public Document findByField(String field, String data) {
     try {
-      connection();
-
       Document query = patients.find(new Document(field, data)).first();
       return query;
     } catch (Exception e) {
@@ -62,8 +60,6 @@ public class PatientDAOImpl implements PatientDAO {
 
   public Document findByID(String field, ObjectId objectId) {
     try {
-      connection();
-
       Document query = patients.find(new Document(field, objectId)).first();
       return query;
     } catch (Exception e) {
@@ -73,7 +69,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   public List<Document> returnAll() {
-    connection();
     List<Document> query = new ArrayList<Document>();
 
     MongoCursor<Document> cursor = patients.find().iterator();
@@ -89,7 +84,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    connection();
     BasicDBObject betweenDates = new BasicDBObject(
       field,
       new Document("$gte", dateGte).append("$lte", dateLte)
@@ -111,8 +105,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   public void update(ObjectId id, Patient patient) {
-    connection();
-
     Document pat = newDoc(patient);
     pat.put("updated", new Date());
 
@@ -122,7 +114,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   public void delete(ObjectId id) {
-    connection();
     patients.deleteOne(Filters.eq("_id", id));
   }
 }

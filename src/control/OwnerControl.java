@@ -58,7 +58,7 @@ public class OwnerControl {
   }
 
   public void readByDate(String field, Date dateGte, Date dateLte) {
-    List<Document> query = (List<Document>) service.findByDate(
+    List<Document> query = service.findByDate(
       field,
       dateGte,
       dateLte
