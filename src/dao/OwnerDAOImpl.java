@@ -3,7 +3,6 @@ package dao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import entity.Owner;
 import java.util.ArrayList;
@@ -14,13 +13,15 @@ import org.bson.types.ObjectId;
 
 public class OwnerDAOImpl implements OwnerDAO {
 
-  MongoDatabase database;
   MongoCollection<Document> owners;
+
+  public OwnerDAOImpl() {
+    connection();
+  }
 
   void connection() {
     MongoConnect mc = new MongoConnect();
-    database = mc.database;
-    owners = database.getCollection("owners");
+    owners = mc.database.getCollection("owners");
   }
 
   Document newDoc(Owner owner) {
@@ -36,8 +37,6 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   public void insert(Owner owner) {
-    connection();
-
     Document customer = newDoc(owner);
 
     customer.put("_id", new ObjectId());
@@ -48,7 +47,6 @@ public class OwnerDAOImpl implements OwnerDAO {
 
   public Document findByField(String field, String data) {
     try {
-      connection();
       String regexQuery = "/^" + data + "/";
       Document query = owners.find(new Document(field, regexQuery)).first();
       return query;
@@ -60,8 +58,6 @@ public class OwnerDAOImpl implements OwnerDAO {
 
   public Document findByID(ObjectId id) {
     try {
-      connection();
-
       Document query = owners.find(new Document("_id", id)).first();
       return query;
     } catch (Exception e) {
@@ -71,7 +67,6 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   public List<Document> returnAll() {
-    connection();
     List<Document> query = new ArrayList<Document>();
 
     MongoCursor<Document> cursor = owners.find().iterator();
@@ -87,7 +82,6 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    connection();
     BasicDBObject betweenDates = new BasicDBObject(
       field,
       new Document("$gte", dateGte).append("$lte", dateLte)
@@ -109,7 +103,6 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   public void update(ObjectId id, Owner owner) {
-    connection();
     Document customer = newDoc(owner);
 
     customer.put("updated", new Date());
@@ -120,7 +113,6 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   public void delete(ObjectId id) {
-    connection();
     owners.deleteOne(Filters.eq("_id", id));
   }
 }
