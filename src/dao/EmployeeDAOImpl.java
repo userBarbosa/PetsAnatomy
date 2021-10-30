@@ -16,139 +16,140 @@ import security.Config;
 public class EmployeeDAOImpl implements EmployeeDAO {
 
 	MongoCollection<Document> employees;
-  
+
 	public EmployeeDAOImpl() {
-    connection();
-  }
+		connection();
+	}
 
 
-  void connection() {
-    MongoConnect mc = new MongoConnect();
-    employees = mc.database.getCollection("employees");
-  }
+	void connection() {
+		MongoConnect mc = new MongoConnect();
+		employees = mc.database.getCollection("employees");
+	}
 
-  Document newDoc(Employee employee) {
-    Document worker = new Document("username", employee.getUsername())
-      .append("active", employee.getActive())
-      .append("email", employee.getEmail())
-      .append("fullname", employee.getFullname())
-      .append("password", employee.getPassword())
-      .append("role", employee.getRole())
-      .append("telephoneNumber", employee.getTelephoneNumber())
-      .append("bankDetails", employee.getBankDetails())
-      .append("birthDate", employee.getBirthDate())
-      .append("specialty", employee.getSpecialty());
-    return worker;
-  }
+	Document newDoc(Employee employee) {
+		Document worker = new Document("username", employee.getUsername())
+				.append("active", employee.getActive())
+				.append("email", employee.getEmail())
+				.append("fullname", employee.getFullname())
+				.append("password", employee.getPassword())
+				.append("role", employee.getRole())
+				.append("telephoneNumber", employee.getTelephoneNumber())
+				.append("bankDetails", employee.getBankDetails())
+				.append("birthDate", employee.getBirthDate())
+				.append("specialty", employee.getSpecialty());
+		return worker;
+	}
 
-  public void insert(Employee employee) {
-    Document worker = newDoc(employee);
+	public void insert(Employee employee) {
+		Document worker = newDoc(employee);
 
-    worker.put("_id", new ObjectId());
-    worker.put("created", new Date());
+		worker.put("_id", new ObjectId());
+		worker.put("created", new Date());
 
-    employees.insertOne(worker);
-  }
+		employees.insertOne(worker);
+	}
 
-  public Document findByID(ObjectId id) {
-    try {
-      Document query = employees.find(new Document("_id", id)).first();
-      return query;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+	public Document findByID(ObjectId id) {
+		try {
+			Document query = employees.find(new Document("_id", id)).first();
+			return query;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-  public Document findByField(String field, String data) {
-    try {
-      // String regexQuery = "/^" + data + "/";
-      Document query = employees.find(new Document(field, data)).first();
-      return query;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+	public Document findByField(String field, String data) {
+		try {
+			// String regexQuery = "/^" + data + "/";
+			Document query = employees.find(new Document(field, data)).first();
+			return query;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-  public boolean findLoginData(String username, String password) {
-    try {
-      Document query = employees
-        .find(new Document("username", username))
-        .first();
+	public boolean findLoginData(String username, String password) {
+		try {
+			Document query = employees
+					.find(new Document("username", username))
+					.first();
 
-      if (query.get("password") == new Config().encryptPassword(password)) {
-        return true;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
+			if (query.get("password") == new Config().encryptPassword(password)) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
-  public boolean findToCreateUser(String username, String email) {
-    try {
-      if (
-        employees.find(new Document("username", username)) != null &&
-        employees.find(new Document("email", email)) != null
-      ) {
-        return true;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
+	public boolean findToCreateUser(String username, String email) {
+		try {
+			if (
+					employees.find(new Document("username", username)) != null &&
+					employees.find(new Document("email", email)) != null
+					) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
-  public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    BasicDBObject betweenDates = new BasicDBObject(
-      field,
-      new Document("$gte", dateGte).append("$lte", dateLte)
-    );
+	public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
+		BasicDBObject betweenDates = new BasicDBObject(
+				field,
+				new Document("$gte", dateGte).append("$lte", dateLte)
+				);
 
-    List<Document> docWorker = new ArrayList<Document>();
+		List<Document> docWorker = new ArrayList<Document>();
 
-    MongoCursor<Document> cursor = employees.find(betweenDates).iterator();
+		MongoCursor<Document> cursor = employees.find(betweenDates).iterator();
 
-    try {
-      while (cursor.hasNext()) {
-        docWorker.add(cursor.next());
-      }
-    } finally {
-      cursor.close();
-    }
+		try {
+			while (cursor.hasNext()) {
+				docWorker.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
 
-    return docWorker;
-  }
+		return docWorker;
+	}
 
-  public List<Document> returnAll() {
-    List<Document> docWorker = new ArrayList<Document>();
+	public List<Document> returnAll() {
+		List<Document> docWorker = new ArrayList<Document>();
 
-    MongoCursor<Document> cursor = employees.find().iterator();
+		MongoCursor<Document> cursor = employees.find().iterator();
 
-    try {
-      while (cursor.hasNext()) {
-        docWorker.add(cursor.next());
-      }
-    } finally {
-      cursor.close();
-    }
+		try {
+			while (cursor.hasNext()) {
+				docWorker.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
 
-    return docWorker;
-  }
+		return docWorker;
+	}
 
-  public void update(ObjectId id, Employee employee) {
+	public void update(ObjectId id, Employee employee) {
 
-    Document worker = newDoc(employee);
-    worker.put("updated", new Date());
+		Document worker = newDoc(employee);
+		worker.put("updated", new Date());
 
-    employees.updateOne(
-      new BasicDBObject("_id", id),
-      new BasicDBObject("$set", worker)
-    );
-  }
+		employees.updateOne(
+				new BasicDBObject("_id", id),
+				new BasicDBObject("$set", worker)
+				);
+	}
 
-  public void delete(ObjectId id) {
-    employees.deleteOne(Filters.eq("_id", id));
-  }
+	public void delete(ObjectId id) {
+		employees.deleteOne(Filters.eq("_id", id));
+	}
+	
 }

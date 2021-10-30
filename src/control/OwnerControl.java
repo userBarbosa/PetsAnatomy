@@ -10,9 +10,9 @@ import org.bson.types.ObjectId;
 
 public class OwnerControl {
 
-  private OwnerDAO service = new OwnerDAOImpl();
+	private OwnerDAO service = new OwnerDAOImpl();
 
-  /* tests structures; remove for final application:
+	/* tests structures; remove for final application:
   public static void main(String[] args) {
     OwnerControl oc = new OwnerControl();
     Owner aninha = new Owner(
@@ -37,51 +37,52 @@ public class OwnerControl {
     oc.delete(new ObjectId("616e25c158bdb637445e75fc"));
   }*/
 
-  public void create(Owner owner) {
-    service.insert(owner);
-  }
+	public void create(Owner owner) {
+		service.insert(owner);
+	}
 
-  public void readAll() {
-    List<Document> allPatients = service.returnAll();
-    if (allPatients != null) {
-      for (Document doc : allPatients) {
-        System.out.println(doc.get("_id"));
-      }
-    } else {
-      System.err.println("There are no clients in database");
-    }
-  }
+	public void readAll() {
+		List<Document> allPatients = service.returnAll();
+		if (allPatients != null) {
+			for (Document doc : allPatients) {
+				System.out.println(doc.get("_id"));
+			}
+		} else {
+			System.err.println("There are no clients in database");
+		}
+	}
 
-  public void readByID(ObjectId id) {
-    Document query = service.findByID(id);
-    System.out.println(query);
-  }
+	public void readByID(ObjectId id) {
+		Document query = service.findByID(id);
+		System.out.println(query);
+	}
 
-  public void readByDate(String field, Date dateGte, Date dateLte) {
-    List<Document> query = service.findByDate(
-      field,
-      dateGte,
-      dateLte
-    );
-    if (query != null) {
-      for (Document doc : query) {
-        System.out.println(doc.get("_id"));
-      }
-    } else {
-      System.err.println("There are no owners in specified dates");
-    }
-  }
+	public void readByDate(String field, Date dateGte, Date dateLte) {
+		List<Document> query = service.findByDate(
+				field,
+				dateGte,
+				dateLte
+				);
+		if (query != null) {
+			for (Document doc : query) {
+				System.out.println(doc.get("_id"));
+			}
+		} else {
+			System.err.println("There are no owners in specified dates");
+		}
+	}
 
-  public void readByField(String field, String data) {
-    Document query = service.findByField(field, data);
-    System.out.println(query);
-  }
+	public void readByField(String field, String data) {
+		Document query = service.findByField(field, data);
+		System.out.println(query);
+	}
 
-  public void update(ObjectId id, Owner owner) {
-    service.update(id, owner);
-  }
+	public void update(ObjectId id, Owner owner) {
+		service.update(id, owner);
+	}
 
-  public void delete(ObjectId id) {
-    service.delete(id);
-  }
+	public void delete(ObjectId id) {
+		service.delete(id);
+	}
+	
 }

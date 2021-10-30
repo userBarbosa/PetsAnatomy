@@ -9,19 +9,20 @@ import com.mongodb.client.MongoDatabase;
 import security.AuthMDB;
 
 public class MongoConnect { 
-  AuthMDB auth = new AuthMDB();
+	AuthMDB auth = new AuthMDB();
 
-  ConnectionString connectionString = new ConnectionString(
-    "mongodb+srv://" + 
-    auth.getAuth() +
-    "@clusterpetsanatomy.pxsfd.mongodb.net/?retryWrites=true&w=majority"
-  );
+	ConnectionString connectionString = new ConnectionString(
+			"mongodb+srv://" + 
+					auth.getAuth() +
+					"@clusterpetsanatomy.pxsfd.mongodb.net/?retryWrites=true&w=majority"
+			);
 
-  MongoClientSettings settings = MongoClientSettings
-    .builder()
-    .applyConnectionString(connectionString)
-    .build();
+	MongoClientSettings settings = MongoClientSettings
+			.builder()
+			.applyConnectionString(connectionString)
+			.build();
 
-  MongoClient mongoClient = MongoClients.create(settings);
-  MongoDatabase database = mongoClient.getDatabase("PetsAnatomy");
+	MongoClient mongoClient = MongoClients.create(settings);
+	MongoDatabase database = mongoClient.getDatabase("PetsAnatomy");
+	
 }
