@@ -7,11 +7,13 @@ import org.bson.types.ObjectId;
 import entity.Appointment;
 
 public interface AppointmentDAO {
-  void insert(Appointment appointment);
-  Document findByID(ObjectId id);
-  Document findByField();
-  List<Document> findByDate();
-  List<Document> returnAll();
-  void update();
-  void delete();
+	
+	void insert(Appointment appointment);
+	Document findByID(ObjectId id);
+	Document findByField();
+	List<Document> findByDate();
+	List<Document> returnAll();
+	void update();
+	void delete();
+	
 }
