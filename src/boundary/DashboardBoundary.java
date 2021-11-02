@@ -2,7 +2,7 @@ package boundary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+import control.DashboardControl;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,17 +26,19 @@ public class DashboardBoundary extends Application {
 	private Button btnConfiguracoes = new Button("Configurações");
 	private Button btnSair = new Button("Sair");
 
+	private static DashboardControl control = new DashboardControl();
+	
 	@Override
 	public void start(Stage stage) throws Exception {
-		HBox mainPane = new HBox(); 
+		AnchorPane mainPane = new AnchorPane(); 
 		AnchorPane menuPane = new AnchorPane();
 		AnchorPane imagePane = new AnchorPane(); 
 		
 		Font fontBtnHome = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 15);
 		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
 		
-		menuPane.prefHeight(768.0);
-		menuPane.prefWidth(300.0);
+		menuPane.setPrefHeight(768.0);
+		menuPane.setPrefWidth(300.0);
 		menuPane.setStyle("-fx-background-color: #000E44;");
 		
 		btnHome.setMinSize(300.0, 55.0);
@@ -80,8 +82,8 @@ public class DashboardBoundary extends Application {
 		
 	    menuPane.getChildren().addAll(btnHome, btnAgenda, btnPacientes, btnClientes, btnAdocoes, btnFuncionarios, btnConfiguracoes, btnSair);
 	    	
-	    imagePane.prefHeight(768.0);
-	    imagePane.prefWidth(1066.0);
+	    imagePane.setPrefHeight(768.0);
+	    imagePane.setPrefWidth(1066.0);
 	    
 		FileInputStream inputDash = new FileInputStream("@../../../PetsAnatomy/src/assets/pet-dashboard.jpg");
 		Image imageDash = new Image(inputDash);
@@ -92,9 +94,12 @@ public class DashboardBoundary extends Application {
 		
 		imagePane.getChildren().add(imageViewDash);
 		
-		HBox.setHgrow(menuPane, Priority.ALWAYS);
-		HBox.setHgrow(imagePane, Priority.ALWAYS);
+		mainPane.setLeftAnchor(menuPane, 0.0);
+		mainPane.setRightAnchor(imagePane, 0.0);
 		mainPane.getChildren().addAll(menuPane, imagePane);
+		mainPane.setPrefHeight(768.0);
+		mainPane.setPrefWidth(1366.0);
+
 		Scene scene = new Scene(mainPane, 1366, 768);
 		stage.setResizable(false);
 		stage.setScene(scene);

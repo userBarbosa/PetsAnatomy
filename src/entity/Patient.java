@@ -30,10 +30,16 @@ public class Patient {
 		this.created = new Date();
 	}
 
+	public Patient() { super(); }
+
 	public Date getCreated() {
 		return this.created;
 	}
-
+	
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
 	public Date getUpdated() {
 		return this.updated;
 	}

@@ -12,6 +12,8 @@ public class Employee {
 	String email, username, fullname, password, role, telephoneNumber, bankDetails;
 	Date created, birthDate;
 	List<String> specialty = new ArrayList<String>();
+	
+	public Employee() { super(); }
 
 	public Employee(
 			String email,

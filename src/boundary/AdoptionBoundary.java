@@ -14,7 +14,7 @@ public class AdoptionBoundary extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		HBox mainPane = new HBox(); 
+		AnchorPane mainPane = new AnchorPane(); 
 		AnchorPane menuPane = new AnchorPane();
 		AnchorPane formPane = new AnchorPane(); 
 		
