@@ -21,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -31,7 +32,7 @@ public class EmployeeControl {
 	private TableView<Employee> table = new TableView<Employee>();
 	private EmployeeDAO service = new EmployeeDAOImpl();
 
-	private ObjectProperty id = new SimpleObjectProperty("");
+	private ObjectProperty<ObjectId> id = new SimpleObjectProperty<ObjectId>(null);
 	private BooleanProperty active = new SimpleBooleanProperty(true);
 	private StringProperty email = new SimpleStringProperty("");
 	private StringProperty username = new SimpleStringProperty("");
@@ -40,9 +41,9 @@ public class EmployeeControl {
 	private StringProperty role = new SimpleStringProperty("");
 	private StringProperty telephoneNumber = new SimpleStringProperty("");
 	private StringProperty bankDetails = new SimpleStringProperty("");
-	private ListProperty specialty = new SimpleListProperty();
-	private ObjectProperty birthDate = new SimpleObjectProperty();
-	private ObjectProperty created = new SimpleObjectProperty();
+	private ListProperty<String> specialty = new SimpleListProperty<String>();
+	private ObjectProperty<Date> birthDate = new SimpleObjectProperty<Date>();
+	private ObjectProperty<Date> created = new SimpleObjectProperty<Date>();
 
 	public void setEntity(Employee employee) {
 		if (employee != null) {
@@ -55,10 +56,15 @@ public class EmployeeControl {
 			role.set(employee.getRole());
 			telephoneNumber.set(employee.getTelephoneNumber());
 			bankDetails.set(employee.getBankDetails());
-			specialty.set(employee.getSpecialty());
+			specialty.setValue(toObservableList(employee.getSpecialty()));
 			birthDate.set(employee.getBirthDate());
 			created.set(employee.getCreated());
 		}
+	}
+
+	ObservableList<String> toObservableList(List<String> l) {
+		ObservableList<String> obsList = FXCollections.observableArrayList(l);
+		return obsList;
 	}
 
 	public Employee getEntity() {
@@ -72,7 +78,12 @@ public class EmployeeControl {
 		employee.setRole(role.get());
 		employee.setTelephoneNumber(telephoneNumber.get());
 		employee.setBankDetails(bankDetails.get());
-		employee.setSpecialty((List<String>) specialty.get());
+		
+		Iterator<String> i = specialty.iterator();
+		while (i.hasNext()){
+			employee.addSpecialty(i.next());
+		}
+
 		employee.setBirthDate((Date) birthDate.get());
 		employee.setCreated((Date) created.get());
 		return employee;
@@ -161,7 +172,7 @@ public class EmployeeControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 
-		TableColumn<Employee, String> colCreated = new TableColumn<>("Data de Criação");
+		TableColumn<Employee, String> colCreated = new TableColumn<>("Data de Criaï¿½ï¿½o");
 		colCreated.setCellValueFactory( (employeeProp) -> {
 			Date n = employeeProp.getValue().getCreated();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
