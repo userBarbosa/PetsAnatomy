@@ -67,6 +67,9 @@ public class EmployeeControl {
 		return obsList;
 	}
 
+	String state [] = {"agendado", "encerrado", "cancelada"};
+	String financialState [] = {"pago", "parcialmente pago", "não pago", "cancelado"};
+
 	public Employee getEntity() {
 		Employee employee = new Employee();
 		employee.setId((ObjectId) id.get());
