@@ -36,7 +36,6 @@ public class EmployeeControl {
 	private StringProperty email = new SimpleStringProperty("");
 	private StringProperty username = new SimpleStringProperty("");
 	private StringProperty fullname = new SimpleStringProperty("");
-	private StringProperty password = new SimpleStringProperty("");
 	private StringProperty role = new SimpleStringProperty("");
 	private StringProperty telephoneNumber = new SimpleStringProperty("");
 	private StringProperty bankDetails = new SimpleStringProperty("");
@@ -51,7 +50,6 @@ public class EmployeeControl {
 			email.set(employee.getEmail());
 			username.set(employee.getUsername());
 			fullname.set(employee.getFullname());
-			password.set(employee.getPassword());
 			role.set(employee.getRole());
 			telephoneNumber.set(employee.getTelephoneNumber());
 			bankDetails.set(employee.getBankDetails());
@@ -68,7 +66,6 @@ public class EmployeeControl {
 		employee.setEmail(email.get());
 		employee.setUsername(username.get());
 		employee.setFullname(fullname.get());
-		employee.setPassword(password.get());
 		employee.setRole(role.get());
 		employee.setTelephoneNumber(telephoneNumber.get());
 		employee.setBankDetails(bankDetails.get());
@@ -111,7 +108,6 @@ public class EmployeeControl {
 		email.set("");
 		username.set("");
 		fullname.set("");
-		password.set("");
 		role.set("");
 		telephoneNumber.set("");
 		bankDetails.set("");
@@ -137,9 +133,6 @@ public class EmployeeControl {
 
 		TableColumn<Employee, String> colFullname = new TableColumn<>("Nome Completo");
 		colFullname.setCellValueFactory(new PropertyValueFactory<Employee, String>("fullname"));
-
-		TableColumn<Employee, String> colPassword = new TableColumn<>("Senha");
-		colPassword.setCellValueFactory(new PropertyValueFactory<Employee, String>("password"));
 
 		TableColumn<Employee, String> colRole = new TableColumn<>("Role");
 		colRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
@@ -169,7 +162,7 @@ public class EmployeeControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 
-		table.getColumns().addAll(colId, colActive, colEmail, colUsername, colFullname, colTelephoneNumber, colBankDetails, colSpecialty, colBirthDate, colCreated, colPassword, colRole);
+		table.getColumns().addAll(colId, colActive, colEmail, colUsername, colFullname, colTelephoneNumber, colBankDetails, colSpecialty, colBirthDate, colCreated, colRole);
 
 		table.getSelectionModel().selectedItemProperty().addListener(
 				(obs, antigo, novo) -> {
@@ -278,14 +271,6 @@ public class EmployeeControl {
 
 	public StringProperty fullnameProperty() {
 		return fullname;
-	}
-
-	public String getPassword() {
-		return password.get();
-	}
-
-	public StringProperty passwordProperty() {
-		return password;
 	}
 
 	public String getRole() {

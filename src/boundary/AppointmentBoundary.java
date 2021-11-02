@@ -2,7 +2,6 @@ package boundary;
 
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
-
 import control.AppointmentControl;
 import entity.Appointment;
 import javafx.application.Application;
@@ -16,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;

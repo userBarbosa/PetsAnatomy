@@ -5,8 +5,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -32,7 +30,7 @@ public class MainScreen extends Application implements PerformerActions {
 //    private ScreenStrategy screenSignUp = new SignUpBoundary();
 //    private ScreenStrategy screenLogin = new LoginBoundary();
     
-    private static HBox mainPane = new HBox();
+    private static AnchorPane mainPane = new AnchorPane();
 	
 	@Override
 	public void start(Stage stage) throws Exception {
