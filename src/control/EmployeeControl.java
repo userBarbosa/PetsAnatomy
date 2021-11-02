@@ -106,12 +106,12 @@ public class EmployeeControl {
 
 	private void listAll() {
 		employees.clear();
-		employees.addAll( service.findByEmail("") );
+		employees.addAll(service.returnAll());
 	}
 
 	public void findByEmail() {
 		employees.clear();
-		employees.addAll( service.findByEmail( getEmail() ));
+		employees.addAll(service.findByField("email", getEmail()));
 	}
 
 	public void clearFields() {
@@ -126,7 +126,7 @@ public class EmployeeControl {
 		role.set("");
 		telephoneNumber.set("");
 		bankDetails.set("");
-		specialty.set("Selecione");
+		// specialty.set("Selecione");
 		birthDate.set(null);
 		created.set(null);
 		this.listAll();
@@ -192,10 +192,10 @@ public class EmployeeControl {
 	}
 
 	public void readAll() {
-		List<Document> allWorkers = service.returnAll();
+		List<Employee> allWorkers = service.returnAll();
 		if (allWorkers != null) {
-			for (Document each : allWorkers) {
-				System.out.println("All: " + each.get("fullname"));
+			for (Employee each : allWorkers) {
+				System.out.println("All: " + each.getFullname());
 			}
 		} else {
 			System.err.println("There are no workers in database");
@@ -203,16 +203,16 @@ public class EmployeeControl {
 	}
 
 	public void readByID(ObjectId id) {
-		Document query = service.findByID(id);
+		Employee query = service.findByID(id);
 		System.out.println("ById: " + query);
 	}
 
 	public void readByDate(String field, Date dateGte, Date dateLte) {
-		List<Document> query = service.findByDate(field, dateGte, dateLte);
+		List<Employee> query = service.findByDate(field, dateGte, dateLte);
 
 		if (query != null) {
-			for (Document each : query) {
-				System.out.println("ByDate: " + each.get("_id"));
+			for (Employee each : query) {
+				System.out.println("ByDate: " + each.getId());
 			}
 		} else {
 			System.err.println("There are no workers in the specified dates");
@@ -220,7 +220,7 @@ public class EmployeeControl {
 	}
 
 	public void readByField(String field, String data) {
-		Document query = service.findByField(field, data);
+		List<Employee> query = service.findByField(field, data);
 		System.out.println("ByField: " + query);
 	}
 
