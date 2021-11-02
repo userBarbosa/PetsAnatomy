@@ -2,7 +2,6 @@ package boundary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
@@ -24,6 +22,7 @@ public class LoginBoundary extends Application {
 	private TextField tfUserName = new TextField();
     private PasswordField pfPassword = new PasswordField();
 	private TextField tfPassword = new TextField();
+	
 	private Button btnLogin = new Button("Login");
 	private Button btnSignUp = new Button("Cadastrar-se");
 	private Label lblTitle = new Label("PetsAnatomy");
