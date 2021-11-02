@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Date;
 import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -10,10 +11,10 @@ public interface AppointmentDAO {
 	
 	void insert(Appointment appointment);
 	Document findByID(ObjectId id);
-	Document findByField();
-	List<Document> findByDate();
+	Document findByField(String field, String data);
+	List<Document> findByDate(String field, Date dateGte, Date dateLte);
 	List<Document> returnAll();
-	void update();
-	void delete();
+	void update(ObjectId id, Appointment appointment);
+	void delete(ObjectId id);
 	
 }

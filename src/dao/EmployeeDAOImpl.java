@@ -3,7 +3,6 @@ package dao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-
 import com.mongodb.client.model.Filters;
 import entity.Employee;
 import java.util.ArrayList;
@@ -15,141 +14,168 @@ import security.Config;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-	MongoCollection<Document> employees;
+  MongoCollection<Document> employees;
 
-	public EmployeeDAOImpl() {
-		connection();
-	}
+  public EmployeeDAOImpl() {
+    connection();
+  }
 
+  void connection() {
+    MongoConnect mc = new MongoConnect();
+    employees = mc.database.getCollection("employees");
+  }
 
-	void connection() {
-		MongoConnect mc = new MongoConnect();
-		employees = mc.database.getCollection("employees");
-	}
+  Document newDoc(Employee employee) {
+    Document worker = new Document("username", employee.getUsername())
+      .append("active", employee.getActive())
+      .append("email", employee.getEmail())
+      .append("fullname", employee.getFullname())
+      .append("password", employee.getPassword())
+      .append("role", employee.getRole())
+      .append("telephoneNumber", employee.getTelephoneNumber())
+      .append("bankDetails", employee.getBankDetails())
+      .append("birthDate", employee.getBirthDate())
+      .append("specialty", employee.getSpecialty());
+    return worker;
+  }
 
-	Document newDoc(Employee employee) {
-		Document worker = new Document("username", employee.getUsername())
-				.append("active", employee.getActive())
-				.append("email", employee.getEmail())
-				.append("fullname", employee.getFullname())
-				.append("password", employee.getPassword())
-				.append("role", employee.getRole())
-				.append("telephoneNumber", employee.getTelephoneNumber())
-				.append("bankDetails", employee.getBankDetails())
-				.append("birthDate", employee.getBirthDate())
-				.append("specialty", employee.getSpecialty());
-		return worker;
-	}
+  Employee newEmployee(Document doc) {
+    String email = doc.getString("email");
+    String username = doc.getString("username");
+    String fullname = doc.getString("fullname");
+    String password = doc.getString("password"); //keep it? i think we should remove the password from the constructor...
 
-	public void insert(Employee employee) {
-		Document worker = newDoc(employee);
+    Employee e = new Employee(email, username, fullname, password);
 
-		worker.put("_id", new ObjectId());
-		worker.put("created", new Date());
+    e.setId(doc.getObjectId("_id"));
+    e.setActive(doc.getBoolean("active"));
+    e.setRole(doc.getString("role"));
+    e.setTelephoneNumber(doc.getString("telephoneNumber"));
+    e.setBankDetails(doc.getString("bankDetails"));
+    e.setCreated(doc.getDate("created"));
+    e.setBirthDate(doc.getDate("birthDate"));
+    List<String> l = doc.getList("speciality", String.class);
+    for (String s : l) {
+      e.addSpecialty(s);
+    }
+    return e;
+  }
 
-		employees.insertOne(worker);
-	}
+  public void insert(Employee employee) {
+    Document worker = newDoc(employee);
 
-	public Document findByID(ObjectId id) {
-		try {
-			Document query = employees.find(new Document("_id", id)).first();
-			return query;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    worker.put("_id", new ObjectId());
+    worker.put("created", new Date());
 
-	public Document findByField(String field, String data) {
-		try {
-			// String regexQuery = "/^" + data + "/";
-			Document query = employees.find(new Document(field, data)).first();
-			return query;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+    employees.insertOne(worker);
+  }
 
-	public boolean findLoginData(String username, String password) {
-		try {
-			Document query = employees
-					.find(new Document("username", username))
-					.first();
+  public Employee findByID(ObjectId id) {
+    Document query = new Document();
+    try {
+      query = employees.find(new Document("_id", id)).first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return newEmployee(query);
+  }
 
-			if (query.get("password") == new Config().encryptPassword(password)) {
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+  public List<Employee> findByField(String field, String data) {
+    List<Employee> eList = new ArrayList<Employee>();
 
-	public boolean findToCreateUser(String username, String email) {
-		try {
-			if (
-					employees.find(new Document("username", username)) != null &&
-					employees.find(new Document("email", email)) != null
-					) {
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+    // String regexQuery = "/^" + data + "/";
+    MongoCursor<Document> cursor = employees
+      .find(new Document(field, data))
+      .iterator();
 
-	public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-		BasicDBObject betweenDates = new BasicDBObject(
-				field,
-				new Document("$gte", dateGte).append("$lte", dateLte)
-				);
+    try {
+      while (cursor.hasNext()) {
+        eList.add(newEmployee(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
 
-		List<Document> docWorker = new ArrayList<Document>();
+    return eList;
+  }
 
-		MongoCursor<Document> cursor = employees.find(betweenDates).iterator();
+  public boolean findLoginData(String username, String password) {
+    try {
+      Document query = employees
+        .find(new Document("username", username))
+        .first();
 
-		try {
-			while (cursor.hasNext()) {
-				docWorker.add(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
+      if (query.get("password") == new Config().encryptPassword(password)) {
+        return true;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 
-		return docWorker;
-	}
+  public boolean findToCreateUser(String username, String email) {
+    try {
+      if (
+        employees.find(new Document("username", username)) != null &&
+        employees.find(new Document("email", email)) != null
+      ) {
+        return true;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 
-	public List<Document> returnAll() {
-		List<Document> docWorker = new ArrayList<Document>();
+  public List<Employee> findByDate(String field, Date dateGte, Date dateLte) {
+    BasicDBObject betweenDates = new BasicDBObject(
+      field,
+      new Document("$gte", dateGte).append("$lte", dateLte)
+    );
 
-		MongoCursor<Document> cursor = employees.find().iterator();
+    List<Employee> eList = new ArrayList<Employee>();
 
-		try {
-			while (cursor.hasNext()) {
-				docWorker.add(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
+    MongoCursor<Document> cursor = employees.find(betweenDates).iterator();
 
-		return docWorker;
-	}
+    try {
+      while (cursor.hasNext()) {
+        eList.add(newEmployee(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
 
-	public void update(ObjectId id, Employee employee) {
+    return eList;
+  }
 
-		Document worker = newDoc(employee);
-		worker.put("updated", new Date());
+  public List<Employee> returnAll() {
+    List<Employee> eList = new ArrayList<Employee>();
 
-		employees.updateOne(
-				new BasicDBObject("_id", id),
-				new BasicDBObject("$set", worker)
-				);
-	}
+    MongoCursor<Document> cursor = employees.find().iterator();
 
-	public void delete(ObjectId id) {
-		employees.deleteOne(Filters.eq("_id", id));
-	}
-	
+    try {
+      while (cursor.hasNext()) {
+        eList.add(newEmployee(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return eList;
+  }
+
+  public void update(ObjectId id, Employee employee) {
+    Document worker = newDoc(employee);
+    worker.put("updated", new Date());
+
+    employees.updateOne(
+      new BasicDBObject("_id", id),
+      new BasicDBObject("$set", worker)
+    );
+  }
+
+  public void delete(ObjectId id) {
+    employees.deleteOne(Filters.eq("_id", id));
+  }
 }

@@ -11,6 +11,8 @@ public class Owner {
 	Date created, updated, lastVisit;
 	ObjectId id;
 	List<ObjectId> patientsId = new ArrayList<ObjectId>();
+	
+	public Owner() { super(); }
 
 	public Owner(
 			String fullname,
