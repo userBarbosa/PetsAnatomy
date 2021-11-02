@@ -3,6 +3,7 @@ package control;
 import dao.EmployeeDAO;
 import dao.EmployeeDAOImpl;
 import entity.Employee;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -20,6 +21,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -334,5 +339,20 @@ public class EmployeeControl {
 	public ObjectProperty createdProperty() {
 		return created;
 	}
+  
+	private List<String> workShift(
+    int endingHourWorkShift,
+    int startHourWorkShift,
+    int appDuration
+  ) {
+    LocalTime workShift = LocalTime.of(startHourWorkShift, 0);
+    List<String> workShiftList = new ArrayList<String>();
+
+    while (workShift.plusMinutes(appDuration).getHour() < endingHourWorkShift) {
+      workShift = workShift.plusMinutes(appDuration);
+      workShiftList.add(workShift.toString());
+    }
+    return workShiftList;
+  }
 
 }

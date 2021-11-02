@@ -20,9 +20,9 @@ public class DashboardBoundary extends Application {
 	private Button btnAgenda = new Button("Agenda");
 	private Button btnPacientes = new Button("Pacientes");
 	private Button btnClientes = new Button("Clientes");
-	private Button btnAdocoes = new Button("Adoções");
-	private Button btnFuncionarios = new Button("Funcionários");
-	private Button btnConfiguracoes = new Button("Configurações");
+	private Button btnAdocoes = new Button("AdoÃ§Ãµes");
+	private Button btnFuncionarios = new Button("FuncionÃ¡rios");
+	private Button btnConfiguracoes = new Button("ConfiguraÃ§Ãµes");
 	private Button btnSair = new Button("Sair");
 
 	private static DashboardControl control = new DashboardControl();
@@ -103,7 +103,7 @@ public class DashboardBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
+		stage.setTitle("ClÃ­nica VeterinÃ¡ria PetsAnatomy");	
 	}
 	
 	public static void main(String[] args) {
