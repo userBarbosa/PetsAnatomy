@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import control.EmployeeControl;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,7 +37,7 @@ public class EmployeeBoundary extends Application {
 	private Label lblUsername = new Label("Username");
 	private Label lblFullname = new Label("Nome");
 	private Label lblTelephoneNumber = new Label("Telefone");
-	private Label lblBankDetails = new Label("Dados Banc·rios");
+	private Label lblBankDetails = new Label("Dados Banc√°rios");
 	private Label lblSpecialty = new Label("Especialidade");
 	private Label lblBirthDate = new Label("Data de Nascimento");
 	private Label lblRole = new Label("Role");
@@ -69,6 +70,7 @@ public class EmployeeBoundary extends Application {
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
+		formPane.setLayoutX(300.0);
 
 		lblId.setLayoutX(15.0);
 		lblId.setLayoutY(37.0);
@@ -77,7 +79,6 @@ public class EmployeeBoundary extends Application {
 		lblId.setFont(fontLbls);
 
 		tfId.setDisable(true);
-		tfId.setEditable(false);
 		tfId.setLayoutX(95.0);
 		tfId.setLayoutY(33.0);
 		tfId.setPrefHeight(25.0);
@@ -105,6 +106,7 @@ public class EmployeeBoundary extends Application {
 		tfEmail.setLayoutY(109.0);
 		tfEmail.setPrefHeight(25.0);
 		tfEmail.setPrefWidth(400.0);
+		tfEmail.setFont(fontTf);
 
 		lblUsername.setLayoutX(15.0);
 		lblUsername.setLayoutY(151.0);
@@ -116,6 +118,7 @@ public class EmployeeBoundary extends Application {
 		tfUsername.setLayoutY(148.0);
 		tfUsername.setPrefHeight(25.0);
 		tfUsername.setPrefWidth(400.0);
+		tfUsername.setFont(fontTf);
 
 		lblFullname.setLayoutX(15.0);
 		lblFullname.setLayoutY(189.0);
@@ -127,6 +130,7 @@ public class EmployeeBoundary extends Application {
 		tfFullname.setLayoutY(187.0);
 		tfFullname.setPrefHeight(25.0);
 		tfFullname.setPrefWidth(400.0);
+		tfFullname.setFont(fontTf);
 
 		lblTelephoneNumber.setLayoutX(15.0);
 		lblTelephoneNumber.setLayoutY(230.0);
@@ -150,6 +154,7 @@ public class EmployeeBoundary extends Application {
 		tfBankDetails.setLayoutY(33.0);
 		tfBankDetails.setPrefHeight(25.0);
 		tfBankDetails.setPrefWidth(400.0);
+		tfBankDetails.setFont(fontTf);
 
 		lblSpecialty.setLayoutX(510.0);
 		lblSpecialty.setLayoutY(75.0);
@@ -161,6 +166,7 @@ public class EmployeeBoundary extends Application {
 		tfSpecialty.setLayoutY(71.0);
 		tfSpecialty.setPrefHeight(25.0);
 		tfSpecialty.setPrefWidth(400.0);
+		tfSpecialty.setFont(fontTf);
 
 		lblBirthDate.setLayoutX(510.0);
 		lblBirthDate.setLayoutY(112.0);
@@ -198,20 +204,17 @@ public class EmployeeBoundary extends Application {
 		dpCreated.setEditable(false);
 		dpCreated.setDisable(true);
 
-		//        if (control.getTable().getColumns().size() == 0) {
-		//            control.generatedTable();
-		//        }
-		//        
-		//        Node table = control.getTable();
-		//        table.setLayoutY(299.0);
-		//        table.prefHeight(469.0);
-		//        table.prefWidth(1066.0);
+        if (control.getTable().getColumns().size() == 0) {
+            control.generatedTable();
+        }
+        
+        Node table = control.getTable();
 
 		formPane.getChildren().addAll(lblId, tfId, lblActive, cbActive, lblEmail, tfEmail, lblUsername, tfUsername, 
 				lblFullname, tfFullname, lblTelephoneNumber, tfTelephoneNumber, lblBankDetails, tfBankDetails, lblSpecialty, 
 				tfSpecialty, lblBirthDate, dpBirthDate, lblRole, cbRole, lblCreated, dpCreated,
 				btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-				//        		, table
+				, table
 				);
 
 		btnCreate.setOnAction((e) -> {
@@ -259,11 +262,11 @@ public class EmployeeBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("ClÌnica Veterin·ria PetsAnatomy");	
+		stage.setTitle("Cl√≠nica Veterin√°ria PetsAnatomy");	
 	}
 
 	private void binding() {
-		Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
+		Bindings.bindBidirectional(tfId.idProperty(), control.idProperty());
 		Bindings.bindBidirectional(cbActive.valueProperty(), control.activeProperty());
 		Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());

@@ -32,16 +32,19 @@ public class AppointmentControl {
   private TableView<Appointment> table = new TableView<Appointment>();
   private AppointmentDAO service = new AppointmentDAOImpl();
 
-  private ObjectProperty id = new SimpleObjectProperty("");
-  private ObjectProperty patientId = new SimpleObjectProperty("");
-  private ObjectProperty ownerId = new SimpleObjectProperty("");
-  private ObjectProperty employeeId = new SimpleObjectProperty("");
+  private ObjectProperty<ObjectId> id = new SimpleObjectProperty<ObjectId>(null);
+  private ObjectProperty<ObjectId> patientId = new SimpleObjectProperty<ObjectId>(null);
+  private ObjectProperty<ObjectId> ownerId = new SimpleObjectProperty<ObjectId>(null);
+  private ObjectProperty<ObjectId> employeeId = new SimpleObjectProperty<ObjectId>(null);
   private StringProperty obs = new SimpleStringProperty("");
   private IntegerProperty state = new SimpleIntegerProperty(0);
   private IntegerProperty financialState = new SimpleIntegerProperty(0);
   private DoubleProperty value = new SimpleDoubleProperty(0);
   private ObjectProperty date = new SimpleObjectProperty();
   private ObjectProperty time = new SimpleObjectProperty();
+  
+  String cbOpState [] = {"agendado", "encerrado", "cancelada"};
+  String cbOpFinancialState [] = {"pago", "parcialmente pago", "n�o pago", "cancelado"};
 
   public void setEntity(Appointment appointment) {
     if (appointment != null) {
@@ -99,17 +102,17 @@ public class AppointmentControl {
 
   public void findByDate() {
     appointments.clear();
-    appointments.addAll(service.findByDate(getDate()));
+    // appointments.addAll(service.findByDate(getDate()));
     // appointments.addAll(service.findByDate("created", new Date(), new Date()));
   }
 
   public void clearFields() {
     Appointment appointment = getEntity();
     appointment.setId(null);
-    id.set(0);
-    patientId.set(0);
-    ownerId.set(0);
-    employeeId.set(0);
+    id.set(null);
+    patientId.set(null);
+    ownerId.set(null);
+    employeeId.set(null);
     obs.set("");
     state.set(0);
     value.set(0.0);
@@ -120,11 +123,6 @@ public class AppointmentControl {
 
   public void generatedTable() {
     listAll();
-    TableColumn<Appointment, ObjectId> colId = new TableColumn<>("Id");
-    colId.setCellValueFactory(
-      new PropertyValueFactory<Appointment, ObjectId>("id")
-    );
-
     TableColumn<Appointment, String> colDate = new TableColumn<>("Date");
     colDate.setCellValueFactory(
       appointmentProp -> {
@@ -151,8 +149,6 @@ public class AppointmentControl {
     colPatient.setCellValueFactory(
       new PropertyValueFactory<Appointment, ObjectId>("patientId")
     );
-
-    
 
     TableColumn<Appointment, String> colOwner = new TableColumn<>("Dono");
     colOwner.setCellValueFactory(
@@ -191,7 +187,6 @@ public class AppointmentControl {
     table
       .getColumns()
       .addAll(
-        colId,
         colDate,
         colTime,
         colPatient,
@@ -223,7 +218,7 @@ public class AppointmentControl {
     return (ObjectId) id.get();
   }
 
-  public ObjectProperty<ObjectId> idProperty() {
+  public ObjectProperty idProperty() {
     return id;
   }
 
@@ -298,4 +293,5 @@ public class AppointmentControl {
   public ObjectProperty timeProperty() {
     return time;
   }
+  
 }

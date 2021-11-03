@@ -2,7 +2,9 @@ package boundary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import control.LoginControl;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -19,24 +21,28 @@ import javafx.stage.Stage;
 
 public class LoginBoundary extends Application {
 
-	private TextField tfUserName = new TextField();
+	private TextField tfUsername = new TextField();
     private PasswordField pfPassword = new PasswordField();
 	private TextField tfPassword = new TextField();
 	
 	private Button btnLogin = new Button("Login");
 	private Button btnSignUp = new Button("Cadastrar-se");
 	private Label lblTitle = new Label("PetsAnatomy");
+	
+	private static LoginControl control = new LoginControl();
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		AnchorPane mainPane = new AnchorPane(); 
 		AnchorPane formPane = new AnchorPane();
 		AnchorPane designPane = new AnchorPane(); 
+		
+		binding();
 
-		Font fontTextField = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
+		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
 		Font fontTitle = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 96);
 		Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
-		Font fontSmallText = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
+		Font fontTxt = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(300.0);
@@ -51,11 +57,11 @@ public class LoginBoundary extends Application {
 		imageViewlogo.setFitWidth(241.0);
 		imageViewlogo.setPreserveRatio(true);
 
-		tfUserName.setLayoutX(50.0);
-		tfUserName.setLayoutY(396.0);
-		tfUserName.setMinSize(240.0, 30.0);
-		tfUserName.setStyle("-fx-border-color: #000E44;");
-		tfUserName.setFont(fontTextField);
+		tfUsername.setLayoutX(50.0);
+		tfUsername.setLayoutY(396.0);
+		tfUsername.setMinSize(240.0, 30.0);
+		tfUsername.setStyle("-fx-border-color: #000E44;");
+		tfUsername.setFont(fontTf);
 
 		FileInputStream inputUser = new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
 		Image imageUser = new Image(inputUser);
@@ -81,14 +87,14 @@ public class LoginBoundary extends Application {
 		imageViewPassword.setPreserveRatio(true);
 		
         CheckBox cbPassword = new CheckBox("Mostrar/Esconder Senha");
-        cbPassword.setFont(fontSmallText);
+        cbPassword.setFont(fontTxt);
         cbPassword.setLayoutX(50.0);
         cbPassword.setLayoutY(494.0);
         
         tfPassword.setLayoutX(50.0);
         tfPassword.setLayoutY(454.0);
         tfPassword.setMinSize(240.0, 30.0);
-        tfPassword.setFont(fontTextField);
+        tfPassword.setFont(fontTf);
         tfPassword.managedProperty().bind(cbPassword.selectedProperty());
         tfPassword.visibleProperty().bind(cbPassword.selectedProperty());
 
@@ -97,25 +103,33 @@ public class LoginBoundary extends Application {
 
         tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
 
+        btnLogin.setOnAction((e) -> {
+            control.login();
+            tfPassword.setText("");
+        });
 		btnLogin.setLayoutX(10.0);
 		btnLogin.setLayoutY(550.0);
 		btnLogin.setMinSize(280.0, 40.0);
 		btnLogin.setFont(fontBtn);
 		btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white;");
 
+		btnSignUp.setOnAction((e) -> {
+            control.signUp();
+        });
 		btnSignUp.setLayoutX(97.0);
 		btnSignUp.setLayoutY(590.0);
 		btnSignUp.setMinSize(100.0, 30.0);
 		btnSignUp.setUnderline(true);
-		btnSignUp.setFont(fontSmallText);
+		btnSignUp.setFont(fontTxt);
 		btnSignUp.setStyle("-fx-background-color: none; -fx-border-color: none;");
 
-		formPane.getChildren().addAll(imageViewlogo, tfUserName, imageViewUser, pfPassword, tfPassword, imageViewPassword, btnLogin, btnSignUp, cbPassword);
+		formPane.getChildren().addAll(imageViewlogo, tfUsername, imageViewUser, pfPassword, tfPassword, imageViewPassword, btnLogin, btnSignUp, cbPassword);
 
 		designPane.setPrefHeight(768.0);
 		designPane.setPrefWidth(1066.0);
 		designPane.setStyle("-fx-background-color: #000E44;");	
-
+		designPane.setLayoutX(300.0);
+		
 		FileInputStream inputEstetoscopio = new FileInputStream("@../../../PetsAnatomy/src/assets/estetoscopio.png");
 		Image imageEstetoscopio = new Image(inputEstetoscopio);
 		ImageView imageViewEstetoscopio = new ImageView(imageEstetoscopio);
@@ -151,7 +165,12 @@ public class LoginBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("ClÌnica Veterin·ria PetsAnatomy");
+		stage.setTitle("Cl√≠nica Veterin√°ria PetsAnatomy");
+	}
+
+	private void binding() {
+        Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
+        Bindings.bindBidirectional(pfPassword.textProperty(), control.passwordProperty());
 	}
 
 	public static void main(String[] args) {

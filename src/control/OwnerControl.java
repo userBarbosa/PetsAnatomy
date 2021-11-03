@@ -119,9 +119,6 @@ public class OwnerControl {
 
 	public void generatedTable() {
 		listAll();
-		TableColumn<Owner, ObjectId> colId = new TableColumn<>("Id");
-		colId.setCellValueFactory(new PropertyValueFactory<Owner, ObjectId>("id"));
-
 		TableColumn<Owner, ObjectId> colPatients = new TableColumn<>("Pacientes");
 		colPatients.setCellValueFactory(new PropertyValueFactory<Owner, ObjectId>("patientsId"));
 
@@ -134,16 +131,16 @@ public class OwnerControl {
 		TableColumn<Owner, String> colTelephoneNumber = new TableColumn<>("Telefone");
 		colTelephoneNumber.setCellValueFactory(new PropertyValueFactory<Owner, String>("telephoneNumber"));
 
-		TableColumn<Owner, String> colAddress = new TableColumn<>("Endereço");
+		TableColumn<Owner, String> colAddress = new TableColumn<>("Endereï¿½o");
 		colAddress.setCellValueFactory(new PropertyValueFactory<Owner, String>("address"));
 		
 		TableColumn<Owner, String> colIdentificationDoc = new TableColumn<>("Documento");
 		colIdentificationDoc.setCellValueFactory(new PropertyValueFactory<Owner, String>("identificationDoc"));
 
-		TableColumn<Owner, String> colIdentificationNumber = new TableColumn<>("Número Documento");
+		TableColumn<Owner, String> colIdentificationNumber = new TableColumn<>("Nï¿½mero Documento");
 		colIdentificationNumber.setCellValueFactory(new PropertyValueFactory<Owner, String>("identificationNumber"));
 
-		TableColumn<Owner, String> colLastVisit = new TableColumn<>("Última Consulta");
+		TableColumn<Owner, String> colLastVisit = new TableColumn<>("ï¿½ltima Consulta");
 		colLastVisit.setCellValueFactory( (ownerProp) -> {
 			Date n = ownerProp.getValue().getLastVisit();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -151,7 +148,7 @@ public class OwnerControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 
-		TableColumn<Owner, String> colCreated = new TableColumn<>("Data de Criação");
+		TableColumn<Owner, String> colCreated = new TableColumn<>("Data de Criaï¿½ï¿½o");
 		colCreated.setCellValueFactory( (ownerProp) -> {
 			Date n = ownerProp.getValue().getCreated();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -159,7 +156,7 @@ public class OwnerControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 		
-		TableColumn<Owner, String> colUpdated = new TableColumn<>("Data Atualização");
+		TableColumn<Owner, String> colUpdated = new TableColumn<>("Data Atualizaï¿½ï¿½o");
 		colUpdated.setCellValueFactory( (ownerProp) -> {
 			Date n = ownerProp.getValue().getUpdated();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -167,13 +164,17 @@ public class OwnerControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 
-		table.getColumns().addAll(colId, colPatients, colEmail, colFullname, colTelephoneNumber, colAddress, colIdentificationDoc, colIdentificationNumber, colLastVisit, colCreated, colUpdated);
+		table.getColumns().addAll(colPatients, colEmail, colFullname, colTelephoneNumber, colAddress, colIdentificationDoc, colIdentificationNumber, colLastVisit, colCreated, colUpdated);
 
 		table.getSelectionModel().selectedItemProperty().addListener(
 				(obs, antigo, novo) -> {
 					setEntity(novo);
 				}
 				);
+		
+        table.setLayoutY(305.0);
+        table.setPrefHeight(469.0);
+        table.setPrefWidth(1066.0);
 
 		table.setItems(owners);
 	}

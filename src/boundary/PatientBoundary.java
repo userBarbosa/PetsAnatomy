@@ -38,15 +38,15 @@ public class PatientBoundary extends Application {
 	private Label lblId = new Label("Id"); 
 	private Label lblOwner = new Label("Dono");
 	private Label lblName = new Label("Nome");	
-	private Label lblSpecies = new Label("Espécie");
-	private Label lblFamily = new Label("Família");
-	private Label lblBloodtype = new Label("Tipo Sanguíneo");
+	private Label lblSpecies = new Label("EspÃ©cie");
+	private Label lblFamily = new Label("FamÃ­lia");
+	private Label lblBloodtype = new Label("Tipo SanguÃ­neo");
 	private Label lblBirthdate = new Label("Data de Nascimento");
-	private Label lblObs = new Label("Observação");
-	private Label lblLastVisit = new Label("Última Consulta");
+	private Label lblObs = new Label("ObservaÃ§Ã£o");
+	private Label lblLastVisit = new Label("Ãšltima Consulta");
 	private Label lblTreatment = new Label("Em Tratamento");
 	private Label lblCreated = new Label("Criado Em");
-	private Label lblUpdated = new Label("Última Atualização");	
+	private Label lblUpdated = new Label("Ãšltima AtualizÃ§Ã£o");	
 	
 	private Button btnClear = new Button("Limpar");
 	private Button btnUpdate = new Button("Atualizar");
@@ -75,6 +75,7 @@ public class PatientBoundary extends Application {
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
+		formPane.setLayoutX(300.0);
 		
 		lblId.setLayoutX(15.0);
 		lblId.setLayoutY(37.0);
@@ -111,6 +112,7 @@ public class PatientBoundary extends Application {
 		tfName.setLayoutY(109.0);
 		tfName.setPrefHeight(25.0);
 		tfName.setPrefWidth(400.0);
+		tfName.setFont(fontTf);
 		
 		lblSpecies.setLayoutX(15.0);
 		lblSpecies.setLayoutY(151.0);
@@ -216,20 +218,20 @@ public class PatientBoundary extends Application {
 		dpUpdated.setEditable(false);
 		dpUpdated.setDisable(true);
 		
-//        if (control.getTable().getColumns().size() == 0) {
-//            control.generatedTable();
-//        }
-//        
-//        Node table = control.getTable();
-//        table.setLayoutY(299.0);
-//        table.prefHeight(469.0);
-//        table.prefWidth(1066.0);
+        if (control.getTable().getColumns().size() == 0) {
+            control.generatedTable();
+        }
+        
+        Node table = control.getTable();
+        table.setLayoutY(299.0);
+        table.prefHeight(469.0);
+        table.prefWidth(1066.0);
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
         		lblFamily, cbFamily, lblBloodtype, cbBloodtype, lblBirthdate, dpBirthdate, lblObs, 
         		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, lblCreated, dpCreated,
         		lblUpdated, dpUpdated, btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-//        		, table
+        		, table
         		);
 
         btnCreate.setOnAction((e) -> {
@@ -277,7 +279,7 @@ public class PatientBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
+		stage.setTitle("Clï¿½nica Veterinï¿½ria PetsAnatomy");	
 	}
 	
 	private void binding() {

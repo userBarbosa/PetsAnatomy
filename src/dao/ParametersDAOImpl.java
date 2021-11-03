@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import javafx.css.CssParser;
-
 public class ParametersDAOImpl implements ParametersDAO {
 
   MongoCollection<Document> parameters;

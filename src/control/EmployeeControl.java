@@ -70,9 +70,6 @@ public class EmployeeControl {
 		return obsList;
 	}
 
-	String state [] = {"agendado", "encerrado", "cancelada"};
-	String financialState [] = {"pago", "parcialmente pago", "não pago", "cancelado"};
-
 	public Employee getEntity() {
 		Employee employee = new Employee();
 		employee.setId((ObjectId) id.get());
@@ -122,7 +119,7 @@ public class EmployeeControl {
 	public void clearFields() {
 		Employee employee = new Employee();
 		employee.setId(null);
-		id.set(0);
+		id.set(null);
 		active.set(true);
 		email.set("");
 		username.set("");
@@ -138,8 +135,6 @@ public class EmployeeControl {
 
 	public void generatedTable() {
 		listAll();
-		TableColumn<Employee, ObjectId> colId = new TableColumn<>("Id");
-		colId.setCellValueFactory(new PropertyValueFactory<Employee, ObjectId>("id"));
 
 		TableColumn<Employee, ObjectId> colActive = new TableColumn<>("Ativo");
 		colActive.setCellValueFactory(new PropertyValueFactory<Employee, ObjectId>("active"));
@@ -165,29 +160,23 @@ public class EmployeeControl {
 		TableColumn<Employee, String> colSpecialty = new TableColumn<>("Especialidade");
 		colSpecialty.setCellValueFactory(new PropertyValueFactory<Employee, String>("specialty"));
 		
-		TableColumn<Employee, String> colBirthDate = new TableColumn<>("Data de Nascimento");
-		colBirthDate.setCellValueFactory( (employeeProp) -> {
-			Date n = employeeProp.getValue().getBirthDate();
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			String strData = dateFormat.format(n);
-			return new ReadOnlyStringWrapper(strData);
-		} );
+		TableColumn<Employee, Date> colBirthDate = new TableColumn<>("Data de Nascimento");
+		colBirthDate.setCellValueFactory( new PropertyValueFactory<Employee, Date>("birthDate") );
 
-		TableColumn<Employee, String> colCreated = new TableColumn<>("Data de Cria��o");
-		colCreated.setCellValueFactory( (employeeProp) -> {
-			Date n = employeeProp.getValue().getCreated();
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			String strData = dateFormat.format(n);
-			return new ReadOnlyStringWrapper(strData);
-		} );
+		TableColumn<Employee, Date> colCreated = new TableColumn<>("Data de Criação");
+		colCreated.setCellValueFactory( new PropertyValueFactory<Employee, Date>("created") );
 
-		table.getColumns().addAll(colId, colActive, colEmail, colUsername, colFullname, colTelephoneNumber, colBankDetails, colSpecialty, colBirthDate, colCreated, colRole);
+		table.getColumns().addAll(colActive, colEmail, colUsername, colFullname, colTelephoneNumber, colBankDetails, colSpecialty, colBirthDate, colCreated, colRole);
 
 		table.getSelectionModel().selectedItemProperty().addListener(
 				(obs, antigo, novo) -> {
 					setEntity(novo);
 				}
 				);
+		
+        table.setLayoutY(305.0);
+        table.setPrefHeight(469.0);
+        table.setPrefWidth(1066.0);
 
 		table.setItems(employees);
 	}

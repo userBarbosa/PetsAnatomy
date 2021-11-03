@@ -33,8 +33,8 @@ public class PatientControl {
 	private TableView<Patient> table = new TableView<Patient>();
 	private PatientDAO service = new PatientDAOImpl();
 
-	private ObjectProperty id = new SimpleObjectProperty("");
-	private ObjectProperty ownerId = new SimpleObjectProperty("");
+	private ObjectProperty<ObjectId> id = new SimpleObjectProperty<ObjectId>(null);
+	private ObjectProperty<ObjectId>  ownerId = new SimpleObjectProperty<ObjectId>(null);
 	private StringProperty name = new SimpleStringProperty("");
 	private StringProperty species = new SimpleStringProperty("");
 	private StringProperty family = new SimpleStringProperty("");
@@ -108,8 +108,8 @@ public class PatientControl {
 	public void clearFields() {
 		Patient patient = new Patient();
 		patient.setId(null);
-		id.set(0);
-		ownerId.set(0);
+		id.set(null);
+		ownerId.set(null);
 		name.set("");
 		species.set("");
 		family.set("");
@@ -125,22 +125,19 @@ public class PatientControl {
 
 	public void generatedTable() {
 		listAll();
-		TableColumn<Patient, ObjectId> colId = new TableColumn<>("Id");
-		colId.setCellValueFactory(new PropertyValueFactory<Patient, ObjectId>("id"));
-
+		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
+		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
+		
 		TableColumn<Patient, ObjectId> colOwner = new TableColumn<>("Dono");
 		colOwner.setCellValueFactory(new PropertyValueFactory<Patient, ObjectId>("ownerId"));
 
-		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
-		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
-
-		TableColumn<Patient, String> colSpecies = new TableColumn<>("Espécie");
+		TableColumn<Patient, String> colSpecies = new TableColumn<>("EspÃ©cie");
 		colSpecies.setCellValueFactory(new PropertyValueFactory<Patient, String>("species"));
 
-		TableColumn<Patient, String> colFamily = new TableColumn<>("Família");
+		TableColumn<Patient, String> colFamily = new TableColumn<>("FamÃ­lia");
 		colFamily.setCellValueFactory(new PropertyValueFactory<Patient, String>("family"));
 
-		TableColumn<Patient, String> colBloodtype = new TableColumn<>("Tipo Sanguíneo");
+		TableColumn<Patient, String> colBloodtype = new TableColumn<>("Tipo Sanguï¿½neo");
 		colBloodtype.setCellValueFactory(new PropertyValueFactory<Patient, String>("bloodtype"));
 
 		TableColumn<Patient, String> colBirthdate = new TableColumn<>("Data de Nascimento");
@@ -151,10 +148,10 @@ public class PatientControl {
 			return new ReadOnlyStringWrapper(strData);
 		} );
 
-		TableColumn<Patient, String> colObs = new TableColumn<>("Observação");
+		TableColumn<Patient, String> colObs = new TableColumn<>("Observaï¿½ï¿½o");
 		colObs.setCellValueFactory(new PropertyValueFactory<Patient, String>("obs"));
 
-		TableColumn<Patient, String> colLastVisit = new TableColumn<>("Última Consulta");
+		TableColumn<Patient, String> colLastVisit = new TableColumn<>("ï¿½ltima Consulta");
 		colLastVisit.setCellValueFactory( (patientProp) -> {
 			Date n = patientProp.getValue().getLastVisit();
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -165,13 +162,17 @@ public class PatientControl {
 		TableColumn<Patient, String> colTreatment = new TableColumn<>("Em Tratamento");
 		colTreatment.setCellValueFactory(new PropertyValueFactory<Patient, String>("treatment"));
 
-		table.getColumns().addAll(colId, colOwner, colName, colSpecies, colFamily, colBloodtype, colBirthdate, colObs, colLastVisit, colTreatment);
+		table.getColumns().addAll(colName, colOwner, colSpecies, colFamily, colBloodtype, colBirthdate, colObs, colLastVisit, colTreatment);
 
 		table.getSelectionModel().selectedItemProperty().addListener(
 				(obs, antigo, novo) -> {
 					setEntity(novo);
 				}
 				);
+		
+        table.setLayoutY(305.0);
+        table.setPrefHeight(469.0);
+        table.setPrefWidth(1066.0);
 
 		table.setItems(patients);
 	}

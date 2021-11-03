@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import control.OwnerControl;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,12 +37,12 @@ public class OwnerBoundary extends Application {
 	private Label lblEmail = new Label("Email");	
 	private Label lblFullname = new Label("Nome");
 	private Label lblTelephoneNumber = new Label("Telefone");
-	private Label lblAddress = new Label("Endereço");
+	private Label lblAddress = new Label("EndereÃ§o");
 	private Label lblIdentificationDoc = new Label("Documento");
-	private Label lblIdentificationNumber = new Label("Número Documento");
-	private Label lblLastVisit = new Label("Última Consulta");
+	private Label lblIdentificationNumber = new Label("NÃºmero Documento");
+	private Label lblLastVisit = new Label("Ãšltima Consulta");
 	private Label lblCreated = new Label("Criado Em");
-	private Label lblUpdated = new Label("Última Atualização");
+	private Label lblUpdated = new Label("Ãšltima AtualizaÃ§Ã£o");
 	
 	private Button btnClear = new Button("Limpar");
 	private Button btnUpdate = new Button("Atualizar");
@@ -70,6 +71,7 @@ public class OwnerBoundary extends Application {
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
+		formPane.setLayoutX(300.0);
 		
 		lblId.setLayoutX(15.0);
 		lblId.setLayoutY(37.0);
@@ -106,6 +108,7 @@ public class OwnerBoundary extends Application {
 		tfEmail.setLayoutY(109.0);
 		tfEmail.setPrefHeight(25.0);
 		tfEmail.setPrefWidth(400.0);
+		tfEmail.setFont(fontTf);
 		
 		lblFullname.setLayoutX(15.0);
 		lblFullname.setLayoutY(151.0);
@@ -200,20 +203,20 @@ public class OwnerBoundary extends Application {
 		dpUpdated.setEditable(false);
 		dpUpdated.setDisable(true);
 		
-//        if (control.getTable().getColumns().size() == 0) {
-//            control.generatedTable();
-//        }
-//        
-//        Node table = control.getTable();
-//        table.setLayoutY(299.0);
-//        table.prefHeight(469.0);
-//        table.prefWidth(1066.0);
+        if (control.getTable().getColumns().size() == 0) {
+            control.generatedTable();
+        }
+        
+        Node table = control.getTable();
+        table.setLayoutY(299.0);
+        table.prefHeight(469.0);
+        table.prefWidth(1066.0);
         
         formPane.getChildren().addAll(lblId, tfId, lblPatients, cbPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
         		lblTelephoneNumber, tfTelephoneNumber, lblAddress, tfAddress, lblIdentificationDoc, cbIdentificationDoc, 
         		lblIdentificationNumber, tfIdentificationNumber, lblLastVisit, dpLastVisit, lblCreated, dpCreated, lblUpdated, dpUpdated, 
         		btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-//        		, table
+        		, table
         		);
 
         btnCreate.setOnAction((e) -> {
@@ -261,11 +264,7 @@ public class OwnerBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
-	}
-
-	public static void main(String[] args) {
-		launch(args);
+		stage.setTitle("Clï¿½nica Veterinï¿½ria PetsAnatomy");	
 	}
 
 	private void binding() {
@@ -280,6 +279,10 @@ public class OwnerBoundary extends Application {
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
         Bindings.bindBidirectional(dpUpdated.valueProperty(), control.updatedProperty());
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
 	}
 
 }

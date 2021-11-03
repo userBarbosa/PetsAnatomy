@@ -36,12 +36,12 @@ public class AppointmentBoundary extends Application {
 	
 	private Label lblId = new Label("Id"); 
 	private Label lblDate = new Label("Data");
-	private Label lblTime = new Label("Horário");	
+	private Label lblTime = new Label("HorÃ¡rio");	
 	private Label lblPatient = new Label("Paciente");
 	private Label lblOwner = new Label("Dono");
-	private Label lblEmployee = new Label("Médico");
+	private Label lblEmployee = new Label("MÃ©dico");
 	private Label lblValue = new Label("Valor");
-	private Label lblObs = new Label("Observação");
+	private Label lblObs = new Label("ObservaÃ§Ã£o");
 	private Label lblState = new Label("Status");
 	private Label lblFinancialState = new Label("Pagamento");
 	
@@ -72,6 +72,7 @@ public class AppointmentBoundary extends Application {
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
+		formPane.setLayoutX(300);
 		
 		lblId.setLayoutX(25.0);
 		lblId.setLayoutY(32.0);
@@ -188,20 +189,20 @@ public class AppointmentBoundary extends Application {
 		cbFinancialState.setPrefHeight(25.0);
 		cbFinancialState.setPrefWidth(414.0);
 		
-//        if (control.getTable().getColumns().size() == 0) {
-//            control.generatedTable();
-//        }
-//        
-//        Node table = control.getTable();
-//        table.setLayoutY(299.0);
-//        table.prefHeight(469.0);
-//        table.prefWidth(1066.0);
+        if (control.getTable().getColumns().size() == 0) {
+            control.generatedTable();
+        }
+        
+        Node table = control.getTable();
+        table.setLayoutY(299.0);
+        table.prefHeight(469.0);
+        table.prefWidth(1066.0);
         
         formPane.getChildren().addAll(lblId, tfId, lblDate, dpDate, lblTime, cbTime, lblPatient, cbPatient, 
         		lblOwner, cbOwner, lblEmployee, cbEmployee, lblState, cbState, lblFinancialState, 
         		cbFinancialState, lblValue, tfValue, lblObs, tfObs, 
         		btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-//        		, table
+        		, table
         		);
 
         btnCreate.setOnAction((e) -> {
@@ -249,7 +250,7 @@ public class AppointmentBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
+		stage.setTitle("Clï¿½nica Veterinï¿½ria PetsAnatomy");	
 	}
 	
 	private void binding() {

@@ -55,8 +55,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     e.setCreated(doc.getDate("created"));
     e.setBirthDate(doc.getDate("birthDate"));
     List<String> l = doc.getList("speciality", String.class);
-    for (String s : l) {
-      e.addSpecialty(s);
+    if (l != null) {
+        for (String s : l) {
+            e.addSpecialty(s);
+          }
     }
     return e;
   }
