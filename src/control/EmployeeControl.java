@@ -1,14 +1,17 @@
 package control;
 
-import dao.EmployeeDAO;
-import dao.EmployeeDAOImpl;
-import entity.Employee;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+
+import dao.EmployeeDAO;
+import dao.EmployeeDAOImpl;
+import entity.Employee;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,8 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Pair;
-import org.bson.types.ObjectId;
 
 public class EmployeeControl {
 
@@ -92,7 +93,7 @@ public class EmployeeControl {
 
   private void listAll() {
     employees.clear();
-    employees.addAll(service.returnAll());
+    employees.addAll(service.getAllEmployees());
   }
 
   public void findByEmail() {
@@ -101,8 +102,6 @@ public class EmployeeControl {
   }
 
   public void clearFields() {
-    // Employee employee = new Employee();
-    // employee.setId(null);
     id.set(null);
     active.set(true);
     email.set("");
@@ -214,7 +213,7 @@ public class EmployeeControl {
   }
 
   public void readAll() {
-    List<Employee> allWorkers = service.returnAll();
+    List<Employee> allWorkers = service.getAllEmployees();
     if (allWorkers != null) {
       for (Employee each : allWorkers) {
         System.out.println("All: " + each.getFullname());

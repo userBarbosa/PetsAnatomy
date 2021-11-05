@@ -164,7 +164,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     return eList;
   }
 
-  public List<Employee> returnAll() {
+  public List<Employee> getAllEmployees() {
     List<Employee> eList = new ArrayList<Employee>();
 
     MongoCursor<Document> cursor = employees.find().iterator();
@@ -194,7 +194,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     employees.deleteOne(Filters.eq("_id", new ObjectId(id)));
   }
 
-  public List<Pair<String, String>> allEmployees() {
+  public List<Pair<String, String>> getAllIdAndNames() {
     List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
 
     MongoCursor<Document> cursor = employees.find().iterator();

@@ -1,25 +1,10 @@
 package control;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.bson.types.ObjectId;
 
 import dao.EmployeeDAO;
 import dao.EmployeeDAOImpl;
 import entity.Employee;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -29,139 +14,144 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ConfigurationControl {
-	
-	private ObservableList<Employee> employees = FXCollections.observableArrayList();
-	private TableView<Employee> table = new TableView<Employee>();
-	private EmployeeDAO service = new EmployeeDAOImpl();
 
-	private ObjectProperty<ObjectId> id = new SimpleObjectProperty<ObjectId>(null);
-	private StringProperty email = new SimpleStringProperty("");
-	private StringProperty username = new SimpleStringProperty("");
-	private StringProperty password = new SimpleStringProperty("");
-	private StringProperty role = new SimpleStringProperty("");
+  private ObservableList<Employee> employees = FXCollections.observableArrayList();
+  private TableView<Employee> table = new TableView<Employee>();
+  private EmployeeDAO service = new EmployeeDAOImpl();
 
-	public void setEntity(Employee employee) {
-		if (employee != null) {
-			id.set(employee.getId());
-			email.set(employee.getEmail());
-			username.set(employee.getUsername());
-			password.set(employee.getPassword());
-			role.set(employee.getRole());
-		}
-	}
+  private StringProperty id = new SimpleStringProperty("");
+  private StringProperty email = new SimpleStringProperty("");
+  private StringProperty username = new SimpleStringProperty("");
+  private StringProperty password = new SimpleStringProperty("");
+  private StringProperty role = new SimpleStringProperty("");
 
-	public Employee getEntity() {
-		Employee employee = new Employee();
-		employee.setId((ObjectId) id.get());
-		employee.setEmail(email.get());
-		employee.setUsername(username.get());
-		employee.setPassword(password.get());
-		employee.setRole(role.get());
-		return employee;
-	}
+  public void setEntity(Employee employee) {
+    if (employee != null) {
+      id.set(employee.getId().toString());
+      email.set(employee.getEmail());
+      username.set(employee.getUsername());
+      password.set(employee.getPassword());
+      role.set(employee.getRole());
+    }
+  }
 
-	public void updateById() {
-		service.update(getId(), getEntity());
-		this.listAll();
-	}
+  public Employee getEntity() {
+    Employee employee = new Employee();
+    employee.setId(new ObjectId(id.get()));
+    employee.setEmail(email.get());
+    employee.setUsername(username.get());
+    employee.setPassword(password.get());
+    employee.setRole(role.get());
+    return employee;
+  }
 
-	private void listAll() {
-		employees.clear();
-		employees.addAll(service.returnAll());
-	}
+  public void updateById() {
+    service.update(getId().toString(), getEntity());
+    this.listAll();
+  }
 
-	public void findByUsername() {
-		employees.clear();
-		employees.addAll(service.findByField("username", getUsername()));
-	}
+  private void listAll() {
+    employees.clear();
+    employees.addAll(service.getAllEmployees());
+  }
 
-	public void clearFields() {
-		Employee employee = new Employee();
-		employee.setId(null);
-		id.set(null);
-		email.set("");
-		username.set("");
-		password.set("");
-		role.set("");
-		this.listAll();
-	}
+  public void findByUsername() {
+    employees.clear();
+    employees.addAll(service.findByField("username", getUsername()));
+  }
 
-	public void generatedTable() {
-		listAll();
-		TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
-		colEmail.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
+  public void clearFields() {
+    Employee employee = new Employee();
+    employee.setId(null);
+    id.set(null);
+    email.set("");
+    username.set("");
+    password.set("");
+    role.set("");
+    this.listAll();
+  }
 
-		TableColumn<Employee, String> colUsername = new TableColumn<>("Username");
-		colUsername.setCellValueFactory(new PropertyValueFactory<Employee, String>("username"));
+  public void generatedTable() {
+    listAll();
+    TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
+    colEmail.setCellValueFactory(
+      new PropertyValueFactory<Employee, String>("email")
+    );
 
-		TableColumn<Employee, String> colPassword = new TableColumn<>("Senha");
-		colPassword.setCellValueFactory(new PropertyValueFactory<Employee, String>("password"));
+    TableColumn<Employee, String> colUsername = new TableColumn<>("Username");
+    colUsername.setCellValueFactory(
+      new PropertyValueFactory<Employee, String>("username")
+    );
 
-		TableColumn<Employee, String> colRole = new TableColumn<>("Role");
-		colRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
-		
-		table.getColumns().addAll(
-				colEmail, 
-				colUsername, 
-				colPassword,
-				colRole
-				);
+    TableColumn<Employee, String> colPassword = new TableColumn<>("Senha");
+    colPassword.setCellValueFactory(
+      new PropertyValueFactory<Employee, String>("password")
+    );
 
-		table.getSelectionModel().selectedItemProperty().addListener(
-				(obs, antigo, novo) -> {
-					setEntity(novo);
-				}
-				);
-		
-        table.setLayoutY(200.0);
-        table.setPrefHeight(574.0);
-        table.setPrefWidth(1066.0);
-        
-		table.setItems(employees);
-	}
+    TableColumn<Employee, String> colRole = new TableColumn<>("Role");
+    colRole.setCellValueFactory(
+      new PropertyValueFactory<Employee, String>("role")
+    );
 
-	public TableView<Employee> getTable() {
-		return table;
-	}
+    table.getColumns().addAll(colEmail, colUsername, colPassword, colRole);
 
-	public ObjectId getId() {
-		return (ObjectId) id.get();
-	}
+    table
+      .getSelectionModel()
+      .selectedItemProperty()
+      .addListener(
+        (obs, antigo, novo) -> {
+          setEntity(novo);
+        }
+      );
 
-	public ObjectProperty idProperty() {
-		return id;
-	}
-	
-	public String getEmail() {
-		return email.get();
-	}
+    table.setLayoutY(200.0);
+    table.setPrefHeight(574.0);
+    table.setPrefWidth(1066.0);
 
-	public StringProperty emailProperty() {
-		return email;
-	}
+    table.setItems(employees);
+  }
 
-	public String getUsername() {
-		return username.get();
-	}
+  public TableView<Employee> getTable() {
+    return table;
+  }
 
-	public StringProperty usernameProperty() {
-		return username;
-	}
+  public String getId() {
+    return id.get();
+  }
 
-	public String getPassword() {
-		return password.get();
-	}
+  public StringProperty idProperty() {
+    return id;
+  }
 
-	public StringProperty passwordProperty() {
-		return password;
-	}
+  public String getEmail() {
+    return email.get();
+  }
 
-	public String getRole() {
-		return role.get();
-	}
+  public StringProperty emailProperty() {
+    return email;
+  }
 
-	public StringProperty roleProperty() {
-		return role;
-	}
+  public String getUsername() {
+    return username.get();
+  }
 
+  public StringProperty usernameProperty() {
+    return username;
+  }
+
+  public String getPassword() {
+    return password.get();
+  }
+
+  public StringProperty passwordProperty() {
+    return password;
+  }
+
+  public String getRole() {
+    return role.get();
+  }
+
+  public StringProperty roleProperty() {
+    return role;
+  }
 }

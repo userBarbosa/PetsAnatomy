@@ -1,123 +1,100 @@
 package entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 import org.bson.types.ObjectId;
 
 public class Owner {
 
-	String email, fullname, telephoneNumber, identificationNumber, identificationDoc, address;
-	Date created, updated, lastVisit;
-	ObjectId id;
-	List<ObjectId> patientsId = new ArrayList<ObjectId>();
-	
-	public Owner() { super(); }
+  String email, fullname, telephoneNumber, identificationNumber, address, patientsId;
+  Date created, updated, lastVisit;
+  ObjectId id;
 
-	public Owner(
-			String fullname,
-			String email,
-			String telephoneNumber,
-			String identificationNumber,
-			String identificationDoc,
-			String address
-			) {
-		this.fullname = fullname;
-		this.email = email;
-		this.telephoneNumber = telephoneNumber;
-		this.identificationNumber = identificationNumber;
-		this.identificationDoc = identificationDoc;
-		this.address = address;
-		this.created = new Date();
-		this.lastVisit = null;
-	}
+  public Owner(String fullname, String email, String identificationNumber) {
+    this.fullname = fullname;
+    this.email = email;
+    this.identificationNumber = identificationNumber;
+    this.created = new Date();
+    this.lastVisit = null;
+  }
 
-	public String getEmail() {
-		return this.email;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public String getFullname() {
-		return this.fullname;
-	}
+  public String getFullname() {
+    return this.fullname;
+  }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+  public void setFullname(String fullname) {
+    this.fullname = fullname;
+  }
 
-	public String getTelephoneNumber() {
-		return this.telephoneNumber;
-	}
+  public String getTelephoneNumber() {
+    return this.telephoneNumber;
+  }
 
-	public void setTelephoneNumber(String telephoneNumber) {
-		this.telephoneNumber = telephoneNumber;
-	}
+  public void setTelephoneNumber(String telephoneNumber) {
+    this.telephoneNumber = telephoneNumber;
+  }
 
-	public String getIdentificationNumber() {
-		return this.identificationNumber;
-	}
+  public String getIdentificationNumber() {
+    return this.identificationNumber;
+  }
 
-	public void setIdentificationNumber(String identificationNumber) {
-		this.identificationNumber = identificationNumber;
-	}
+  public void setIdentificationNumber(String identificationNumber) {
+    this.identificationNumber = identificationNumber;
+  }
 
-	public String getIdentificationDoc() {
-		return this.identificationDoc;
-	}
+  public String getAddress() {
+    return this.address;
+  }
 
-	public void setIdentificationDoc(String identificationDoc) {
-		this.identificationDoc = identificationDoc;
-	}
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-	public String getAddress() {
-		return this.address;
-	}
+  public Date getCreated() {
+    return this.created;
+  }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
-	public Date getCreated() {
-		return this.created;
-	}
+  public Date getUpdated() {
+    return this.updated;
+  }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+  public void setUpdated(Date updated) {
+    this.updated = updated;
+  }
 
-	public Date getUpdated() {
-		return this.updated;
-	}
+  public Date getLastVisit() {
+    return this.lastVisit;
+  }
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
+  public void setLastVisit(Date lastVisit) {
+    this.lastVisit = lastVisit;
+  }
 
-	public Date getLastVisit() {
-		return this.lastVisit;
-	}
+  public ObjectId getId() {
+    return this.id;
+  }
 
-	public void setLastVisit(Date lastVisit) {
-		this.lastVisit = lastVisit;
-	}
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
-	public ObjectId getId() {
-		return this.id;
-	}
+  public String getPatientsId() {
+    return this.patientsId;
+  }
 
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
-
-	public List<ObjectId> getPatientsId() {
-		return this.patientsId;
-	}
-
-	public void setPatientsId(ObjectId id) {
-		this.patientsId.add(id);
-	}
-	
+  public void setPatientsId(String patientsId) {
+    this.patientsId = patientsId;
+  }
 }
