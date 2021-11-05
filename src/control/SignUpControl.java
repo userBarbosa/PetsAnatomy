@@ -42,7 +42,7 @@ public class SignUpControl {
 		return employee;
 	}
 	
-	public void signUp() {
+	public void signUp(String role) {
 		
 		clearFields();
 		
@@ -88,7 +88,7 @@ public class SignUpControl {
 			String password
 			) {
 		if (service.findToCreateUser(username, email)) {
-			Employee user = new Employee(email, username, fullname, password);
+			Employee user = new Employee(email, username, fullname);
 			service.insert(user);
 		}
 	}

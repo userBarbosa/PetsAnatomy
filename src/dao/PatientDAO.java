@@ -1,19 +1,20 @@
 package dao;
 
-import entity.Patient;
 import java.util.Date;
 import java.util.List;
-import org.bson.Document;
-import org.bson.types.ObjectId;
+
+import entity.Patient;
+import javafx.util.Pair;
 
 public interface PatientDAO {
 	
-	void insert(Patient patient, ObjectId ownerId);
-	List<Document> findByDate(String field, Date dateGte, Date dateLte);
-	Document findByID(String field, ObjectId id);
-	Document findByField(String field, String data);
-	List<Document> returnAll();
-	void update(ObjectId id, Patient patient);
-	void delete(ObjectId id);
+	void insert(Patient patient, String ownerId);
+	Patient findByID(String field, String id);
+	List<Patient> findByField(String field, String data);
+	List<Patient> findByDate(String field, Date dateGte, Date dateLte);
+	List<Patient> getAllPatients();
+	List<Pair<String, String>> getAllIdAndNames();
+	void update(String id, Patient patient);
+	void delete(String id);
 	
 }

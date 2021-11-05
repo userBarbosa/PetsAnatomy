@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
+import utils.Security;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import security.Config;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
@@ -120,7 +121,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         .find(new Document("username", username))
         .first();
 
-      if (query.get("password") == new Config().encryptPassword(password)) {
+      if (query.get("password") == new Security().encryptPassword(password)) {
         return query.get("role").toString();
       }
     } catch (Exception e) {
@@ -201,11 +202,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     try {
       while (cursor.hasNext()) {
-        Document nb = cursor.next();
+        Document temp = cursor.next();
         cbList.add(
           new Pair<String, String>(
-            nb.get("_id").toString(),
-            nb.get("fullname").toString()
+            temp.get("_id").toString(),
+            temp.get("fullname").toString()
           )
         );
       }

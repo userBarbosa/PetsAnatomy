@@ -153,11 +153,11 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     try {
       while (cursor.hasNext()) {
-        Document nb = cursor.next();
+        Document temp = cursor.next();
         cbList.add(
           new Pair<String, String>(
-            nb.get("_id").toString(),
-            nb.get("fullname").toString()
+            temp.get("_id").toString(),
+            temp.get("fullname").toString()
           )
         );
       }
