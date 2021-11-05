@@ -62,7 +62,7 @@ public class AppointmentControl {
 
   public Appointment getEntity() {
     Appointment appointment = new Appointment();
-    appointment.setId((ObjectId) id.get());
+    appointment.setId(id.get());
     appointment.setPatientId((ObjectId) patientId.get());
     appointment.setOwnerId((ObjectId) ownerId.get());
     appointment.setEmployeeId((ObjectId) employeeId.get());

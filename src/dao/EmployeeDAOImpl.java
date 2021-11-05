@@ -8,6 +8,7 @@ import entity.Employee;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import security.Config;
@@ -43,23 +44,19 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     String email = doc.getString("email");
     String username = doc.getString("username");
     String fullname = doc.getString("fullname");
-    String password = doc.getString("password"); //keep it? i think we should remove the password from the constructor...
-
-    Employee e = new Employee(email, username, fullname, password);
-
+    
+    Employee e = new Employee(email, username, fullname);
+    
     e.setId(doc.getObjectId("_id"));
+    e.setPassword(doc.getString("password"));
     e.setActive(doc.getBoolean("active"));
     e.setRole(doc.getString("role"));
     e.setTelephoneNumber(doc.getString("telephoneNumber"));
     e.setBankDetails(doc.getString("bankDetails"));
     e.setCreated(doc.getDate("created"));
     e.setBirthDate(doc.getDate("birthDate"));
-    List<String> l = doc.getList("speciality", String.class);
-    if (l != null) {
-        for (String s : l) {
-            e.addSpecialty(s);
-          }
-    }
+    e.setSpecialty(doc.getString("specialty"));
+
     return e;
   }
 
@@ -72,10 +69,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     employees.insertOne(worker);
   }
 
-  public Employee findByID(ObjectId id) {
+  public Employee findByID(String id) {
+
     Document query = new Document();
     try {
-      query = employees.find(new Document("_id", id)).first();
+      query = employees.find(new Document("_id", new ObjectId(id))).first();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -101,7 +99,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     return eList;
   }
 
-  public boolean findLoginData(String username, String password) {
+  /* public boolean findLoginData(String username, String password) {
     try {
       Document query = employees
         .find(new Document("username", username))
@@ -114,6 +112,21 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       e.printStackTrace();
     }
     return false;
+  } */
+
+  public String findLoginData(String username, String password) {
+    try {
+      Document query = employees
+        .find(new Document("username", username))
+        .first();
+
+      if (query.get("password") == new Config().encryptPassword(password)) {
+        return query.get("role").toString();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   public boolean findToCreateUser(String username, String email) {
@@ -167,17 +180,39 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     return eList;
   }
 
-  public void update(ObjectId id, Employee employee) {
+  public void update(String id, Employee employee) {
     Document worker = newDoc(employee);
     worker.put("updated", new Date());
 
     employees.updateOne(
-      new BasicDBObject("_id", id),
+      new BasicDBObject("_id", new ObjectId(id)),
       new BasicDBObject("$set", worker)
     );
   }
 
-  public void delete(ObjectId id) {
-    employees.deleteOne(Filters.eq("_id", id));
+  public void delete(String id) {
+    employees.deleteOne(Filters.eq("_id", new ObjectId(id)));
+  }
+
+  public List<Pair<String, String>> allEmployees() {
+    List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
+
+    MongoCursor<Document> cursor = employees.find().iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        Document nb = cursor.next();
+        cbList.add(
+          new Pair<String, String>(
+            nb.get("_id").toString(),
+            nb.get("fullname").toString()
+          )
+        );
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return cbList;
   }
 }

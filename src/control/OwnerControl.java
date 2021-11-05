@@ -75,6 +75,11 @@ public class OwnerControl {
 		return owner;
 	}
 
+	ObservableList<String> toObservableList(List<String> l) {
+		ObservableList<String> obsList = FXCollections.observableArrayList(l);
+		return obsList;
+	}
+
 	public void create() {
 		service.insert(getEntity());
 		this.listAll();
@@ -92,7 +97,7 @@ public class OwnerControl {
 
 	private void listAll() {
 		owners.clear();
-		owners.addAll( service.findByIdentificationNumber("") );
+		owners.addAll(service.findByField("", "") );
 	}
 
 	public void findByIdentificationNumber() {

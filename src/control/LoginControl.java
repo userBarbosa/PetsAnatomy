@@ -1,19 +1,19 @@
 package control;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.swing.JOptionPane;
+
+import org.bson.types.ObjectId;
+
 import dao.EmployeeDAO;
 import dao.EmployeeDAOImpl;
 import entity.Employee;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import javax.swing.JOptionPane;
-import org.bson.types.ObjectId;
 
 public class LoginControl {
 
@@ -41,14 +41,15 @@ public class LoginControl {
 
 	public void login(String username, String password)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		if (service.findLoginData(username, password)) {
-			// SUCCESS
+		String role = service.findLoginData(username, password);
+		if (role != null) {
+			identification(role);
 		} else {
 			// FAILED
 		}
 	}
 
-	public void login() {
+	public void identification(String role) {
 
 		clearFields();
 
