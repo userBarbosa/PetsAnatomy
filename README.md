@@ -100,8 +100,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 ## 👨‍💻 Contribuidores
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/anabalves"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/63269304?v=4" width="100px;" alt=""/><br /><sub><b>Ana Alves</b></sub></a><br /><a href="https://github.com/anabalves" title="Perfil Ana">🚀</a></td>
-    <td align="center"><a href="https://github.com/karengabriella"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/79243574?v=4" width="100px;" alt=""/><br /><sub><b>Karen Rodrigues</b></sub></a><br /><a href="https://github.com/karengabriella" title="Perfil Karen">🚀</a></td>
+    <td align="center"><a href="https://github.com/anabalves"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/63269304?v=4" width="100px;" alt=""/><br /><sub><b>Ana Alves</b></sub></a><br /><a href="https://github.com/anabalves" title="Perfil Ana">🚀</a></td> 
     <td align="center"><a href="https://github.com/CTRLMarcws"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/59204054?v=4" width="100px;" alt=""/><br /><sub><b>Marcos Filipe</b></sub></a><br /><a href="https://github.com/CTRLMarcws" title="Perfil Marcos">🚀</a></td>
   </tr>
 </table>

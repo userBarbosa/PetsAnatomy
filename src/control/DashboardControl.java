@@ -22,8 +22,8 @@ public class DashboardControl {
   }
 	private ParametersDAO service = new ParametersDAOImpl();
 
-	public void getDailyPhrase() {
-		System.out.println(service.dailyPhrase());
+	public String getDailyPhrase() {
+		return service.dailyPhrase();
 	}
 
 	private void insertDailyPhrase() {

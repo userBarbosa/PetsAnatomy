@@ -5,6 +5,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import entity.Owner;
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,107 +15,156 @@ import org.bson.types.ObjectId;
 
 public class OwnerDAOImpl implements OwnerDAO {
 
-	MongoCollection<Document> owners;
+  MongoCollection<Document> owners;
 
-	public OwnerDAOImpl() {
-		connection();
-	}
+  public OwnerDAOImpl() {
+    connection();
+  }
 
-	void connection() {
-		MongoConnect mc = new MongoConnect();
-		owners = mc.database.getCollection("owners");
-	}
+  void connection() {
+    MongoConnect mc = new MongoConnect();
+    owners = mc.database.getCollection("owners");
+  }
 
-	Document newDoc(Owner owner) {
-		Document customer = new Document("fullname", owner.getFullname())
-				.append("identificationNumber", "")
-				.append("email", owner.getEmail())
-				.append("telephoneNumber", owner.getTelephoneNumber())
-				.append("patientsId", owner.getPatientsId())
-				.append("identificationNumber", owner.getIdentificationNumber())
-				.append("address", owner.getAddress())
-				.append("lastVisit", owner.getLastVisit());
-		return customer;
-	}
+  Document newDoc(Owner owner) {
+    Document customer = new Document("fullname", owner.getFullname())
+      .append("identificationNumber", "")
+      .append("email", owner.getEmail())
+      .append("telephoneNumber", owner.getTelephoneNumber())
+      .append("patientsId", owner.getPatientsId())
+      .append("identificationNumber", owner.getIdentificationNumber())
+      .append("address", owner.getAddress())
+      .append("lastVisit", owner.getLastVisit());
+    return customer;
+  }
 
-	public void insert(Owner owner) {
-		Document customer = newDoc(owner);
+  Owner newOwner(Document doc) {
+    String fullname = doc.getString("fullname");
+    String email = doc.getString("email");
+    String identificationNumber = doc.getString("identificationNumber");
 
-		customer.put("_id", new ObjectId());
-		customer.put("created", new Date());
+    Owner o = new Owner(fullname, email, identificationNumber);
 
-		owners.insertOne(customer);
-	}
+    o.setId(doc.getObjectId("_id"));
+    o.setTelephoneNumber(doc.getString("telephoneNumber"));
+    o.setAddress(doc.getString("address"));
+    o.setCreated(doc.getDate("created"));
+    o.setLastVisit(doc.getDate("lastVisit"));
 
-	public Document findByField(String field, String data) {
+    return o;
+  }
+
+  public void insert(Owner owner) {
+    Document customer = newDoc(owner);
+
+    customer.put("_id", new ObjectId());
+    customer.put("created", new Date());
+
+    owners.insertOne(customer);
+  }
+
+	public Owner findByID(String id) {
+		Document query = new Document();
 		try {
-			String regexQuery = "/^" + data + "/";
-			Document query = owners.find(new Document(field, regexQuery)).first();
-			return query;
+			query = owners.find(new Document("_id", new ObjectId(id))).first();
+			
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
 		}
-		return null;
+		return newOwner(query);
 	}
 
-	public Document findByID(ObjectId id) {
-		try {
-			Document query = owners.find(new Document("_id", id)).first();
-			return query;
-		} catch (Exception e) {
-			System.err.println(e);
-		}
-		return null;
-	}
+  public List<Owner> findByField(String field, String data) {
+		List<Owner> oList = new ArrayList<Owner>();
+    MongoCursor<Document> cursor = owners
+      .find(new Document(field, data))
+      .iterator();
 
-	public List<Document> returnAll() {
-		List<Document> query = new ArrayList<Document>();
+    try {
+      while (cursor.hasNext()) {
+        oList.add(newOwner(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
 
-		MongoCursor<Document> cursor = owners.find().iterator();
+    return oList;
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				query.add(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
-		return query;
-	}
 
-	public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-		BasicDBObject betweenDates = new BasicDBObject(
-				field,
-				new Document("$gte", dateGte).append("$lte", dateLte)
+  public List<Owner> getAllOwners() {
+    List<Owner> oList = new ArrayList<Owner>();
+
+    MongoCursor<Document> cursor = owners.find().iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        oList.add(
+					newOwner(cursor.next())
 				);
+      }
+    } finally {
+      cursor.close();
+    }
+    return oList;
+  }
 
-		List<Document> docOwner = new ArrayList<Document>();
+  public List<Owner> findByDate(String field, Date dateGte, Date dateLte) {
+    BasicDBObject betweenDates = new BasicDBObject(
+      field,
+      new Document("$gte", dateGte).append("$lte", dateLte)
+    );
 
-		MongoCursor<Document> cursor = owners.find(betweenDates).iterator();
+    List<Owner> oList = new ArrayList<Owner>();
 
-		try {
-			while (cursor.hasNext()) {
-				docOwner.add(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
+    MongoCursor<Document> cursor = owners.find(betweenDates).iterator();
 
-		return docOwner;
+    try {
+      while (cursor.hasNext()) {
+        oList.add(
+					newOwner(cursor.next())
+				);
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return oList;
+  }
+
+  public void update(String id, Owner owner) {
+    Document customer = newDoc(owner);
+
+    customer.put("updated", new Date());
+
+    BasicDBObject update = new BasicDBObject("$set", customer);
+
+    owners.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
+  }
+
+  public void delete(String id) {
+    owners.deleteOne(Filters.eq("_id", new ObjectId(id)));
+  }
+
+	public List<Pair<String, String>> getAllIdAndNames() {
+		List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
+
+    MongoCursor<Document> cursor = owners.find().iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        Document temp = cursor.next();
+        cbList.add(
+          new Pair<String, String>(
+            temp.get("_id").toString(),
+            temp.get("fullname").toString()
+          )
+        );
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return cbList;
 	}
-
-	public void update(ObjectId id, Owner owner) {
-		Document customer = newDoc(owner);
-
-		customer.put("updated", new Date());
-
-		BasicDBObject update = new BasicDBObject("$set", customer);
-
-		owners.updateOne(new BasicDBObject("_id", id), update);
-	}
-
-	public void delete(ObjectId id) {
-		owners.deleteOne(Filters.eq("_id", id));
-	}
-	
 }

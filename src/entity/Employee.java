@@ -1,139 +1,131 @@
 package entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.bson.types.ObjectId;
 
 public class Employee {
 
-	ObjectId id;
-	boolean active;
-	String email, username, fullname, password, role, telephoneNumber, bankDetails;
-	Date created, birthDate;
-	List<String> specialty = new ArrayList<String>();
+  ObjectId id;
+  boolean active;
+  String email, username, fullname, password, role, telephoneNumber, bankDetails, specialty;
+  Date created, birthDate;
 
-	public Employee(
-			String email,
-			String username,
-			String fullname,
-			String password
-			) {
-		this.email = email;
-		this.username = username;
-		this.fullname = fullname;
-		this.password = password;
-		this.created = new Date();
-	}
+  public Employee(
+    String email,
+    String username,
+    String fullname
+  ) {
+    this.email = email;
+    this.username = username;
+    this.fullname = fullname;
+    this.created = new Date();
+  }
 
-	/* "dailySchedule/workShift": {
+  /* "dailySchedule/workShift": {
 		"startHour": 8,
 		"endingHour": 18,
 		"appDuration": 45 //minutes
 	} */
 
+  public Employee() { super();	}
+
 	public String getUsername() {
-		return this.username;
-	}
+    return this.username;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public void setSpecialty(List<String> specialty) {
-		this.specialty = specialty;
-	}
+  public ObjectId getId() {
+    return this.id;
+  }
 
-	public List<String> getSpecialty() {
-		return this.specialty;
-	}
+  public void setId(ObjectId id) {
+    this.id = id;
+  }
 
-	public void addSpecialty(String specialtyToAdd) {
-		this.specialty.add(specialtyToAdd);
-	}
+  public boolean isActive() {
+    return this.active;
+  }
 
-	public ObjectId getId() {
-		return this.id;
-	}
+  public boolean getActive() {
+    return this.active;
+  }
 
-	public void setId(ObjectId id) {
-		this.id = id;
-	}
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 
-	public boolean isActive() {
-		return this.active;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	public boolean getActive() {
-		return this.active;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+  public String getFullname() {
+    return this.fullname;
+  }
 
-	public String getEmail() {
-		return this.email;
-	}
+  public void setFullname(String fullname) {
+    this.fullname = fullname;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public String getPassword() {
+    return this.password;
+  }
 
-	public String getFullname() {
-		return this.fullname;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+  public String getRole() {
+    return this.role;
+  }
 
-	public String getPassword() {
-		return this.password;
-	}
+  public void setRole(String role) {
+    this.role = role;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public String getTelephoneNumber() {
+    return this.telephoneNumber;
+  }
 
-	public String getRole() {
-		return this.role;
-	}
+  public void setTelephoneNumber(String telephoneNumber) {
+    this.telephoneNumber = telephoneNumber;
+  }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+  public String getBankDetails() {
+    return this.bankDetails;
+  }
 
-	public String getTelephoneNumber() {
-		return this.telephoneNumber;
-	}
+  public void setBankDetails(String bankDetails) {
+    this.bankDetails = bankDetails;
+  }
 
-	public void setTelephoneNumber(String telephoneNumber) {
-		this.telephoneNumber = telephoneNumber;
-	}
+  public Date getCreated() {
+    return this.created;
+  }
 
-	public String getBankDetails() {
-		return this.bankDetails;
-	}
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
-	public void setBankDetails(String bankDetails) {
-		this.bankDetails = bankDetails;
-	}
+  public Date getBirthDate() {
+    return this.birthDate;
+  }
 
-	public Date getCreated() {
-		return this.created;
-	}
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+  public String getSpecialty() {
+    return this.specialty;
+  }
 
-	public Date getBirthDate() {
-		return this.birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-	
+  public void setSpecialty(String specialty) {
+    this.specialty = specialty;
+  }
 }

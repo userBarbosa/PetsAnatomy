@@ -1,21 +1,21 @@
 package dao;
 
-import entity.Employee;
 import java.util.Date;
 import java.util.List;
-import org.bson.Document;
-import org.bson.types.ObjectId;
+
+import entity.Employee;
+import javafx.util.Pair;
 
 public interface EmployeeDAO {
-	
-	void insert(Employee employee);
-	Document findByID(ObjectId id);
-	Document findByField(String field, String data);
-	List<Document> findByDate(String field, Date dateGte, Date dateLte);
-	boolean findLoginData(String username, String password);
-	boolean findToCreateUser(String username, String email);
-	List<Document> returnAll();
-	void update(ObjectId id, Employee employee);
-	void delete(ObjectId id);
-	
+  void insert(Employee employee);
+  Employee findByID(String id);
+  List<Employee> findByField(String field, String data);
+  List<Employee> findByDate(String field, Date dateGte, Date dateLte);
+  // boolean findLoginData(String username, String password);
+  String findLoginData(String username, String password);
+  boolean findToCreateUser(String username, String email);
+  List<Employee> getAllEmployees();
+  List<Pair<String, String>> getAllIdAndNames();
+  void update(String id, Employee employee);
+  void delete(String id);
 }

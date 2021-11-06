@@ -14,26 +14,23 @@ public class Patient {
 			String name,
 			ObjectId ownerId,
 			String species,
-			String family,
-			String bloodtype,
-			Date birthdate
+			String family
 			) {
 		this.ownerId = ownerId;
 		this.name = name;
 		this.species = species;
 		this.family = family;
-		this.bloodtype = bloodtype;
-		this.birthdate = birthdate;
-		this.obs = null;
-		this.lastVisit = null;
-		this.treatment = false;
 		this.created = new Date();
 	}
 
 	public Date getCreated() {
 		return this.created;
 	}
-
+	
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
 	public Date getUpdated() {
 		return this.updated;
 	}
