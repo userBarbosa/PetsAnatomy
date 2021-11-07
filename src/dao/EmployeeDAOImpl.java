@@ -11,6 +11,8 @@ import java.util.List;
 import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import utils.MongoConnect;
 import utils.Security;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
@@ -23,6 +25,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   void connection() {
     MongoConnect mc = new MongoConnect();
+    mc.connection();
     employees = mc.database.getCollection("employees");
   }
 

@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import entity.Owner;
 import javafx.util.Pair;
+import utils.MongoConnect;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class OwnerDAOImpl implements OwnerDAO {
 
   void connection() {
     MongoConnect mc = new MongoConnect();
+    mc.connection();
     owners = mc.database.getCollection("owners");
   }
 

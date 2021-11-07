@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
+import utils.MongoConnect;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -22,6 +24,7 @@ public class PatientDAOImpl implements PatientDAO {
 
   void connection() {
     MongoConnect mc = new MongoConnect();
+    mc.connection();
     patients = mc.database.getCollection("patients");
   }
 

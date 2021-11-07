@@ -1,9 +1,13 @@
 package dao;
 
-import com.mongodb.client.MongoCollection;
 import java.time.LocalDate;
+
+import com.mongodb.client.MongoCollection;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import utils.MongoConnect;
 
 public class ParametersDAOImpl implements ParametersDAO {
 
@@ -15,6 +19,7 @@ public class ParametersDAOImpl implements ParametersDAO {
 
   void connection() {
     MongoConnect mc = new MongoConnect();
+    mc.connection();
     parameters = mc.database.getCollection("parameters");
   }
 

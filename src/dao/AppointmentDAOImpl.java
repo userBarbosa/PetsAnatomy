@@ -2,6 +2,8 @@ package dao;
 
 import com.mongodb.client.MongoCollection;
 import entity.Appointment;
+import utils.MongoConnect;
+
 import java.util.Date;
 import java.util.List;
 import org.bson.Document;
@@ -17,6 +19,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
   void connection() {
     MongoConnect mc = new MongoConnect();
+    mc.connection();
     appointments = mc.database.getCollection("appointments");
   }
 

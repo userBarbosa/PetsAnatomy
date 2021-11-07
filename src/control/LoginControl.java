@@ -17,7 +17,7 @@ public class LoginControl {
   public void login() {
     String username = usernameProperty().getValue();
     String password = passwordProperty().getValue();
-    
+
     identification(service.findLoginData(username, password));
   }
 
