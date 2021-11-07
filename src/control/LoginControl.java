@@ -90,16 +90,8 @@ public class LoginControl {
     password.set("");
   }
 
-  public String getUsername() {
-    return username.get();
-  }
-
   public StringProperty usernameProperty() {
     return username;
-  }
-
-  public String getPassword() {
-    return password.get();
   }
 
   public StringProperty passwordProperty() {

@@ -104,32 +104,16 @@ public class SignUpControl {
     password.set("");
   }
 
-  public String getEmail() {
-    return email.get();
-  }
-
   public StringProperty emailProperty() {
     return email;
-  }
-
-  public String getFullname() {
-    return fullname.get();
   }
 
   public StringProperty fullnameProperty() {
     return fullname;
   }
 
-  public String getUsername() {
-    return username.get();
-  }
-
   public StringProperty usernameProperty() {
     return username;
-  }
-
-  public String getPassword() {
-    return password.get();
   }
 
   public StringProperty passwordProperty() {
