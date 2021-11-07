@@ -119,7 +119,7 @@ public class LoginBoundary extends Application {
     btnLogin.setLayoutY(550.0);
     btnLogin.setMinSize(280.0, 40.0);
     btnLogin.setFont(fontBtn);
-    btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white;");
+    btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
     btnSignUp.setOnAction(
       e -> {
@@ -131,7 +131,7 @@ public class LoginBoundary extends Application {
     btnSignUp.setMinSize(100.0, 30.0);
     btnSignUp.setUnderline(true);
     btnSignUp.setFont(fontTxt);
-    btnSignUp.setStyle("-fx-background-color: none; -fx-border-color: none;");
+    btnSignUp.setStyle("-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;");
 
     formPane
       .getChildren()
