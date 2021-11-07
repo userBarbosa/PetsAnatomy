@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
-import utils.Security;
-
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import utils.Security;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
@@ -32,7 +31,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       .append("active", employee.getActive())
       .append("email", employee.getEmail())
       .append("fullname", employee.getFullname())
-      .append("password", employee.getPassword())
+      .append("password", new Security().encryptPassword(employee.getPassword()))
       .append("role", employee.getRole())
       .append("telephoneNumber", employee.getTelephoneNumber())
       .append("bankDetails", employee.getBankDetails())
@@ -45,9 +44,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     String email = doc.getString("email");
     String username = doc.getString("username");
     String fullname = doc.getString("fullname");
-    
+
     Employee e = new Employee(email, username, fullname);
-    
+
     e.setId(doc.getObjectId("_id"));
     e.setPassword(doc.getString("password"));
     e.setActive(doc.getBoolean("active"));
@@ -71,7 +70,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public Employee findByID(String id) {
-
     Document query = new Document();
     try {
       query = employees.find(new Document("_id", new ObjectId(id))).first();
@@ -100,41 +98,29 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     return eList;
   }
 
-  /* public boolean findLoginData(String username, String password) {
-    try {
-      Document query = employees
-        .find(new Document("username", username))
-        .first();
-
-      if (query.get("password") == new Config().encryptPassword(password)) {
-        return true;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return false;
-  } */
-
   public String findLoginData(String username, String password) {
+    Document query = new Document();
     try {
-      Document query = employees
-        .find(new Document("username", username))
-        .first();
-
-      if (query.get("password") == new Security().encryptPassword(password)) {
-        return query.get("role").toString();
-      }
+      query = employees.find(new Document("username", username)).first();
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+    if (query != null) {
+      String cipher = new Security().encryptPassword(password);
+      if (cipher.equals(query.get("password"))) {
+        return query.get("role") == null ? "" : query.get("role").toString();
+      } else {
+        return "401 - Unauthorized";
+      }
+    }
+    return "400 - Bad Request";
   }
 
   public boolean findToCreateUser(String username, String email) {
     try {
       if (
-        employees.find(new Document("username", username)) != null &&
-        employees.find(new Document("email", email)) != null
+        employees.find(new Document("username", username)).first() == null &&
+        employees.find(new Document("email", email)).first() == null
       ) {
         return true;
       }

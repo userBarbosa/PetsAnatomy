@@ -62,22 +62,22 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   public Document findByField(String field, String data) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    // TODO Auto-generated method stub
     return null;
   }
 
-  public void update(ObjectId id, Appointment appointment) {
-    // TODO Auto-generated method stub
+
+  
+
+  public void delete(ObjectId id) {
 
   }
 
-  public void delete(ObjectId id) {
-    // TODO Auto-generated method stub
-
+  @Override
+  public void update(ObjectId id, Appointment appointment) {
+    
   }
 }

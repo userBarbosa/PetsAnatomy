@@ -264,7 +264,7 @@ public class OwnerBoundary extends Application {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-		stage.setTitle("Cl�nica Veterin�ria PetsAnatomy");	
+		stage.setTitle("Clínica Veterinária PetsAnatomy");	
 	}
 
 	private void binding() {
@@ -274,7 +274,7 @@ public class OwnerBoundary extends Application {
         Bindings.bindBidirectional(tfFullname.textProperty(), control.fullnameProperty());
         Bindings.bindBidirectional(tfTelephoneNumber.textProperty(), control.telephoneNumberProperty());
         Bindings.bindBidirectional(tfAddress.textProperty(), control.addressProperty());
-        Bindings.bindBidirectional(cbIdentificationDoc.valueProperty(), control.identificationDocProperty());
+        // Bindings.bindBidirectional(cbIdentificationDoc.valueProperty(), control.identificationDocProperty());
         Bindings.bindBidirectional(tfIdentificationNumber.textProperty(), control.identificationNumberProperty());
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
