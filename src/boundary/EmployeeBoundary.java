@@ -274,9 +274,10 @@ public class EmployeeBoundary extends Application {
 		Bindings.bindBidirectional(tfTelephoneNumber.textProperty(), control.telephoneNumberProperty());
 		Bindings.bindBidirectional(tfBankDetails.textProperty(), control.bankDetailsProperty());
 		Bindings.bindBidirectional(tfSpecialty.textProperty(), control.specialtyProperty());
-		Bindings.bindBidirectional(dpBirthDate.valueProperty(), control.birthDateProperty());
 		Bindings.bindBidirectional(cbRole.valueProperty(), control.roleProperty());
+		Bindings.bindBidirectional(dpBirthDate.valueProperty(), control.birthDateProperty());
 		Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
+		//The method bindBidirectional(Property<T>, Property<T>) in the type Bindings is not applicable for the arguments (ObjectProperty<LocalDate>, StringProperty)Java(67108979)
 	}
 
 	public static void main(String[] args) {

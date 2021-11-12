@@ -1,6 +1,8 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.bson.types.ObjectId;
 
 public class Employee {
@@ -10,14 +12,10 @@ public class Employee {
   String email, username, fullname, password, role, telephoneNumber, bankDetails, specialty;
   Date created, birthDate;
 
-  public Employee(
-    String email,
-    String username,
-    String fullname
-  ) {
+  public Employee(String email, String username) {
     this.email = email;
     this.username = username;
-    this.fullname = fullname;
+
     this.created = new Date();
   }
 
@@ -27,9 +25,7 @@ public class Employee {
 		"appDuration": 45 //minutes
 	} */
 
-  public Employee() { super();	}
-
-	public String getUsername() {
+  public String getUsername() {
     return this.username;
   }
 
@@ -127,5 +123,22 @@ public class Employee {
 
   public void setSpecialty(String specialty) {
     this.specialty = specialty;
+  }
+
+  public List<String> getSpecialtyList(String specialty) {
+    List<String> specialtyList = new ArrayList<String>();
+    String split[] = specialty.split(";");
+    for (String s : split) {
+      specialtyList.add(s);
+    }
+    return specialtyList;
+  }
+
+  public String getSpecialtyString(List<String> specialtyList) {
+    StringBuilder builder = new StringBuilder();
+    for (String s : specialtyList) {
+      builder.append(s);
+    }
+    return builder.toString();
   }
 }

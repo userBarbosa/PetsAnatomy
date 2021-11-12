@@ -36,10 +36,8 @@ public class ConfigurationControl {
   }
 
   public Employee getEntity() {
-    Employee employee = new Employee();
+    Employee employee = new Employee(emailProperty().getValue(), usernameProperty().getValue());
     employee.setId(new ObjectId(id.get()));
-    employee.setEmail(email.get());
-    employee.setUsername(username.get());
     employee.setPassword(password.get());
     employee.setRole(role.get());
     return employee;
@@ -61,8 +59,6 @@ public class ConfigurationControl {
   }
 
   public void clearFields() {
-    Employee employee = new Employee();
-    employee.setId(null);
     id.set(null);
     email.set("");
     username.set("");

@@ -264,17 +264,6 @@ public class PatientControl {
     List<Patient> query = service.findByField(field, data);
   }
 
-  /* private Date convertToDate(int year, int month, int day) {
-      Date date = Date.from(
-        LocalDate
-          .of(year, month, day)
-          .atStartOfDay()
-          .atZone(ZoneId.systemDefault())
-          .toInstant()
-      );
-      return date;
-    } */
-
   public TableView<Patient> getTable() {
     return table;
   }
