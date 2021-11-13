@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import dao.PatientDAO;
-import dao.PatientDAOImpl;
+import dao.impl.PatientDAOImpl;
+import dao.interfaces.PatientDAO;
 import entity.Patient;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;

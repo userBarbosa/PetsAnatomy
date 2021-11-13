@@ -2,8 +2,8 @@ package control;
 
 import javax.swing.JOptionPane;
 
-import dao.EmployeeDAO;
-import dao.EmployeeDAOImpl;
+import dao.impl.EmployeeDAOImpl;
+import dao.interfaces.EmployeeDAO;
 import entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

@@ -1,4 +1,4 @@
-package dao;
+package dao.interfaces;
 
 public interface ParametersDAO {
 	String dailyPhrase();

@@ -1,25 +1,23 @@
-package dao;
-
-import com.mongodb.client.MongoCollection;
-import entity.Appointment;
-import utils.MongoConnect;
+package dao.impl;
 
 import java.util.Date;
 import java.util.List;
+
+import com.mongodb.client.MongoCollection;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import dao.interfaces.AppointmentDAO;
+import entity.Appointment;
+import utils.MongoConnect;
 
 public class AppointmentDAOImpl implements AppointmentDAO {
 
   MongoCollection<Document> appointments;
+  MongoConnect mc = new MongoConnect();
 
-  public AppointmentDAOImpl() {
-    connection();
-  }
-
-  void connection() {
-    MongoConnect mc = new MongoConnect();
-    mc.connection();
+  public void getCollection() {
     appointments = mc.database.getCollection("appointments");
   }
 
@@ -46,11 +44,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
     app.put("_id", new ObjectId());
     app.put("created", new Date());
-
+    getCollection();
     appointments.insertOne(app);
   }
 
   public Document findByID(ObjectId id) {
+    getCollection();
     try {
       Document query = appointments.find(new Document("_id", id)).first();
       return query;

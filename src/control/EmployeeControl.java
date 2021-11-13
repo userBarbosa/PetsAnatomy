@@ -5,20 +5,15 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import dao.EmployeeDAO;
-import dao.EmployeeDAOImpl;
+import dao.impl.EmployeeDAOImpl;
+import dao.interfaces.EmployeeDAO;
 import entity.Employee;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import utils.Formatters;
 
 public class EmployeeControl {
@@ -43,7 +38,7 @@ public class EmployeeControl {
 	  Employee employee = new Employee(getEmail(), getUsername());
 	  employee.setFullname(getFullname());
 	  employee.setId(new ObjectId(getId()));
-	  employee.setActive(getActive());
+	  employee.setActive(toBoolean(getActive()));
 	  employee.setRole(getRole());
 	  employee.setTelephoneNumber(getTelephoneNumber());
 	  employee.setBankDetails(getBankDetails());
@@ -234,6 +229,13 @@ public class EmployeeControl {
 
   public ObservableList<Employee> getListView() {
 	  return listEmployees;
+  }
+
+  private boolean toBoolean(String b) {
+    if (b == "Ativo") {
+      return true;
+    }
+    return false;
   }
 
   

@@ -1,31 +1,29 @@
-package dao;
+package dao.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import entity.Employee;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javafx.util.Pair;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import dao.interfaces.EmployeeDAO;
+import entity.Employee;
+import javafx.util.Pair;
 import utils.MongoConnect;
 import utils.Security;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
   MongoCollection<Document> employees;
+  MongoConnect mc = new MongoConnect();
 
-  public EmployeeDAOImpl() {
-    connection();
-  }
-
-  void connection() {
-    MongoConnect mc = new MongoConnect();
-    mc.connection();
+  private void getCollection() {
     employees = mc.database.getCollection("employees");
   }
 
@@ -69,11 +67,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     worker.put("_id", new ObjectId());
     worker.put("created", new Date());
 
+    getCollection();
     employees.insertOne(worker);
   }
 
   public Employee findByID(String id) {
     Document query = new Document();
+    getCollection();
     try {
       query = employees.find(new Document("_id", new ObjectId(id))).first();
     } catch (Exception e) {
@@ -84,7 +84,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public List<Employee> findByField(String field, String data) {
     List<Employee> eList = new ArrayList<Employee>();
-
+    getCollection();
     // String regexQuery = "/^" + data + "/";
     MongoCursor<Document> cursor = employees
       .find(new Document(field, data))
@@ -103,6 +103,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public String findLoginData(String username, String password) {
     Document query = new Document();
+    getCollection();
     try {
       query = employees.find(new Document("username", username)).first();
     } catch (Exception e) {
@@ -120,6 +121,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public boolean findToCreateUser(String username, String email) {
+    getCollection();
     try {
       if (
         employees.find(new Document("username", username)).first() == null &&
@@ -138,6 +140,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       field,
       new Document("$gte", dateGte).append("$lte", dateLte)
     );
+    getCollection();
 
     List<Employee> eList = new ArrayList<Employee>();
 
@@ -156,6 +159,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   public List<Employee> getAllEmployees() {
     List<Employee> eList = new ArrayList<Employee>();
+    getCollection();
 
     MongoCursor<Document> cursor = employees.find().iterator();
 
@@ -173,7 +177,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   public void update(String id, Employee employee) {
     Document worker = newDoc(employee);
     worker.put("updated", new Date());
-
+    
+    getCollection();
     employees.updateOne(
       new BasicDBObject("_id", new ObjectId(id)),
       new BasicDBObject("$set", worker)
@@ -181,12 +186,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   public void delete(String id) {
+    getCollection();
     employees.deleteOne(Filters.eq("_id", new ObjectId(id)));
   }
 
   public List<Pair<String, String>> getAllIdAndNames() {
     List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
-
+    getCollection();
     MongoCursor<Document> cursor = employees.find().iterator();
 
     try {

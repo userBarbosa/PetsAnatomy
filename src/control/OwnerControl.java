@@ -1,12 +1,15 @@
 package control;
 
-import dao.OwnerDAO;
-import dao.OwnerDAOImpl;
-import entity.Owner;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+
+import dao.impl.OwnerDAOImpl;
+import dao.interfaces.OwnerDAO;
+import entity.Owner;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,7 +20,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.bson.types.ObjectId;
 
 public class OwnerControl {
 

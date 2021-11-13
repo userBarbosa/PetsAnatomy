@@ -1,30 +1,25 @@
-package dao;
+package dao.impl;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import dao.interfaces.PatientDAO;
 import entity.Patient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.util.Pair;
-import utils.MongoConnect;
-
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
 
   MongoCollection<Document> patients;
+  MongoConnect mc = new MongoConnect();
 
-  public PatientDAOImpl() {
-    connection();
-  }
-
-  void connection() {
-    MongoConnect mc = new MongoConnect();
-    mc.connection();
+  public void getCollection() {
     patients = mc.database.getCollection("patients");
   }
 
@@ -66,12 +61,13 @@ public class PatientDAOImpl implements PatientDAO {
     pat.put("_id", new ObjectId());
     pat.put("created", new Date());
     pat.replace("ownerId", new ObjectId(ownerId));
-
+    getCollection();
     patients.insertOne(pat);
   }
 
   public Patient findByID(String field, String id) {
     Document query = new Document();
+    getCollection();
     try {
       query = patients.find(new Document("_id", new ObjectId(id))).first();
     } catch (Exception e) {
@@ -82,6 +78,7 @@ public class PatientDAOImpl implements PatientDAO {
 
   public List<Patient> findByField(String field, String data) {
     List<Patient> pList = new ArrayList<Patient>();
+    getCollection();
     MongoCursor<Document> cursor = patients
       .find(new Document(field, data))
       .iterator();
@@ -99,7 +96,7 @@ public class PatientDAOImpl implements PatientDAO {
 
   public List<Patient> getAllPatients() {
     List<Patient> pList = new ArrayList<Patient>();
-
+    getCollection();
     MongoCursor<Document> cursor = patients.find().iterator();
 
     try {
@@ -119,7 +116,7 @@ public class PatientDAOImpl implements PatientDAO {
     );
 
     List<Patient> pList = new ArrayList<Patient>();
-
+    getCollection();
     MongoCursor<Document> cursor = patients.find(betweenDates).iterator();
 
     try {
@@ -138,17 +135,18 @@ public class PatientDAOImpl implements PatientDAO {
     pat.put("updated", new Date());
 
     BasicDBObject update = new BasicDBObject("$set", pat);
-
+    getCollection();
     patients.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
   }
 
   public void delete(String id) {
+    getCollection();
     patients.deleteOne(Filters.eq("_id", new ObjectId(id)));
   }
 
   public List<Pair<String, String>> getAllIdAndNames() {
     List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
-
+    getCollection();
     MongoCursor<Document> cursor = patients.find().iterator();
 
     try {
@@ -170,7 +168,7 @@ public class PatientDAOImpl implements PatientDAO {
 
   public List<String> petsByOwner(String ownerId) {
     List<String> cbPets = new ArrayList<String>();
-
+    getCollection();
     MongoCursor<Document> cursor = patients
       .find(new Document("ownerId", new ObjectId(ownerId)))
       .iterator();

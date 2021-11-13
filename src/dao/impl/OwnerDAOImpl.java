@@ -1,30 +1,25 @@
-package dao;
+package dao.impl;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import dao.interfaces.OwnerDAO;
 import entity.Owner;
-import javafx.util.Pair;
-import utils.MongoConnect;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import utils.MongoConnect;
 
 public class OwnerDAOImpl implements OwnerDAO {
 
   MongoCollection<Document> owners;
+  MongoConnect mc = new MongoConnect();
 
-  public OwnerDAOImpl() {
-    connection();
-  }
-
-  void connection() {
-    MongoConnect mc = new MongoConnect();
-    mc.connection();
+  public void getCollection() {
     owners = mc.database.getCollection("owners");
   }
 
@@ -61,23 +56,24 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     customer.put("_id", new ObjectId());
     customer.put("created", new Date());
-
+    getCollection();
     owners.insertOne(customer);
   }
 
-	public Owner findByID(String id) {
-		Document query = new Document();
-		try {
-			query = owners.find(new Document("_id", new ObjectId(id))).first();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return newOwner(query);
-	}
+  public Owner findByID(String id) {
+    Document query = new Document();
+    getCollection();
+    try {
+      query = owners.find(new Document("_id", new ObjectId(id))).first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return newOwner(query);
+  }
 
   public List<Owner> findByField(String field, String data) {
-		List<Owner> oList = new ArrayList<Owner>();
+    List<Owner> oList = new ArrayList<Owner>();
+    getCollection();
     MongoCursor<Document> cursor = owners
       .find(new Document(field, data))
       .iterator();
@@ -93,17 +89,14 @@ public class OwnerDAOImpl implements OwnerDAO {
     return oList;
   }
 
-
   public List<Owner> getAllOwners() {
     List<Owner> oList = new ArrayList<Owner>();
-
+    getCollection();
     MongoCursor<Document> cursor = owners.find().iterator();
 
     try {
       while (cursor.hasNext()) {
-        oList.add(
-					newOwner(cursor.next())
-				);
+        oList.add(newOwner(cursor.next()));
       }
     } finally {
       cursor.close();
@@ -118,14 +111,12 @@ public class OwnerDAOImpl implements OwnerDAO {
     );
 
     List<Owner> oList = new ArrayList<Owner>();
-
+    getCollection();
     MongoCursor<Document> cursor = owners.find(betweenDates).iterator();
 
     try {
       while (cursor.hasNext()) {
-        oList.add(
-					newOwner(cursor.next())
-				);
+        oList.add(newOwner(cursor.next()));
       }
     } finally {
       cursor.close();
@@ -140,17 +131,18 @@ public class OwnerDAOImpl implements OwnerDAO {
     customer.put("updated", new Date());
 
     BasicDBObject update = new BasicDBObject("$set", customer);
-
+    getCollection();
     owners.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
   }
 
   public void delete(String id) {
+    getCollection();
     owners.deleteOne(Filters.eq("_id", new ObjectId(id)));
   }
 
-	public List<Pair<String, String>> getAllIdAndNames() {
-		List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
-
+  public List<Pair<String, String>> getAllIdAndNames() {
+    List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
+    getCollection();
     MongoCursor<Document> cursor = owners.find().iterator();
 
     try {
@@ -168,5 +160,5 @@ public class OwnerDAOImpl implements OwnerDAO {
     }
 
     return cbList;
-	}
+  }
 }

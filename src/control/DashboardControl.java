@@ -1,7 +1,7 @@
 package control;
 
-import dao.ParametersDAO;
-import dao.ParametersDAOImpl;
+import dao.impl.ParametersDAOImpl;
+import dao.interfaces.ParametersDAO;
 
 public class DashboardControl {
 
