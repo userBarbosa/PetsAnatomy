@@ -83,4 +83,17 @@ public class Formatters {
   public String timeDateToString(Date date) {
     return dateToString(date) + " às " + hourToString(date);
   }
+
+  public String BooleanToString(Boolean value) {
+	  return value == true ? "Ativo" : "Inativo";
+  }
+
+  public boolean StringToBoolean(String value) {
+	  if (value.equals("Ativo")) {
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
+ 
 }
