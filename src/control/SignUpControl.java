@@ -44,8 +44,9 @@ public class SignUpControl {
     String password
   ) {
     if (service.findToCreateUser(username, email)) {
-      Employee user = new Employee(email, username, fullname);
+      Employee user = new Employee(email, username);
       user.setPassword(password);
+      user.setFullname(fullname);
       service.insert(user);
     } else {
 			JOptionPane.showMessageDialog(

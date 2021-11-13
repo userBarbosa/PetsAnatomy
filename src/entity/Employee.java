@@ -15,7 +15,6 @@ public class Employee {
   public Employee(String email, String username) {
     this.email = email;
     this.username = username;
-
     this.created = new Date();
   }
 

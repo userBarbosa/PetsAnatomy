@@ -46,11 +46,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   Employee newEmployee(Document doc) {
     String email = doc.getString("email");
     String username = doc.getString("username");
-    String fullname = doc.getString("fullname");
 
-    Employee e = new Employee(email, username, fullname);
+    Employee e = new Employee(email, username);
 
     e.setId(doc.getObjectId("_id"));
+    e.setFullname(doc.getString("fullname"));
     e.setPassword(doc.getString("password"));
     e.setActive(doc.getBoolean("active"));
     e.setRole(doc.getString("role"));
