@@ -20,7 +20,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 
-public class PatientBoundary extends Application {
+public class PatientBoundary implements StrategyBoundary {
 	
 	private TextField tfId = new TextField(); 
 	private ComboBox cbOwner = new ComboBox();
@@ -56,10 +56,8 @@ public class PatientBoundary extends Application {
 	
 	private static PatientControl control = new PatientControl();
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		AnchorPane mainPane = new AnchorPane(); 
-		AnchorPane menuPane = new AnchorPane();
+	@Override	
+	public Pane generateBoundaryStrategy() {
 		AnchorPane formPane = new AnchorPane(); 
 		
 		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -67,10 +65,6 @@ public class PatientBoundary extends Application {
 		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 		
 		binding();
-		
-		menuPane.setPrefHeight(768.0);
-		menuPane.setPrefWidth(300.0);
-		menuPane.setStyle("-fx-background-color: #000E44;");
 		
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
@@ -268,18 +262,9 @@ public class PatientBoundary extends Application {
         btnClear.setLayoutX(450.0);
         btnClear.setLayoutY(269.0);
 		btnClear.setFont(fontBtns);
-
-		mainPane.setLeftAnchor(menuPane, 0.0);
-		mainPane.setRightAnchor(formPane, 0.0);
-		mainPane.getChildren().addAll(menuPane, formPane);
-		mainPane.setPrefHeight(768.0);
-		mainPane.setPrefWidth(1366.0);
 		
-		Scene scene = new Scene(mainPane, 1366, 768);
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("Cl�nica Veterin�ria PetsAnatomy");	
+		return formPane;
+		
 	}
 	
 	private void binding() {
@@ -295,10 +280,6 @@ public class PatientBoundary extends Application {
         Bindings.bindBidirectional(cbTreatment.valueProperty(), control.treatmentProperty());
         Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
         Bindings.bindBidirectional(dpUpdated.valueProperty(), control.updatedProperty());
-	}
-
-	public static void main(String[] args) {
-		launch(args);
 	}
 
 }

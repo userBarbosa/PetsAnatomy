@@ -18,7 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class OwnerBoundary extends Application {
+public class OwnerBoundary implements StrategyBoundary {
 	
 	private TextField tfId = new TextField(); 
 	private ComboBox cbPatients = new ComboBox();
@@ -52,10 +52,8 @@ public class OwnerBoundary extends Application {
 	
 	private static OwnerControl control = new OwnerControl();
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		AnchorPane mainPane = new AnchorPane(); 
-		AnchorPane menuPane = new AnchorPane();
+	@Override	
+	public Pane generateBoundaryStrategy() {
 		AnchorPane formPane = new AnchorPane(); 
 		
 		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -63,10 +61,6 @@ public class OwnerBoundary extends Application {
 		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 		
 		binding();
-		
-		menuPane.setPrefHeight(768.0);
-		menuPane.setPrefWidth(300.0);
-		menuPane.setStyle("-fx-background-color: #000E44;");
 		
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
@@ -254,17 +248,8 @@ public class OwnerBoundary extends Application {
         btnClear.setLayoutY(269.0);
 		btnClear.setFont(fontBtns);
 		
-		mainPane.setLeftAnchor(menuPane, 0.0);
-		mainPane.setRightAnchor(formPane, 0.0);
-		mainPane.getChildren().addAll(menuPane, formPane);
-		mainPane.setPrefHeight(768.0);
-		mainPane.setPrefWidth(1366.0);
+		return formPane;
 		
-		Scene scene = new Scene(mainPane, 1366, 768);
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
 	}
 
 	private void binding() {
@@ -279,10 +264,6 @@ public class OwnerBoundary extends Application {
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
         Bindings.bindBidirectional(dpUpdated.valueProperty(), control.updatedProperty());
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
 	}
 
 }

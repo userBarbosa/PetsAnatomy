@@ -14,7 +14,7 @@ public interface AppointmentDAO {
 	Document findByField(String field, String data);
 	List<Document> findByDate(String field, Date dateGte, Date dateLte);
 	List<Document> returnAll();
-	void update(ObjectId id, Appointment appointment);
-	void delete(ObjectId id);
+	void update(String id, Appointment appointment);
+	void delete(String id);
 	
 }

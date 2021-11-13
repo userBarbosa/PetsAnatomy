@@ -23,13 +23,12 @@ import utils.Formatters;
 
 public class EmployeeControl {
 
-  private ObservableList<Employee> employees = FXCollections.observableArrayList();
-  private TableView<Employee> table = new TableView<Employee>();
+  private ObservableList<Employee> listEmployees = FXCollections.observableArrayList();
   private EmployeeDAO service = new EmployeeDAOImpl();
   private Formatters fmt = new Formatters();
 
   private StringProperty id = new SimpleStringProperty("");
-  private BooleanProperty active = new SimpleBooleanProperty(true);
+  private StringProperty active = new SimpleStringProperty("");
   private StringProperty email = new SimpleStringProperty("");
   private StringProperty username = new SimpleStringProperty("");
   private StringProperty fullname = new SimpleStringProperty("");
@@ -40,41 +39,38 @@ public class EmployeeControl {
   private ObjectProperty<Date> birthDate = new SimpleObjectProperty<Date>();
   private ObjectProperty<Date> created = new SimpleObjectProperty<Date>();
 
-  public void setEntity(Employee employee) {
-    if (employee != null) {
-      id.setValue(employee.getId().toString());
-      active.setValue(employee.getActive());
-      email.setValue(employee.getEmail());
-      username.setValue(employee.getUsername());
-      fullname.setValue(employee.getFullname());
-      role.setValue(employee.getRole());
-      telephoneNumber.setValue(employee.getTelephoneNumber());
-      bankDetails.setValue(employee.getBankDetails());
-      specialty.setValue(employee.getSpecialty());
-      birthDate.setValue(employee.getBirthDate());
-      created.setValue(employee.getCreated());
-      //fmt.timeDateToString
-    }
-  }
-
   public Employee getEntity() {
-    Employee employee = new Employee(getEmail(), getUsername());
-    employee.setFullname(getFullname());
-    employee.setId(new ObjectId(getId()));
-    employee.setActive(getActive());
-    employee.setRole(getRole());
-    employee.setTelephoneNumber(getTelephoneNumber());
-    employee.setBankDetails(getBankDetails());
-    employee.setSpecialty(getSpecialty());
-    employee.setBirthDate((Date) getBirthDate());
-    employee.setCreated((Date) getCreated());
-    /* employee.setBirthDate(fmt.stringToDate(birthDate.getValue()));
-    employee.setCreated(
-      fmt.stringToTimeDate(createdProperty().getValue(), "00:00")
-    ); */
-    return employee;
+	  Employee employee = new Employee(getEmail(), getUsername());
+	  employee.setFullname(getFullname());
+	  employee.setId(new ObjectId(getId()));
+	  employee.setActive(getActive());
+	  employee.setRole(getRole());
+	  employee.setTelephoneNumber(getTelephoneNumber());
+	  employee.setBankDetails(getBankDetails());
+	  employee.setSpecialty(getSpecialty());
+	  employee.setBirthDate((Date) getBirthDate());
+	  employee.setCreated((Date) getCreated());
+	  /* employee.setBirthDate(fmt.stringToDate(birthDate.getValue()));
+	    employee.setCreated(
+	      fmt.stringToTimeDate(createdProperty().getValue(), "00:00")
+	    ); */
+	  return employee;
   }
-
+  
+  public void setEntity(Employee employee) {
+	  id.setValue(employee.getId().toString());
+	  active.setValue(employee.getActive());
+	  email.setValue(employee.getEmail());
+	  username.setValue(employee.getUsername());
+	  fullname.setValue(employee.getFullname());
+	  role.setValue(employee.getRole());
+	  telephoneNumber.setValue(employee.getTelephoneNumber());
+	  bankDetails.setValue(employee.getBankDetails());
+	  specialty.setValue(employee.getSpecialty());
+	  birthDate.setValue(employee.getBirthDate());
+	  created.setValue(employee.getCreated());
+  }
+  
   public void create() {
     service.insert(getEntity());
     this.listAll();
@@ -91,13 +87,13 @@ public class EmployeeControl {
   }
 
   private void listAll() {
-    employees.clear();
-    employees.addAll(service.getAllEmployees());
+	listEmployees.clear();
+	listEmployees.addAll(service.getAllEmployees());
   }
 
   public void findByEmail() {
-    employees.clear();
-    employees.addAll(service.findByField("email", getEmail()));
+	listEmployees.clear();
+	listEmployees.addAll(service.findByField("email", getEmail()));
   }
 
   public void clearFields() {
@@ -114,112 +110,16 @@ public class EmployeeControl {
     created.setValue(null);
     this.listAll();
   }
-
-  public void generatedTable() {
-    listAll();
-
-    TableColumn<Employee, ObjectId> colActive = new TableColumn<>("Ativo");
-    colActive.setCellValueFactory(
-      new PropertyValueFactory<Employee, ObjectId>("active")
-    );
-
-    TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
-    colEmail.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("email")
-    );
-
-    TableColumn<Employee, String> colUsername = new TableColumn<>("Username");
-    colUsername.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("username")
-    );
-
-    TableColumn<Employee, String> colFullname = new TableColumn<>(
-      "Nome Completo"
-    );
-    colFullname.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("fullname")
-    );
-
-    TableColumn<Employee, String> colRole = new TableColumn<>("Role");
-    colRole.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("role")
-    );
-
-    TableColumn<Employee, String> colTelephoneNumber = new TableColumn<>(
-      "Telefone"
-    );
-    colTelephoneNumber.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("telephoneNumber")
-    );
-
-    TableColumn<Employee, String> colBankDetails = new TableColumn<>(
-      "Dados Bancarios"
-    );
-    colBankDetails.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("bankDetails")
-    );
-
-    TableColumn<Employee, String> colSpecialty = new TableColumn<>(
-      "Especialidade"
-    );
-    colSpecialty.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("specialty")
-    );
-
-    TableColumn<Employee, Date> colBirthDate = new TableColumn<>(
-      "Data de Nascimento"
-    );
-    colBirthDate.setCellValueFactory(
-      new PropertyValueFactory<Employee, Date>("birthDate")
-    );
-
-    TableColumn<Employee, Date> colCreated = new TableColumn<>(
-      "Data de Criação"
-    );
-    colCreated.setCellValueFactory(
-      new PropertyValueFactory<Employee, Date>("created")
-    );
-
-    table
-      .getColumns()
-      .addAll(
-        colActive,
-        colEmail,
-        colUsername,
-        colFullname,
-        colTelephoneNumber,
-        colBankDetails,
-        colSpecialty,
-        colBirthDate,
-        colCreated,
-        colRole
-      );
-
-    table
-      .getSelectionModel()
-      .selectedItemProperty()
-      .addListener(
-        (obs, antigo, novo) -> {
-          setEntity(novo);
-        }
-      );
-
-    table.setLayoutY(305.0);
-    table.setPrefHeight(469.0);
-    table.setPrefWidth(1066.0);
-
-    table.setItems(employees);
-  }
-
+  
   public void readAll() {
-    List<Employee> allWorkers = service.getAllEmployees();
-    if (allWorkers != null) {
-      for (Employee each : allWorkers) {
-        System.out.println("All: " + each.getFullname());
-      }
-    } else {
-      System.err.println("There are no workers in database");
-    }
+	  List<Employee> allWorkers = service.getAllEmployees();
+	  if (allWorkers != null) {
+		  for (Employee each : allWorkers) {
+			  System.out.println("All: " + each.getFullname());
+		  }
+	  } else {
+		  System.err.println("There are no workers in database");
+	  }
   }
 
   public void readByID(String id) {
@@ -244,10 +144,6 @@ public class EmployeeControl {
     System.out.println("ByField: " + query);
   }
 
-  public TableView<Employee> getTable() {
-    return table;
-  }
-
   public String getId() {
     return id.getValue();
   }
@@ -256,11 +152,11 @@ public class EmployeeControl {
     return id;
   }
 
-  public Boolean getActive() {
+  public String getActive() {
     return active.getValue();
   }
 
-  public BooleanProperty activeProperty() {
+  public StringProperty activeProperty() {
     return active;
   }
 
@@ -335,6 +231,10 @@ public class EmployeeControl {
   public ObjectProperty createdProperty() {
     return created;
   } //entender o que ele esta esperando
+
+  public ObservableList<Employee> getListView() {
+	  return listEmployees;
+  }
 
   
   /* public String getBirthDate() {

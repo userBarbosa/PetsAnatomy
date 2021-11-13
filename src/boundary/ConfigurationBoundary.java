@@ -17,7 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class ConfigurationBoundary extends Application  {
+public class ConfigurationBoundary implements StrategyBoundary  {
 	
 	private TextField tfId = new TextField(); 
 	private TextField tfEmail = new TextField();
@@ -36,10 +36,8 @@ public class ConfigurationBoundary extends Application  {
 	
 	private static ConfigurationControl control = new ConfigurationControl();
 	
-	@Override
-	public void start(Stage stage) throws Exception {
-		AnchorPane mainPane = new AnchorPane(); 
-		AnchorPane menuPane = new AnchorPane();
+	@Override	
+	public Pane generateBoundaryStrategy() {
 		AnchorPane formPane = new AnchorPane(); 
 		
 		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -47,10 +45,6 @@ public class ConfigurationBoundary extends Application  {
 		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 		
 		binding();
-		
-		menuPane.setPrefHeight(768.0);
-		menuPane.setPrefWidth(300.0);
-		menuPane.setStyle("-fx-background-color: #000E44;");
 		
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
@@ -146,17 +140,7 @@ public class ConfigurationBoundary extends Application  {
 		btnClear.setLayoutY(151.0);
 		btnClear.setFont(fontBtns);
 		
-		mainPane.setLeftAnchor(menuPane, 0.0);
-		mainPane.setRightAnchor(formPane, 0.0);
-		mainPane.getChildren().addAll(menuPane, formPane);
-		mainPane.setPrefHeight(768.0);
-		mainPane.setPrefWidth(1366.0);
-		
-		Scene scene = new Scene(mainPane, 1366, 768);
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");	
+		return formPane;
 	}
 	
 	private void binding() {
@@ -167,8 +151,4 @@ public class ConfigurationBoundary extends Application  {
 		Bindings.bindBidirectional(cbRole.valueProperty(), control.roleProperty());
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
-
 }

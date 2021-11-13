@@ -75,12 +75,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
   
 
-  public void delete(ObjectId id) {
+  public void delete(String id) {
 
   }
 
   @Override
-  public void update(ObjectId id, Appointment appointment) {
+  public void update(String id, Appointment appointment) {
     
   }
 }
