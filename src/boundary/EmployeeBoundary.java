@@ -1,6 +1,8 @@
 package boundary;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import control.EmployeeControl;
 import entity.Employee;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -37,13 +40,12 @@ public class EmployeeBoundary implements StrategyBoundary {
 	private TextField tfTelephoneNumber = new TextField();
 	private TextField tfBankDetails = new TextField();
 	private DatePicker dpBirthDate = new DatePicker();
-	private DatePicker dpCreated = new DatePicker();	
 	private ComboBox<String> cbActive = new ComboBox<>();
 	private ComboBox<String> cbSpecialty = new ComboBox<>();
 	private ComboBox<String> cbRole = new ComboBox<>();
 
 	private Label lblId = new Label("Id"); 
-	private Label lblActive = new Label("Ativo");
+	private Label lblActive = new Label("Status");
 	private Label lblEmail = new Label("Email");	
 	private Label lblUsername = new Label("Username");
 	private Label lblFullname = new Label("Nome");
@@ -52,7 +54,6 @@ public class EmployeeBoundary implements StrategyBoundary {
 	private Label lblSpecialty = new Label("Especialidade");
 	private Label lblBirthDate = new Label("Data de Nascimento");
 	private Label lblRole = new Label("Role");
-	private Label lblCreated = new Label("Criado Em");
 
 	private Button btnClear = new Button("Limpar");
 	private Button btnUpdate = new Button("Atualizar");
@@ -62,10 +63,13 @@ public class EmployeeBoundary implements StrategyBoundary {
 
 	private static EmployeeControl control = new EmployeeControl();
 	private TableView<Employee> table = new TableView<Employee>();
-	
+//    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
 	public void generatedTable() {
-        ObservableList<String> actives = FXCollections.observableArrayList("Ativo", "Inativo");
-        cbActive.setItems(actives);
+		control.listAll();
+		
+        ObservableList<String> status = FXCollections.observableArrayList("Ativo", "Inativo");
+        cbActive.setItems(status);
         cbActive.setValue("Selecione");
       
 		TableColumn<Employee, String> colActive = new TableColumn<>("Status");
@@ -79,13 +83,6 @@ public class EmployeeBoundary implements StrategyBoundary {
 
 		TableColumn<Employee, String> colFullname = new TableColumn<>("Nome Completo");
 		colFullname.setCellValueFactory(new PropertyValueFactory<Employee, String>("fullname"));
-
-        ObservableList<String> roles = FXCollections.observableArrayList("admin", "receptionist", "doctor");
-        cbRole.setItems(roles);
-        cbRole.setValue("Selecione");
-		
-		TableColumn<Employee, String> colRole = new TableColumn<>("Role");
-		colRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
 
 		TableColumn<Employee, String> colTelephoneNumber = new TableColumn<>("Telefone");
 		colTelephoneNumber.setCellValueFactory(new PropertyValueFactory<Employee, String>("telephoneNumber"));
@@ -117,12 +114,9 @@ public class EmployeeBoundary implements StrategyBoundary {
 		TableColumn<Employee, String> colSpecialty = new TableColumn<>("Especialidade");
 		colSpecialty.setCellValueFactory(new PropertyValueFactory<Employee, String>("specialty"));
 
-		TableColumn<Employee, Date> colBirthDate = new TableColumn<>("Data de Nascimento");
-		colBirthDate.setCellValueFactory(new PropertyValueFactory<Employee, Date>("birthDate"));
-
-		TableColumn<Employee, Date> colCreated = new TableColumn<>("Data de Criação");
-		colCreated.setCellValueFactory(new PropertyValueFactory<Employee, Date>("created"));
-
+		TableColumn<Employee, String> colBirthDate = new TableColumn<>("Data de Nascimento");
+		colBirthDate.setCellValueFactory(new PropertyValueFactory<Employee, String>("birthDate"));
+		
 		table
 		.getColumns()
 		.addAll(
@@ -133,13 +127,11 @@ public class EmployeeBoundary implements StrategyBoundary {
 				colTelephoneNumber,
 				colBankDetails,
 				colSpecialty,
-				colBirthDate,
-				colCreated,
-				colRole
+				colBirthDate
 				);
 
 
-        table.setItems(control.getListView());
+        table.setItems(control.getListEmployees());
 
         table
         .getSelectionModel()
@@ -176,7 +168,8 @@ public class EmployeeBoundary implements StrategyBoundary {
 		lblId.setPrefWidth(20.0);
 		lblId.setFont(fontLbls);
 
-		tfId.setDisable(true);
+//		tfId.setDisable(true);
+//		tfId.setEditable(false);
 		tfId.setLayoutX(95.0);
 		tfId.setLayoutY(33.0);
 		tfId.setPrefHeight(25.0);
@@ -275,39 +268,13 @@ public class EmployeeBoundary implements StrategyBoundary {
 		dpBirthDate.setLayoutY(108.0);
 		dpBirthDate.setPrefHeight(25.0);
 		dpBirthDate.setPrefWidth(400.0);
-
-		lblRole.setLayoutX(510.0);
-		lblRole.setLayoutY(151.0);
-		lblRole.setPrefHeight(17.0);
-		lblRole.setPrefWidth(100.0);
-		lblRole.setFont(fontLbls);
-
-		cbRole.setLayoutX(645.0);
-		cbRole.setLayoutY(147.0);
-		cbRole.setPrefHeight(25.0);
-		cbRole.setPrefWidth(400.0);
-		cbRole.setDisable(true);
-
-		lblCreated.setLayoutX(510.0);
-		lblCreated.setLayoutY(189.0);
-		lblCreated.setPrefHeight(17.0);
-		lblCreated.setPrefWidth(100.0);
-		lblCreated.setFont(fontLbls);
-
-		dpCreated.setLayoutX(645.0);
-		dpCreated.setLayoutY(187.0);
-		dpCreated.setPrefHeight(25.0);
-		dpCreated.setPrefWidth(400.0);
-		dpCreated.setEditable(false);
-		dpCreated.setDisable(true);
 		
 		formPane.getChildren().addAll(lblId, tfId, lblActive, cbActive, lblEmail, tfEmail, lblUsername, tfUsername, 
 				lblFullname, tfFullname, lblTelephoneNumber, tfTelephoneNumber, lblBankDetails, tfBankDetails, lblSpecialty, 
-				cbSpecialty, lblBirthDate, dpBirthDate, lblRole, cbRole, lblCreated, dpCreated,
-				btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
-		
+				cbSpecialty, lblBirthDate, dpBirthDate, btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
+		formPane.getChildren().add(table);		
 		this.generatedTable();		
-		formPane.getChildren().add(table);
+
 
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -356,10 +323,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 		Bindings.bindBidirectional(tfTelephoneNumber.textProperty(), control.telephoneNumberProperty());
 		Bindings.bindBidirectional(tfBankDetails.textProperty(), control.bankDetailsProperty());
 		Bindings.bindBidirectional(cbSpecialty.valueProperty(), control.specialtyProperty());
-		Bindings.bindBidirectional(cbRole.valueProperty(), control.roleProperty());
 		Bindings.bindBidirectional(dpBirthDate.valueProperty(), control.birthDateProperty());
-		Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
-		//The method bindBidirectional(Property<T>, Property<T>) in the type Bindings is not applicable for the arguments (ObjectProperty<LocalDate>, StringProperty)Java(67108979)
 	}
 
 }

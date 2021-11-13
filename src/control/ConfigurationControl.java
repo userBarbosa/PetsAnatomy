@@ -84,10 +84,12 @@ public class ConfigurationControl {
       new PropertyValueFactory<Employee, String>("password")
     );
 
-    TableColumn<Employee, String> colRole = new TableColumn<>("Role");
-    colRole.setCellValueFactory(
-      new PropertyValueFactory<Employee, String>("role")
-    );
+//    ObservableList<String> roles = FXCollections.observableArrayList("admin", "receptionist", "doctor");
+//    cbRole.setItems(roles);
+//    cbRole.setValue("Selecione");
+	
+	TableColumn<Employee, String> colRole = new TableColumn<>("Role");
+	colRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
 
     table.getColumns().addAll(colEmail, colUsername, colPassword, colRole);
 

@@ -7,6 +7,9 @@ import java.security.NoSuchAlgorithmException;
 public class Security {
 
 	public String encryptPassword(String cipher) {
+		if (cipher == null) {
+			cipher = "12345";
+		}
 		StringBuilder builder = new StringBuilder();
 		try {
 			MessageDigest algorithm = MessageDigest.getInstance("SHA-256");

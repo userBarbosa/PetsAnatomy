@@ -95,5 +95,21 @@ public class Formatters {
 		  return false;
 	  }
   }
+  
+  public Date localToDate(LocalDate date){
+	  Date dt = Date.from(date
+		  .atStartOfDay()
+		  .atZone(ZoneId.systemDefault())
+		  .toInstant()
+		  );
+	  return dt;
+  }
+
+  public LocalDate DateToLocal(Date date) {
+	  return date.toInstant()
+		  .atZone(ZoneId.systemDefault())
+		  .toLocalDate();
+  }
+
  
 }

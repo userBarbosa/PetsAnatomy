@@ -269,8 +269,7 @@ public class AppointmentBoundary implements StrategyBoundary {
         formPane.getChildren().addAll(lblId, tfId, lblDate, dpDate, lblTime, cbTime, lblPatient, cbPatient, 
         		lblOwner, cbOwner, lblEmployee, cbEmployee, lblState, cbState, lblFinancialState, 
         		cbFinancialState, lblValue, tfValue, lblObs, tfObs, 
-        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-        		);
+        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
         
         formPane.getChildren().add(table);
 

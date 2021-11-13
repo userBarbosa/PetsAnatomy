@@ -15,6 +15,7 @@ import org.bson.types.ObjectId;
 import dao.interfaces.EmployeeDAO;
 import entity.Employee;
 import javafx.util.Pair;
+import utils.Formatters;
 import utils.MongoConnect;
 import utils.Security;
 
@@ -22,8 +23,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   MongoCollection<Document> employees;
   MongoConnect mc = new MongoConnect();
-
+  private Formatters fmt = new Formatters();
+  
   private void getCollection() {
+	mc.connection();
     employees = mc.database.getCollection("employees");
   }
 
@@ -197,7 +200,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     try {
       while (cursor.hasNext()) {
-        Document temp = cursor.next();
+        Document temp = cursor.next(); 
         cbList.add(
           new Pair<String, String>(
             temp.get("_id").toString(),
