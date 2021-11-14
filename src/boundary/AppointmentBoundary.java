@@ -64,25 +64,11 @@ public class AppointmentBoundary implements StrategyBoundary {
 	private static AppointmentControl control = new AppointmentControl();
 
 	public void generatedTable() {
-		TableColumn<Appointment, String> colDate = new TableColumn<>("Date");
-		colDate.setCellValueFactory(
-				appointmentProp -> {
-					Date n = appointmentProp.getValue().getDate();
-					DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-					String strData = dateFormat.format(n);
-					return new ReadOnlyStringWrapper(strData);
-				}
-				);
+		TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
+		colDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
 
-		TableColumn<Appointment, String> colTime = new TableColumn<>("Hor�rio");
-		colTime.setCellValueFactory(
-				appointmentProp -> {
-					Date n = appointmentProp.getValue().getDate();
-					DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-					String strData = dateFormat.format(n);
-					return new ReadOnlyStringWrapper(strData);
-				}
-				);
+		TableColumn<Appointment, String> colTime = new TableColumn<>("Horário");
+		colTime.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
 
 		TableColumn<Appointment, ObjectId> colPatient = new TableColumn<>("Paciente");
 		colPatient.setCellValueFactory(new PropertyValueFactory<Appointment, ObjectId>("patientId"));

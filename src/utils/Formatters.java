@@ -83,18 +83,6 @@ public class Formatters {
   public String timeDateToString(Date date) {
     return dateToString(date) + " às " + hourToString(date);
   }
-
-  public String BooleanToString(Boolean value) {
-	  return value == true ? "Ativo" : "Inativo";
-  }
-
-  public boolean StringToBoolean(String value) {
-	  if (value.equals("Ativo")) {
-		  return true;
-	  } else {
-		  return false;
-	  }
-  }
   
   public Date localToDate(LocalDate date){
 	  Date dt = Date.from(date
@@ -110,6 +98,29 @@ public class Formatters {
 		  .atZone(ZoneId.systemDefault())
 		  .toLocalDate();
   }
+  
+  public String activeBooleanToString(Boolean value) {
+	  return value == true ? "Ativo" : "Inativo";
+  }
 
+  public boolean activeStringToBoolean(String value) {
+	  if (value.equals("Ativo")) {
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
+  
+  public String treatmentBooleanToString(Boolean value) {
+	  return value == true ? "Em tratamento" : "Liberado para Alta Hospitalar";
+  }
+
+  public boolean treatmentStringToBoolean(String value) {
+	  if (value.equals("Em tratamento")) {
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
  
 }

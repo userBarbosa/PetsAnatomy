@@ -1,40 +1,48 @@
 package boundary;
 
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.bson.types.ObjectId;
 import control.AppointmentControl;
 import control.PatientControl;
+import entity.Patient;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.converter.NumberStringConverter;
 
 public class PatientBoundary implements StrategyBoundary {
 	
 	private TextField tfId = new TextField(); 
-	private ComboBox cbOwner = new ComboBox();
 	private TextField tfName = new TextField();
-	private ComboBox cbSpecies = new ComboBox();
-	private ComboBox cbFamily = new ComboBox();
-	private ComboBox cbBloodtype = new ComboBox();
-	private DatePicker dpBirthdate = new DatePicker();
 	private TextField tfObs = new TextField();
+	private TextField tfBloodtype = new TextField();
+	private ComboBox<String> cbOwner = new ComboBox<>();
+	private ComboBox<String> cbSpecies = new ComboBox<>();
+	private ComboBox<String> cbFamily = new ComboBox<>();
+	private ComboBox<String> cbTreatment = new ComboBox<>();
+	private DatePicker dpBirthdate = new DatePicker();
 	private DatePicker dpLastVisit = new DatePicker();
-	private ComboBox cbTreatment = new ComboBox();
-	private DatePicker dpCreated = new DatePicker();
-	private DatePicker dpUpdated = new DatePicker();
-	
+
 	private Label lblId = new Label("Id"); 
 	private Label lblOwner = new Label("Dono");
 	private Label lblName = new Label("Nome");	
@@ -45,8 +53,6 @@ public class PatientBoundary implements StrategyBoundary {
 	private Label lblObs = new Label("Observação");
 	private Label lblLastVisit = new Label("Última Consulta");
 	private Label lblTreatment = new Label("Em Tratamento");
-	private Label lblCreated = new Label("Criado Em");
-	private Label lblUpdated = new Label("Última Atualizção");	
 	
 	private Button btnClear = new Button("Limpar");
 	private Button btnUpdate = new Button("Atualizar");
@@ -55,6 +61,84 @@ public class PatientBoundary implements StrategyBoundary {
 	private Button btnDelete = new Button("Remover");
 	
 	private static PatientControl control = new PatientControl();
+	private TableView<Patient> table = new TableView<Patient>();
+	  
+	public void generatedTable() {
+		control.listAll();
+		
+		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
+		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
+
+		TableColumn<Patient, ObjectId> colOwner = new TableColumn<>("Dono");
+		colOwner.setCellValueFactory(new PropertyValueFactory<Patient, ObjectId>("ownerId"));
+
+        ObservableList<String> species = FXCollections.observableArrayList(
+        		"Peixe", 
+        		"Réptil",
+        		"Ave",
+        		"Mamífero",
+        		"Anfíbio",
+        		"Porífero",
+        		"Cnidário",
+        		"Platelminto",
+        		"Molusco",
+        		"Artrópode",
+        		"Nematelminto",
+        		"Anelídeo",
+        		"Equinodermo"
+        		);
+        cbSpecies.setItems(species);
+        
+		TableColumn<Patient, String> colSpecies = new TableColumn<>("Espécie");
+		colSpecies.setCellValueFactory(new PropertyValueFactory<Patient, String>("species"));
+
+		TableColumn<Patient, String> colFamily = new TableColumn<>("Família");
+		colFamily.setCellValueFactory(new PropertyValueFactory<Patient, String>("family"));
+
+		TableColumn<Patient, String> colBloodtype = new TableColumn<>("Tipo Sanguíneo");
+		colBloodtype.setCellValueFactory(new PropertyValueFactory<Patient, String>("bloodtype"));
+
+		TableColumn<Patient, String> colBirthdate = new TableColumn<>("Data de Nascimento");
+		colBirthdate.setCellValueFactory(new PropertyValueFactory<Patient, String>("birthdate"));
+
+		TableColumn<Patient, String> colObs = new TableColumn<>("Observação");
+		colObs.setCellValueFactory(new PropertyValueFactory<Patient, String>("obs"));
+
+		TableColumn<Patient, String> colLastVisit = new TableColumn<>("Última Consulta");
+		colLastVisit.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastVisit"));
+
+		TableColumn<Patient, String> colTreatment = new TableColumn<>("Em Tratamento");
+		colTreatment.setCellValueFactory(new PropertyValueFactory<Patient, String>("treatment"));
+
+		table
+		.getColumns()
+		.addAll(
+				colName,
+				colOwner,
+				colSpecies,
+				colFamily,
+				colBloodtype,
+				colBirthdate,
+				colObs,
+				colLastVisit,
+				colTreatment
+				);
+		
+        table.setItems(control.getListPatients());
+
+		table
+		.getSelectionModel()
+		.selectedItemProperty()
+        .addListener( (obs, older, newer) -> {
+        	if (newer != null) {
+        		control.setEntity(newer);
+        	}
+        });
+
+		table.setLayoutY(305.0);
+		table.setPrefHeight(469.0);
+		table.setPrefWidth(1066.0);
+	}
 
 	@Override	
 	public Pane generateBoundaryStrategy() {
@@ -130,104 +214,68 @@ public class PatientBoundary implements StrategyBoundary {
 		cbFamily.setPrefHeight(25.0);
 		cbFamily.setPrefWidth(400.0);
 		
-		lblObs.setLayoutX(15.0);
-		lblObs.setLayoutY(230.0);
+		lblObs.setLayoutX(510.0);
+		lblObs.setLayoutY(37.0);
 		lblObs.setPrefHeight(17.0);
-		lblObs.setPrefWidth(77.0);
+		lblObs.setPrefWidth(100.0);
 		lblObs.setFont(fontLbls);
 		
-		tfObs.setLayoutX(95.0);
-		tfObs.setLayoutY(226.0);
+		tfObs.setLayoutX(645.0);
+		tfObs.setLayoutY(33.0);
 		tfObs.setPrefHeight(25.0);
 		tfObs.setPrefWidth(400.0);
 		tfObs.setFont(fontTf);
 		
 		lblBloodtype.setLayoutX(510.0);
-		lblBloodtype.setLayoutY(37.0);
+		lblBloodtype.setLayoutY(75.0);
 		lblBloodtype.setPrefHeight(17.0);
-		lblBloodtype.setPrefWidth(100.0);
+		lblBloodtype.setPrefWidth(150.0);
 		lblBloodtype.setFont(fontLbls);
 		
-		cbBloodtype.setLayoutX(645.0);
-		cbBloodtype.setLayoutY(33.0);
-		cbBloodtype.setPrefHeight(25.0);
-		cbBloodtype.setPrefWidth(400.0);
+		tfBloodtype.setLayoutX(645.0);
+		tfBloodtype.setLayoutY(71.0);
+		tfBloodtype.setPrefHeight(25.0);
+		tfBloodtype.setPrefWidth(400.0);
 		
 		lblBirthdate.setLayoutX(510.0);
-		lblBirthdate.setLayoutY(75.0);
+		lblBirthdate.setLayoutY(112.0);
 		lblBirthdate.setPrefHeight(17.0);
 		lblBirthdate.setPrefWidth(150.0);
 		lblBirthdate.setFont(fontLbls);
 		
 		dpBirthdate.setLayoutX(645.0);
-		dpBirthdate.setLayoutY(71.0);
+		dpBirthdate.setLayoutY(108.0);
 		dpBirthdate.setPrefHeight(25.0);
 		dpBirthdate.setPrefWidth(400.0);
 		
 		lblLastVisit.setLayoutX(510.0);
-		lblLastVisit.setLayoutY(112.0);
+		lblLastVisit.setLayoutY(151.0);
 		lblLastVisit.setPrefHeight(17.0);
 		lblLastVisit.setPrefWidth(100.0);
 		lblLastVisit.setFont(fontLbls);
 		
 		dpLastVisit.setLayoutX(645.0);
-		dpLastVisit.setLayoutY(108.0);
+		dpLastVisit.setLayoutY(147.0);
 		dpLastVisit.setPrefHeight(25.0);
 		dpLastVisit.setPrefWidth(400.0);
 		
 		lblTreatment.setLayoutX(510.0);
-		lblTreatment.setLayoutY(151.0);
+		lblTreatment.setLayoutY(189.0);
 		lblTreatment.setPrefHeight(17.0);
 		lblTreatment.setPrefWidth(100.0);
 		lblTreatment.setFont(fontLbls);
 		
 		cbTreatment.setLayoutX(645.0);
-		cbTreatment.setLayoutY(147.0);
+		cbTreatment.setLayoutY(187.0);
 		cbTreatment.setPrefHeight(25.0);
 		cbTreatment.setPrefWidth(400.0);
-		
-		lblCreated.setLayoutX(510.0);
-		lblCreated.setLayoutY(189.0);
-		lblCreated.setPrefHeight(17.0);
-		lblCreated.setPrefWidth(100.0);
-		lblCreated.setFont(fontLbls);
-		
-		dpCreated.setLayoutX(645.0);
-		dpCreated.setLayoutY(187.0);
-		dpCreated.setPrefHeight(25.0);
-		dpCreated.setPrefWidth(400.0);
-		dpCreated.setEditable(false);
-		dpCreated.setDisable(true);
-		
-		lblUpdated.setLayoutX(510.0);
-		lblUpdated.setLayoutY(230.0);
-		lblUpdated.setPrefHeight(17.0);
-		lblUpdated.setPrefWidth(120.0);
-		lblUpdated.setFont(fontLbls);
-		
-		dpUpdated.setLayoutX(645.0);
-		dpUpdated.setLayoutY(226.0);
-		dpUpdated.setPrefHeight(25.0);
-		dpUpdated.setPrefWidth(400.0);
-		dpUpdated.setEditable(false);
-		dpUpdated.setDisable(true);
-		
-        if (control.getTable().getColumns().size() == 0) {
-            control.generatedTable();
-        }
-        
-        Node table = control.getTable();
-        table.setLayoutY(299.0);
-        table.prefHeight(469.0);
-        table.prefWidth(1066.0);
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
-        		lblFamily, cbFamily, lblBloodtype, cbBloodtype, lblBirthdate, dpBirthdate, lblObs, 
-        		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, lblCreated, dpCreated,
-        		lblUpdated, dpUpdated, btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-        		, table
-        		);
-
+        		lblFamily, cbFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
+        		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
+		formPane.getChildren().add(table);		
+		this.generatedTable();	
+        
         btnCreate.setOnAction((e) -> {
             control.create();
         });
@@ -236,7 +284,7 @@ public class PatientBoundary implements StrategyBoundary {
         btnCreate.setFont(fontBtns);
 		
         btnFind.setOnAction((e) -> {
-            control.findByName();
+            control.findByField();
         });
         btnFind.setLayoutX(281.0);
         btnFind.setLayoutY(269.0);
@@ -264,7 +312,6 @@ public class PatientBoundary implements StrategyBoundary {
 		btnClear.setFont(fontBtns);
 		
 		return formPane;
-		
 	}
 	
 	private void binding() {
@@ -273,13 +320,11 @@ public class PatientBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(tfName.textProperty(), control.nameProperty());
         Bindings.bindBidirectional(cbSpecies.valueProperty(), control.speciesProperty());
         Bindings.bindBidirectional(cbFamily.valueProperty(), control.familyProperty());
-        Bindings.bindBidirectional(cbBloodtype.valueProperty(), control.bloodtypeProperty());
+        Bindings.bindBidirectional(tfBloodtype.textProperty(), control.bloodtypeProperty());
         Bindings.bindBidirectional(dpBirthdate.valueProperty(), control.birthdateProperty());
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(cbTreatment.valueProperty(), control.treatmentProperty());
-        Bindings.bindBidirectional(dpCreated.valueProperty(), control.createdProperty());
-        Bindings.bindBidirectional(dpUpdated.valueProperty(), control.updatedProperty());
 	}
 
 }

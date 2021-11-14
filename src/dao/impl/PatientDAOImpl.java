@@ -20,6 +20,7 @@ public class PatientDAOImpl implements PatientDAO {
   MongoConnect mc = new MongoConnect();
 
   public void getCollection() {
+	mc.connection();
     patients = mc.database.getCollection("patients");
   }
 

@@ -144,7 +144,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	}
 	
 	private void binding() {
-		Bindings.bindBidirectional(tfId.idProperty(), control.idProperty());
+		Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
 		Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
 		Bindings.bindBidirectional(tfPassword.textProperty(), control.passwordProperty());

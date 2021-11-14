@@ -18,12 +18,6 @@ public class Employee {
     this.created = new Date();
   }
 
-  /* "dailySchedule/workShift": {
-		"startHour": 8,
-		"endingHour": 18,
-		"appDuration": 45 //minutes
-	} */
-
   public String getUsername() {
     return this.username;
   }

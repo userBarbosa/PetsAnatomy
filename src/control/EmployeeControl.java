@@ -39,7 +39,7 @@ public class EmployeeControl {
   public Employee getEntity() {
 	  Employee employee = new Employee(emailProperty().getValue(), usernameProperty().getValue());
 	  employee.setId(idProperty().getValue() == null ? new ObjectId() : new ObjectId(idProperty().getValue()));
-	  employee.setActive(fmt.StringToBoolean(activeProperty().getValue()));
+	  employee.setActive(fmt.activeStringToBoolean(activeProperty().getValue()));
 	  employee.setFullname(fullnameProperty().getValue());
 	  employee.setTelephoneNumber(telephoneNumberProperty().getValue());
 	  employee.setBankDetails(bankDetailsProperty().getValue());
@@ -50,7 +50,7 @@ public class EmployeeControl {
   
   public void setEntity(Employee employee) {
 	  id.setValue((String) employee.getId().toString());
-	  active.setValue(fmt.BooleanToString(employee.getActive()));
+	  active.setValue(fmt.activeBooleanToString(employee.getActive()));
 	  email.setValue(employee.getEmail());
 	  username.setValue(employee.getUsername());
 	  fullname.setValue(employee.getFullname());
@@ -63,26 +63,30 @@ public class EmployeeControl {
   public void create() {
     service.insert(getEntity());
     this.listAll();
+    this.clearFields();
   }
 
   public void updateById() {
     service.update(idProperty().getValue(), getEntity());
     this.listAll();
+    this.clearFields();
   }
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.findByEmail();
+    this.findByField();
+    this.clearFields();
   }
 
   public void listAll() {
 	listEmployees.clear();
 	listEmployees.addAll(service.getAllEmployees());
   }
-
-  public void findByEmail() {
-	listEmployees.clear();
-	listEmployees.addAll(service.findByField("email", emailProperty().getValue()));
+  
+  public void findByField() {
+	  listEmployees.clear();
+	  listEmployees.addAll(service.findByField("fullname", fullnameProperty().getValue()));
+	  this.clearFields();
   }
 
   public void clearFields() {
@@ -96,39 +100,6 @@ public class EmployeeControl {
     specialty.setValue("");
     birthDate.setValue(null);
     this.listAll();
-  }
-  
-  public void readAll() {
-	  List<Employee> allWorkers = service.getAllEmployees();
-	  if (allWorkers != null) {
-		  for (Employee each : allWorkers) {
-			  System.out.println("All: " + each.getFullname());
-		  }
-	  } else {
-		  System.err.println("There are no workers in database");
-	  }
-  }
-
-  public void readByID(String id) {
-    Employee query = service.findByID(id);
-    System.out.println("ById: " + query);
-  }
-
-  public void readByDate(String field, Date dateGte, Date dateLte) {
-    List<Employee> query = service.findByDate(field, dateGte, dateLte);
-
-    if (query != null) {
-      for (Employee each : query) {
-        System.out.println("ByDate: " + each.getId());
-      }
-    } else {
-      System.err.println("There are no workers in the specified dates");
-    }
-  }
-
-  public void readByField(String field, String data) {
-    List<Employee> query = service.findByField(field, data);
-    System.out.println("ByField: " + query);
   }
 
   public ObservableList<Employee> getListEmployees() {
@@ -170,33 +141,5 @@ public class EmployeeControl {
   public ObjectProperty birthDateProperty() {
 	  return birthDate;
   }
-  /* tests structures; remove for final application:
-  public static void main(String[] args) {
-    EmployeeControl ec = new EmployeeControl();
-    EmployeeDAO s1 = new EmployeeDAOImpl();
 
-    List<Pair<String, String>> cb = s1.allEmployees();
-
-    for (Pair<String, String> e : cb) {
-      System.out.println(e.getKey() + " - " + e.getValue());
-    }
-    Employee marcos = new Employee(
-	      "abc@email.com",
-	      "Marcos",
-	      "Marcos F R Barbosa",
-	      "12345"
-	    );
-	    marcos.setId(new ObjectId());
-	    ec.create(marcos);
-	    ec.readByID(new ObjectId("6178893359bd6c23d3e59b27"));
-	    ec.readByDate(
-	      "created",
-	      new Date().from(Instant.now().minusMillis((86400000))),
-	      new Date().from(Instant.now().plusMillis(86400000))
-	    );
-	    ec.readByField("fullname", "Marcos Barbosa");
-	    ec.update(new ObjectId("6178893359bd6c23d3e59b27"), marcos);
-	    ec.delete(new ObjectId("6178893359bd6c23d3e59b27"));
-	    ec.readAll(); 
-  }*/
 }

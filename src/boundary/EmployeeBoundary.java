@@ -42,7 +42,6 @@ public class EmployeeBoundary implements StrategyBoundary {
 	private DatePicker dpBirthDate = new DatePicker();
 	private ComboBox<String> cbActive = new ComboBox<>();
 	private ComboBox<String> cbSpecialty = new ComboBox<>();
-	private ComboBox<String> cbRole = new ComboBox<>();
 
 	private Label lblId = new Label("Id"); 
 	private Label lblActive = new Label("Status");
@@ -53,7 +52,6 @@ public class EmployeeBoundary implements StrategyBoundary {
 	private Label lblBankDetails = new Label("Dados Bancários");
 	private Label lblSpecialty = new Label("Especialidade");
 	private Label lblBirthDate = new Label("Data de Nascimento");
-	private Label lblRole = new Label("Role");
 
 	private Button btnClear = new Button("Limpar");
 	private Button btnUpdate = new Button("Atualizar");
@@ -63,7 +61,6 @@ public class EmployeeBoundary implements StrategyBoundary {
 
 	private static EmployeeControl control = new EmployeeControl();
 	private TableView<Employee> table = new TableView<Employee>();
-//    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
 	public void generatedTable() {
 		control.listAll();
@@ -168,8 +165,8 @@ public class EmployeeBoundary implements StrategyBoundary {
 		lblId.setPrefWidth(20.0);
 		lblId.setFont(fontLbls);
 
-//		tfId.setDisable(true);
-//		tfId.setEditable(false);
+		tfId.setDisable(true);
+		tfId.setEditable(false);
 		tfId.setLayoutX(95.0);
 		tfId.setLayoutY(33.0);
 		tfId.setPrefHeight(25.0);
@@ -223,49 +220,49 @@ public class EmployeeBoundary implements StrategyBoundary {
 		tfFullname.setPrefWidth(400.0);
 		tfFullname.setFont(fontTf);
 
-		lblTelephoneNumber.setLayoutX(15.0);
-		lblTelephoneNumber.setLayoutY(230.0);
+		lblTelephoneNumber.setLayoutX(510.0);
+		lblTelephoneNumber.setLayoutY(37.0);
 		lblTelephoneNumber.setPrefHeight(17.0);
-		lblTelephoneNumber.setPrefWidth(77.0);
+		lblTelephoneNumber.setPrefWidth(130.0);
 		lblTelephoneNumber.setFont(fontLbls);
 
-		tfTelephoneNumber.setLayoutX(95.0);
-		tfTelephoneNumber.setLayoutY(226.0);
+		tfTelephoneNumber.setLayoutX(645.0);
+		tfTelephoneNumber.setLayoutY(33.0);
 		tfTelephoneNumber.setPrefHeight(25.0);
 		tfTelephoneNumber.setPrefWidth(400.0);
 		tfTelephoneNumber.setFont(fontTf);
 
 		lblBankDetails.setLayoutX(510.0);
-		lblBankDetails.setLayoutY(37.0);
+		lblBankDetails.setLayoutY(75.0);
 		lblBankDetails.setPrefHeight(17.0);
-		lblBankDetails.setPrefWidth(130.0);
+		lblBankDetails.setPrefWidth(150.0);
 		lblBankDetails.setFont(fontLbls);
 
 		tfBankDetails.setLayoutX(645.0);
-		tfBankDetails.setLayoutY(33.0);
+		tfBankDetails.setLayoutY(71.0);
 		tfBankDetails.setPrefHeight(25.0);
 		tfBankDetails.setPrefWidth(400.0);
 		tfBankDetails.setFont(fontTf);
 
 		lblSpecialty.setLayoutX(510.0);
-		lblSpecialty.setLayoutY(75.0);
+		lblSpecialty.setLayoutY(112.0);
 		lblSpecialty.setPrefHeight(17.0);
 		lblSpecialty.setPrefWidth(150.0);
 		lblSpecialty.setFont(fontLbls);
 
 		cbSpecialty.setLayoutX(645.0);
-		cbSpecialty.setLayoutY(71.0);
+		cbSpecialty.setLayoutY(108.0);
 		cbSpecialty.setPrefHeight(25.0);
 		cbSpecialty.setPrefWidth(400.0);
 
 		lblBirthDate.setLayoutX(510.0);
-		lblBirthDate.setLayoutY(112.0);
+		lblBirthDate.setLayoutY(151.0);
 		lblBirthDate.setPrefHeight(17.0);
 		lblBirthDate.setPrefWidth(150.0);
 		lblBirthDate.setFont(fontLbls);
 
 		dpBirthDate.setLayoutX(645.0);
-		dpBirthDate.setLayoutY(108.0);
+		dpBirthDate.setLayoutY(147.0);
 		dpBirthDate.setPrefHeight(25.0);
 		dpBirthDate.setPrefWidth(400.0);
 		
@@ -284,7 +281,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 		btnCreate.setFont(fontBtns);
 
 		btnFind.setOnAction((e) -> {
-			control.findByEmail();
+			control.findByField();
 		});
 		btnFind.setLayoutX(281.0);
 		btnFind.setLayoutY(269.0);
@@ -315,7 +312,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 	}
 
 	private void binding() {
-		Bindings.bindBidirectional(tfId.idProperty(), control.idProperty());
+		Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
 		Bindings.bindBidirectional(cbActive.valueProperty(), control.activeProperty());
 		Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
