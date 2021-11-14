@@ -15,10 +15,9 @@ import utils.MongoConnect;
 public class AppointmentDAOImpl implements AppointmentDAO {
 
   MongoCollection<Document> appointments;
-  MongoConnect mc = new MongoConnect();
 
   public void getCollection() {
-    appointments = mc.database.getCollection("appointments");
+    appointments = MongoConnect.database.getCollection("appointments");
   }
 
   /* 	Date date;

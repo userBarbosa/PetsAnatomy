@@ -17,10 +17,9 @@ import utils.MongoConnect;
 public class PatientDAOImpl implements PatientDAO {
 
   MongoCollection<Document> patients;
-  MongoConnect mc = new MongoConnect();
 
   public void getCollection() {
-    patients = mc.database.getCollection("patients");
+    patients = MongoConnect.database.getCollection("patients");
   }
 
   Document newDoc(Patient patient) {

@@ -10,10 +10,9 @@ import utils.MongoConnect;
 public class ParametersDAOImpl implements ParametersDAO {
 
   MongoCollection<Document> parameters;
-  MongoConnect mc = new MongoConnect();
 
   void getCollection() {
-    parameters = mc.database.getCollection("parameters");
+    parameters = MongoConnect.database.getCollection("parameters");
   }
 
   public String dailyPhrase() {

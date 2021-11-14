@@ -11,7 +11,6 @@ public interface EmployeeDAO {
   Employee findByID(String id);
   List<Employee> findByField(String field, String data);
   List<Employee> findByDate(String field, Date dateGte, Date dateLte);
-  // boolean findLoginData(String username, String password);
   String findLoginData(String username, String password);
   boolean findToCreateUser(String username, String email);
   List<Employee> getAllEmployees();
