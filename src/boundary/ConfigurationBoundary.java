@@ -36,6 +36,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	private Label lblRole = new Label("Role");
 
 	private Button btnClear = new Button("Limpar");
+	private Button btnResetPassword = new Button("Resetar Senha");
 	private Button btnUpdate = new Button("Atualizar");
 
 	private static ConfigurationControl control = new ConfigurationControl();
@@ -142,7 +143,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
         	this.generatedTable();
         }
 
-		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnUpdate, btnClear, table);
+		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, table);
 
 		btnUpdate.setOnAction((e) -> {
 			control.updateById();
@@ -157,7 +158,14 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		btnClear.setLayoutX(440.0);
 		btnClear.setLayoutY(151.0);
 		btnClear.setFont(fontBtns);
-
+		
+		btnResetPassword.setOnAction((e) -> {
+			control.resetPassword();
+		});
+		btnResetPassword.setLayoutX(105.0);
+		btnResetPassword.setLayoutY(151.0);
+		btnResetPassword.setFont(fontBtns);
+		
 		return formPane;
 	}
 

@@ -15,65 +15,70 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ConfigurationControl {
 
-  private ObservableList<Employee> listEmployees = FXCollections.observableArrayList();
-  private EmployeeDAO service = new EmployeeDAOImpl();
+	private ObservableList<Employee> listEmployees = FXCollections.observableArrayList();
+	private EmployeeDAO service = new EmployeeDAOImpl();
 
-  private StringProperty id = new SimpleStringProperty("");
-  private StringProperty email = new SimpleStringProperty("");
-  private StringProperty username = new SimpleStringProperty("");
-  private StringProperty role = new SimpleStringProperty("");
+	private StringProperty id = new SimpleStringProperty("");
+	private StringProperty email = new SimpleStringProperty("");
+	private StringProperty username = new SimpleStringProperty("");
+	private StringProperty role = new SimpleStringProperty("");
 
-  public Employee getEntity() {
-	  Employee employee = new Employee(emailProperty().getValue(), usernameProperty().getValue());
-	  employee.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
-	  employee.setRole(roleProperty().getValue());
-	  return employee;
-  }
-  
-  public void setEntity(Employee employee) {
-      id.set(employee.getId().toString());
-      email.set(employee.getEmail());
-      username.set(employee.getUsername());
-      role.set(employee.getRole());
-  }
+	public Employee getEntity() {
+		Employee employee = new Employee(emailProperty().getValue(), usernameProperty().getValue());
+		employee.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
+		employee.setRole(roleProperty().getValue());
+		return employee;
+	}
 
-  public void updateById() {
-    service.update(idProperty().getValue(), getEntity());
-    this.listAll();
-    this.clearFields();
-  }
+	public void setEntity(Employee employee) {
+		id.set(employee.getId().toString());
+		email.set(employee.getEmail());
+		username.set(employee.getUsername());
+		role.set(employee.getRole());
+	}
 
-  public void listAll() {
-	  listEmployees.clear();
-	  listEmployees.addAll(service.getAllEmployees());
-  }
+	public void updateById() {
+		service.update(idProperty().getValue(), getEntity());
+		this.listAll();
+		this.clearFields();
+	}
 
-  public void clearFields() {
-    id.set("");
-    email.set("");
-    username.set("");
-    role.set("");
-    this.listAll();
-  }
-  
-  public ObservableList<Employee> getListEmployees() {
-	  return listEmployees;
-  }
+	public void listAll() {
+		listEmployees.clear();
+		listEmployees.addAll(service.getAllEmployees());
+	}
 
-  public StringProperty idProperty() {
-    return id;
-  }
+	public void clearFields() {
+		id.set("");
+		email.set("");
+		username.set("");
+		role.set("");
+		this.listAll();
+	}
 
-  public StringProperty emailProperty() {
-    return email;
-  }
-  
-  public StringProperty usernameProperty() {
-    return username;
-  }
+	public ObservableList<Employee> getListEmployees() {
+		return listEmployees;
+	}
 
-  public StringProperty roleProperty() {
-    return role;
-  }
-  
+	public StringProperty idProperty() {
+		return id;
+	}
+
+	public StringProperty emailProperty() {
+		return email;
+	}
+
+	public StringProperty usernameProperty() {
+		return username;
+	}
+
+	public StringProperty roleProperty() {
+		return role;
+	}
+
+	public void resetPassword() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
