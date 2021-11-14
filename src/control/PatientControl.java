@@ -87,8 +87,8 @@ public class PatientControl {
   }
 
   public void clearFields() {
-    id.set(null);
-    ownerId.set(null);
+    id.set("");
+    ownerId.set("");
     name.set("");
     species.set("");
     family.set("");

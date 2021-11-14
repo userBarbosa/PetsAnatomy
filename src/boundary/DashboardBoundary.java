@@ -15,7 +15,7 @@ public class DashboardBoundary implements StrategyBoundary {
 	
 	private static DashboardControl control = new DashboardControl();
 	
-	private Label lblDailyPhrase = new Label("Onde cuidar significa mais");
+	private Label lblDailyPhrase = new Label("Onde cuidar significa mais!");
 //	private Label lblDailyPhrase = new Label("Onde as patas estão em boas mãos");
 	
 //	private Label lblDailyPhrase = new Label(control.getDailyPhrase());

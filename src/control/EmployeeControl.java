@@ -161,6 +161,5 @@ public class EmployeeControl {
     listEmployees.addAll(
       service.findByField("fullname", fullnameProperty().getValue())
     );
-    this.clearFields();
   }
 }
