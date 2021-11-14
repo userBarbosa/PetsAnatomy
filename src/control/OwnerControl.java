@@ -44,7 +44,7 @@ public class OwnerControl {
       emailProperty().getValue(),
       identificationNumberProperty().getValue()
     );
-    owner.setId(idProperty().getValue() == null ? new ObjectId() : new ObjectId(idProperty().getValue()));
+    owner.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
     owner.setPatientsId(patientsIdProperty().getValue());
     owner.setTelephoneNumber(telephoneNumberProperty().getValue());
     owner.setAddress(addressProperty().getValue());
@@ -56,7 +56,7 @@ public class OwnerControl {
 	  id.set(owner.getId().toString());
 	  patientsId.set(owner.getPatientsId());
 	  email.set(owner.getEmail());
-	  fullname.set(owner.getEmail());
+	  fullname.set(owner.getFullname());
 	  telephoneNumber.set(owner.getTelephoneNumber());
 	  address.set(owner.getAddress());
 	  identificationNumber.set(owner.getIdentificationNumber());

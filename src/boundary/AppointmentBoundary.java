@@ -64,6 +64,8 @@ public class AppointmentBoundary implements StrategyBoundary {
 	private static AppointmentControl control = new AppointmentControl();
 
 	public void generatedTable() {
+		control.listAll();
+		
 		TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
 		colDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
 
@@ -105,7 +107,7 @@ public class AppointmentBoundary implements StrategyBoundary {
 				colObs
 				);
 		
-        table.setItems(control.getListView());
+        table.setItems(control.getListAppointments());
 
 		table
 		.getSelectionModel()
@@ -257,6 +259,7 @@ public class AppointmentBoundary implements StrategyBoundary {
         		cbFinancialState, lblValue, tfValue, lblObs, tfObs, 
         		btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
         
+        this.generatedTable();
         formPane.getChildren().add(table);
 
         btnCreate.setOnAction((e) -> {

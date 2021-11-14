@@ -49,7 +49,7 @@ public class PatientControl {
 			  speciesProperty().getValue(),
 			  familyProperty().getValue()
 			  );
-	  patient.setId(idProperty().getValue() == null ? new ObjectId() : new ObjectId(idProperty().getValue()));
+	  patient.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
 	  patient.setBloodtype(bloodtypeProperty().getValue());
 	  patient.setObs(obsProperty().getValue());
 	  patient.setBirthdate(fmt.localToDate((LocalDate) birthdateProperty().getValue()));

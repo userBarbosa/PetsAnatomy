@@ -174,7 +174,8 @@ public class OwnerBoundary implements StrategyBoundary {
 		tfFullname.setLayoutY(148.0);
 		tfFullname.setPrefHeight(25.0);
 		tfFullname.setPrefWidth(400.0);
-
+		tfFullname.setFont(fontTf);
+		
 		lblTelephoneNumber.setLayoutX(15.0);
 		lblTelephoneNumber.setLayoutY(189.0);
 		lblTelephoneNumber.setPrefHeight(17.0);

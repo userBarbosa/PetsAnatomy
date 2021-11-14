@@ -38,7 +38,7 @@ public class EmployeeControl {
 
   public Employee getEntity() {
 	  Employee employee = new Employee(emailProperty().getValue(), usernameProperty().getValue());
-	  employee.setId(idProperty().getValue() == null ? new ObjectId() : new ObjectId(idProperty().getValue()));
+	  employee.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
 	  employee.setActive(fmt.activeStringToBoolean(activeProperty().getValue()));
 	  employee.setFullname(fullnameProperty().getValue());
 	  employee.setTelephoneNumber(telephoneNumberProperty().getValue());
