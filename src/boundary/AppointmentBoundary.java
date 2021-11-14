@@ -1,27 +1,24 @@
 package boundary;
 
-import java.io.FileNotFoundException;
-import java.time.format.DateTimeFormatter;
+import org.bson.types.ObjectId;
+
 import control.AppointmentControl;
 import entity.Appointment;
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 
-public class AppointmentBoundary extends Application {
+public class AppointmentBoundary implements StrategyBoundary {
 	
 	private TextField tfId = new TextField(); 
 	private TextField tfObs = new TextField();
@@ -51,12 +48,72 @@ public class AppointmentBoundary extends Application {
 	private Button btnCreate = new Button("Adicionar");
 	private Button btnDelete = new Button("Remover");
 	
+	private TableView<Appointment> table = new TableView<Appointment>();
 	private static AppointmentControl control = new AppointmentControl();
 
-	@Override
-	public void start(Stage stage) throws Exception {
-		AnchorPane mainPane = new AnchorPane(); 
-		AnchorPane menuPane = new AnchorPane();
+	public void generatedTable() {
+		control.listAll();
+		
+		TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
+		colDate.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
+
+		TableColumn<Appointment, String> colTime = new TableColumn<>("Horário");
+		colTime.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
+
+		TableColumn<Appointment, ObjectId> colPatient = new TableColumn<>("Paciente");
+		colPatient.setCellValueFactory(new PropertyValueFactory<Appointment, ObjectId>("patientId"));
+
+		TableColumn<Appointment, String> colOwner = new TableColumn<>("Dono");
+		colOwner.setCellValueFactory(new PropertyValueFactory<Appointment, String>("ownerId"));
+
+		TableColumn<Appointment, ObjectId> colEmployee = new TableColumn<>("Médico");
+		colEmployee.setCellValueFactory(new PropertyValueFactory<Appointment, ObjectId>("employeeId"));
+
+		TableColumn<Appointment, Integer> colState = new TableColumn<>("Status");
+		colState.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("state"));
+
+		TableColumn<Appointment, Integer> colFinancialState = new TableColumn<>("Pagamento");
+		colFinancialState.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("financialState"));
+
+		TableColumn<Appointment, String> colValue = new TableColumn<>("Valor");
+		colValue.setCellValueFactory(new PropertyValueFactory<Appointment, String>("value"));
+
+		TableColumn<Appointment, String> colObs = new TableColumn<>("Observação");
+		colObs.setCellValueFactory(new PropertyValueFactory<Appointment, String>("obs"));
+
+		table
+		.getColumns()
+		.addAll(
+				colDate,
+				colTime,
+				colPatient,
+				colOwner,
+				colEmployee,
+				colState,
+				colFinancialState,
+				colValue,
+				colObs
+				);
+		
+        table.setItems(control.getListAppointments());
+
+		table
+		.getSelectionModel()
+		.selectedItemProperty()
+		.addListener(
+				(obs, older, newer) -> {
+					control.setEntity(newer);
+				}
+				);
+
+		table.setLayoutY(305.0);
+		table.setPrefHeight(469.0);
+		table.setPrefWidth(1066.0);
+		
+	}
+	
+	@Override	
+	public Pane generateBoundaryStrategy() {
 		AnchorPane formPane = new AnchorPane(); 
 		
 		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -64,10 +121,6 @@ public class AppointmentBoundary extends Application {
 		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 		
 		binding();
-		
-		menuPane.setPrefHeight(768.0);
-		menuPane.setPrefWidth(300.0);
-		menuPane.setStyle("-fx-background-color: #000E44;");
 		
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(1066.0);
@@ -189,21 +242,14 @@ public class AppointmentBoundary extends Application {
 		cbFinancialState.setPrefHeight(25.0);
 		cbFinancialState.setPrefWidth(414.0);
 		
-        if (control.getTable().getColumns().size() == 0) {
-            control.generatedTable();
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
         }
-        
-        Node table = control.getTable();
-        table.setLayoutY(299.0);
-        table.prefHeight(469.0);
-        table.prefWidth(1066.0);
         
         formPane.getChildren().addAll(lblId, tfId, lblDate, dpDate, lblTime, cbTime, lblPatient, cbPatient, 
         		lblOwner, cbOwner, lblEmployee, cbEmployee, lblState, cbState, lblFinancialState, 
         		cbFinancialState, lblValue, tfValue, lblObs, tfObs, 
-        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear
-        		, table
-        		);
+        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 
         btnCreate.setOnAction((e) -> {
             control.create();
@@ -239,18 +285,8 @@ public class AppointmentBoundary extends Application {
         btnClear.setLayoutX(459.0);
         btnClear.setLayoutY(246.0);
 		btnClear.setFont(fontBtns);
-
-		mainPane.setLeftAnchor(menuPane, 0.0);
-		mainPane.setRightAnchor(formPane, 0.0);
-		mainPane.getChildren().addAll(menuPane, formPane);
-		mainPane.setPrefHeight(768.0);
-		mainPane.setPrefWidth(1366.0);
 		
-		Scene scene = new Scene(mainPane, 1366, 768);
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("Cl�nica Veterin�ria PetsAnatomy");	
+		return formPane;
 	}
 	
 	private void binding() {
@@ -266,8 +302,8 @@ public class AppointmentBoundary extends Application {
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	public TableView<Appointment> getTable() {
+		return table;
 	}
 
 }

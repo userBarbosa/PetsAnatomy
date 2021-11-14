@@ -2,8 +2,8 @@ package control;
 
 import javax.swing.JOptionPane;
 
-import dao.EmployeeDAO;
-import dao.EmployeeDAOImpl;
+import dao.impl.EmployeeDAOImpl;
+import dao.interfaces.EmployeeDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,7 +17,7 @@ public class LoginControl {
   public void login() {
     String username = usernameProperty().getValue();
     String password = passwordProperty().getValue();
-    
+
     identification(service.findLoginData(username, password));
   }
 
@@ -97,4 +97,6 @@ public class LoginControl {
   public StringProperty passwordProperty() {
     return password;
   }
+
+  void forgotPassword() {}
 }

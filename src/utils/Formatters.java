@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Formatters {
 
-	public String dateToString(Date date) {
+  public String dateToString(Date date) {
     // dd/MM/yyyy
     LocalDate fmt = LocalDate.ofInstant(
       date.toInstant(),
@@ -35,11 +35,92 @@ public class Formatters {
       normalizeDateOutcome(fmt.getMinute())
     );
   }
-	
-	public String normalizeDateOutcome(int n) {
+
+  public String normalizeDateOutcome(int n) {
     if (n < 10) {
       return "0" + n;
     }
     return Integer.toString(n);
   }
+
+  public Date stringToDate(String date) {
+    String split[] = date.split("/");
+    int year = Integer.parseInt(split[2]);
+    int month = Integer.parseInt(split[1]);
+    int day = Integer.parseInt(split[0]);
+
+    Date dt = Date.from(
+      LocalDate
+        .of(year, month, day)
+        .atStartOfDay()
+        .atZone(ZoneId.systemDefault())
+        .toInstant()
+    );
+
+    return dt;
+  }
+
+  public Date stringToTimeDate(String date, String schedule) {
+    String splitDate[] = date.split("/");
+    String splitHour[] = schedule.split(":");
+    
+    int year = Integer.parseInt(splitDate[2]);
+    int month = Integer.parseInt(splitDate[1]);
+    int day = Integer.parseInt(splitDate[0]);
+    int hour = Integer.parseInt(splitHour[0]);
+    int minutes = Integer.parseInt(splitHour[0]);
+
+    Date dt = Date.from(
+      LocalDate
+        .of(year, month, day)
+        .atTime(hour, minutes)
+        .atZone(ZoneId.systemDefault())
+        .toInstant()
+    );
+    return dt;
+  }
+
+  public String timeDateToString(Date date) {
+    return dateToString(date) + " às " + hourToString(date);
+  }
+  
+  public Date localToDate(LocalDate date){
+	  Date dt = Date.from(date
+		  .atStartOfDay()
+		  .atZone(ZoneId.systemDefault())
+		  .toInstant()
+		  );
+	  return dt;
+  }
+
+  public LocalDate DateToLocal(Date date) {
+	  return date.toInstant()
+		  .atZone(ZoneId.systemDefault())
+		  .toLocalDate();
+  }
+  
+  public String activeBooleanToString(Boolean value) {
+	  return value == true ? "Ativo" : "Inativo";
+  }
+
+  public boolean activeStringToBoolean(String value) {
+	  if (value.equals("Ativo")) {
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
+  
+  public String treatmentBooleanToString(Boolean value) {
+	  return value == true ? "Em tratamento" : "Liberado para Alta Hospitalar";
+  }
+
+  public boolean treatmentStringToBoolean(String value) {
+	  if (value.equals("Em tratamento")) {
+		  return true;
+	  } else {
+		  return false;
+	  }
+  }
+ 
 }
