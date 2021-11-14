@@ -67,8 +67,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 		
         ObservableList<String> status = FXCollections.observableArrayList("Ativo", "Inativo");
         cbActive.setItems(status);
-        cbActive.setValue("Selecione");
-      
+
 		TableColumn<Employee, String> colActive = new TableColumn<>("Status");
 		colActive.setCellValueFactory(new PropertyValueFactory<Employee, String>("active"));
 
@@ -106,7 +105,6 @@ public class EmployeeBoundary implements StrategyBoundary {
                 		"Pediatra"
                 		);
         cbSpecialty.setItems(specialty);
-        cbSpecialty.setValue("Selecione");
 
 		TableColumn<Employee, String> colSpecialty = new TableColumn<>("Especialidade");
 		colSpecialty.setCellValueFactory(new PropertyValueFactory<Employee, String>("specialty"));
@@ -266,12 +264,13 @@ public class EmployeeBoundary implements StrategyBoundary {
 		dpBirthDate.setPrefHeight(25.0);
 		dpBirthDate.setPrefWidth(400.0);
 		
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
+        }
+		
 		formPane.getChildren().addAll(lblId, tfId, lblActive, cbActive, lblEmail, tfEmail, lblUsername, tfUsername, 
 				lblFullname, tfFullname, lblTelephoneNumber, tfTelephoneNumber, lblBankDetails, tfBankDetails, lblSpecialty, 
-				cbSpecialty, lblBirthDate, dpBirthDate, btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
-		formPane.getChildren().add(table);		
-		this.generatedTable();		
-
+				cbSpecialty, lblBirthDate, dpBirthDate, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -321,6 +320,10 @@ public class EmployeeBoundary implements StrategyBoundary {
 		Bindings.bindBidirectional(tfBankDetails.textProperty(), control.bankDetailsProperty());
 		Bindings.bindBidirectional(cbSpecialty.valueProperty(), control.specialtyProperty());
 		Bindings.bindBidirectional(dpBirthDate.valueProperty(), control.birthDateProperty());
+	}
+
+	public TableView<Employee> getTable() {
+		return table;
 	}
 
 }

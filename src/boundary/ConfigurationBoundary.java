@@ -44,14 +44,10 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	public void generatedTable() {
 		control.listAll();
 		TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
-		colEmail.setCellValueFactory(
-				new PropertyValueFactory<Employee, String>("email")
-				);
+		colEmail.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
 
 		TableColumn<Employee, String> colUsername = new TableColumn<>("Username");
-		colUsername.setCellValueFactory(
-				new PropertyValueFactory<Employee, String>("username")
-				);
+		colUsername.setCellValueFactory(new PropertyValueFactory<Employee, String>("username"));
 
 	    ObservableList<String> roles = FXCollections.observableArrayList("admin", "receptionist", "doctor");
 	    cbRole.setItems(roles);
@@ -141,11 +137,13 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		cbRole.setLayoutY(71.0);
 		cbRole.setPrefHeight(25.0);
 		cbRole.setPrefWidth(400.0);
-
-		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnUpdate, btnClear);
-		formPane.getChildren().add(table);		
-		this.generatedTable();		
 		
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
+        }
+
+		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnUpdate, btnClear, table);
+
 		btnUpdate.setOnAction((e) -> {
 			control.updateById();
 		});
@@ -168,6 +166,10 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
 		Bindings.bindBidirectional(cbRole.valueProperty(), control.roleProperty());
+	}
+	
+	public TableView<Employee> getTable() {
+		return table;
 	}
 
 }

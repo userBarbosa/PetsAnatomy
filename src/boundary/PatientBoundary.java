@@ -269,12 +269,14 @@ public class PatientBoundary implements StrategyBoundary {
 		cbTreatment.setLayoutY(187.0);
 		cbTreatment.setPrefHeight(25.0);
 		cbTreatment.setPrefWidth(400.0);
+		
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
+        }
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
         		lblFamily, cbFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
-        		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
-		formPane.getChildren().add(table);		
-		this.generatedTable();	
+        		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
         
         btnCreate.setOnAction((e) -> {
             control.create();
@@ -325,6 +327,10 @@ public class PatientBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(cbTreatment.valueProperty(), control.treatmentProperty());
+	}
+
+	public TableView<Patient> getTable() {
+		return table;
 	}
 
 }

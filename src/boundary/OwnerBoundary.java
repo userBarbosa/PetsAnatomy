@@ -221,11 +221,13 @@ public class OwnerBoundary implements StrategyBoundary {
 		dpLastVisit.setPrefHeight(25.0);
 		dpLastVisit.setPrefWidth(400.0);
 
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
+        }
+		
 		formPane.getChildren().addAll(lblId, tfId, lblPatients, cbPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
 				lblTelephoneNumber, tfTelephoneNumber, lblAddress, tfAddress, lblIdentificationNumber, tfIdentificationNumber, 
-				lblLastVisit, dpLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
-		formPane.getChildren().add(table);		
-		this.generatedTable();	
+				lblLastVisit, dpLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 		
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -274,6 +276,10 @@ public class OwnerBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(tfAddress.textProperty(), control.addressProperty());
         Bindings.bindBidirectional(tfIdentificationNumber.textProperty(), control.identificationNumberProperty());
         Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
+	}
+
+	public TableView<Owner> getTable() {
+		return table;
 	}
 
 }

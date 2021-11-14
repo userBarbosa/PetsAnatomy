@@ -253,14 +253,15 @@ public class AppointmentBoundary implements StrategyBoundary {
 		cbFinancialState.setLayoutY(180.0);
 		cbFinancialState.setPrefHeight(25.0);
 		cbFinancialState.setPrefWidth(414.0);
+		
+        if (getTable().getColumns().size() == 0) {
+        	this.generatedTable();
+        }
         
         formPane.getChildren().addAll(lblId, tfId, lblDate, dpDate, lblTime, cbTime, lblPatient, cbPatient, 
         		lblOwner, cbOwner, lblEmployee, cbEmployee, lblState, cbState, lblFinancialState, 
         		cbFinancialState, lblValue, tfValue, lblObs, tfObs, 
-        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear);
-        
-        this.generatedTable();
-        formPane.getChildren().add(table);
+        		btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 
         btnCreate.setOnAction((e) -> {
             control.create();
@@ -311,6 +312,10 @@ public class AppointmentBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(cbFinancialState.valueProperty(), control.financialStateProperty());
         Bindings.bindBidirectional(tfValue.textProperty(), control.valueProperty(), new NumberStringConverter());
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
+	}
+
+	public TableView<Appointment> getTable() {
+		return table;
 	}
 
 }
