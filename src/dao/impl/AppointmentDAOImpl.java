@@ -1,9 +1,14 @@
 package dao.impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -20,12 +25,6 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     appointments = MongoConnect.database.getCollection("appointments");
   }
 
-  /* 	Date date;
-  ObjectId id, patientId, ownerId, employeeId;
-  String obs;
-  int state, financialState;
-  double value; */
-
   Document newDoc(Appointment appointment) {
     Document app = new Document("patientId", appointment.getPatientId())
       .append("ownerId", appointment.getOwnerId())
@@ -38,47 +37,114 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return app;
   }
 
+  Appointment newApp(Document doc) {
+    ObjectId employeeId = doc.getObjectId("employeeId");
+    ObjectId patientId = doc.getObjectId("patientId");
+    ObjectId ownerId = doc.getObjectId("ownerId");
+    Date date = doc.getDate("date");
+    Double value = doc.getDouble("value");
+
+    Appointment app = new Appointment(
+      employeeId,
+      patientId,
+      ownerId,
+      date,
+      value
+    );
+
+    app.setId(doc.getObjectId("_id"));
+    app.setObs(doc.getString("obs"));
+    app.setState(doc.getInteger("state"));
+    app.setFinancialState(doc.getInteger("financialState"));
+
+    return app;
+  }
+
   public void insert(Appointment appointment) {
     Document app = newDoc(appointment);
 
     app.put("_id", new ObjectId());
     app.put("created", new Date());
+
     getCollection();
     appointments.insertOne(app);
   }
 
-  public Document findByID(ObjectId id) {
+  public Appointment findByID(String id) {
+    Document query = new Document();
     getCollection();
     try {
-      Document query = appointments.find(new Document("_id", id)).first();
-      return query;
+      query =
+        appointments.find(new BasicDBObject("_id", new ObjectId(id))).first();
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+    return newApp(query);
   }
 
-  public List<Document> returnAll() {
+  public List<Appointment> getAllAppointments() {
+    
     return null;
   }
-
-  public Document findByField(String field, String data) {
-    return null;
-  }
-
-  public List<Document> findByDate(String field, Date dateGte, Date dateLte) {
-    return null;
-  }
-
 
   
+  public void update(String id, Appointment appointment) {}
 
-  public void delete(String id) {
+  public void delete(String id) {}
 
+  
+  public boolean findScheduleAppointment(Date date, String docId) {
+    Document query = new Document();
+    getCollection();
+
+    LocalDateTime dateGte = date
+      .toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDateTime();
+    LocalDateTime dateLte = dateGte.plusMinutes(30);
+
+    try {
+      query =
+        appointments
+          .find(
+            new Document("employeeId", new ObjectId(docId))
+            .append(
+                "date",
+                new BasicDBObject("$gte", dateGte).append("$lte", dateLte)
+              )
+          )
+          .first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if (query != null) {
+      return true;
+    }
+    return false;
   }
 
-  @Override
-  public void update(String id, Appointment appointment) {
+  public List<Appointment> findByField(String field, String data) {
+    List<Appointment> aList = new ArrayList<Appointment>();
+    getCollection();
+
+    MongoCursor<Document> cursor = appointments
+      .find(new BasicDBObject(field, data))
+      .iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        aList.add(newApp(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return aList;
+  }
+
+  
+  public List<Appointment> findByDate(String field, Date dateGte, Date dateLte) {
     
+    return null;
   }
 }

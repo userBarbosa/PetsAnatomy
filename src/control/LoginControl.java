@@ -97,4 +97,6 @@ public class LoginControl {
   public StringProperty passwordProperty() {
     return password;
   }
+
+  void forgotPassword() {}
 }

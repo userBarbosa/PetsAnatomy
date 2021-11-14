@@ -1,15 +1,10 @@
 package boundary;
 
-import java.io.FileNotFoundException;
-
 import control.ConfigurationControl;
 import entity.Employee;
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -19,9 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 public class ConfigurationBoundary implements StrategyBoundary  {
 
@@ -146,7 +139,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, table);
 
 		btnUpdate.setOnAction((e) -> {
-			control.updateById();
+			control.updateRole();
 		});
 		btnUpdate.setLayoutX(15.0);
 		btnUpdate.setLayoutY(151.0);

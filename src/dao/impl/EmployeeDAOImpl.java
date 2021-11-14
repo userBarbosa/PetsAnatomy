@@ -1,20 +1,17 @@
 package dao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-
-import org.bson.Document;
-import org.bson.types.ObjectId;
-
 import dao.interfaces.EmployeeDAO;
 import entity.Employee;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javafx.util.Pair;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import utils.Formatters;
 import utils.MongoConnect;
 import utils.Security;
@@ -23,7 +20,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
   MongoCollection<Document> employees;
   private Formatters fmt = new Formatters();
-  
+
   private void getCollection() {
     employees = MongoConnect.database.getCollection("employees");
   }
@@ -33,7 +30,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       .append("active", employee.getActive())
       .append("email", employee.getEmail())
       .append("fullname", employee.getFullname())
-      .append("password", new Security().encryptPassword(employee.getPassword()))
+      .append(
+        "password",
+        new Security().encryptPassword(employee.getPassword())
+      )
       .append("role", employee.getRole())
       .append("telephoneNumber", employee.getTelephoneNumber())
       .append("bankDetails", employee.getBankDetails())
@@ -178,7 +178,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   public void update(String id, Employee employee) {
     Document worker = newDoc(employee);
     worker.put("updated", new Date());
-    
+
     getCollection();
     employees.updateOne(
       new BasicDBObject("_id", new ObjectId(id)),
@@ -198,7 +198,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     try {
       while (cursor.hasNext()) {
-        Document temp = cursor.next(); 
+        Document temp = cursor.next();
         cbList.add(
           new Pair<String, String>(
             temp.get("_id").toString(),
@@ -211,5 +211,59 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     return cbList;
+  }
+
+  public void updateField(String id, String field, String data) {
+    BasicDBObject updatedData = new BasicDBObject(
+      "$set",
+      new BasicDBObject(field, data).append("updated", new Date())
+    );
+
+    if (field.equals("password") && data.equals("12345")) {
+      updatedData.append("defaultPassword", true);
+    }
+
+    getCollection();
+    employees.updateOne(
+      new BasicDBObject("_id", new ObjectId(id)),
+      updatedData
+    );
+  }
+
+  public void updatePassword(String id, String data) {
+    BasicDBObject updatedData = new BasicDBObject(
+      "$set",
+      new BasicDBObject("password", data).append("updated", new Date())
+    );
+
+    if (data.equals("12345")) {
+      updatedData.append("defaultPassword", true);
+    } else {
+      updatedData.append("defaultPassword", false);
+    }
+
+    getCollection();
+    employees.updateOne(
+      new BasicDBObject("_id", new ObjectId(id)),
+      updatedData
+    );
+  }
+
+  public Document findForUpdatePassword(String username) {
+    Document query = new Document();
+    getCollection();
+    try {
+      query = employees.find(new Document("username", username)).first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if (query != null) {
+      Document user = new Document("_id", query.getObjectId("_id").toString());
+      if (query.getBoolean("defaultPassword") != null) {
+        user.append("defaultPassword", query.getBoolean("defaultPassword"));
+      }
+      return user;
+    }
+    return null;
   }
 }

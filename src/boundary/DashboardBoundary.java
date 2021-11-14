@@ -2,20 +2,14 @@ package boundary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
 import control.DashboardControl;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class DashboardBoundary implements StrategyBoundary {
 	
