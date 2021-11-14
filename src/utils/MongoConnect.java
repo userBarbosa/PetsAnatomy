@@ -10,7 +10,7 @@ public class MongoConnect {
 
   AuthMDB auth = new AuthMDB();
   DBLogger lgr = new DBLogger();
-  public MongoDatabase database;
+  public static MongoDatabase database;
 
   public void connection() {
     lgr.setupLogger();

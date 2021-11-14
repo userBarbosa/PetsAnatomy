@@ -16,15 +16,13 @@ import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
 
-  MongoCollection<Document> patients;
-  MongoConnect mc = new MongoConnect();
+	MongoCollection<Document> patients;
 
-  public void getCollection() {
-	mc.connection();
-    patients = mc.database.getCollection("patients");
-  }
+	public void getCollection() {
+		patients = MongoConnect.database.getCollection("patients");
+	}
 
-  Document newDoc(Patient patient) {
+	Document newDoc(Patient patient) {
     Document pat = new Document("ownerId", patient.getOwnerId())
       .append("name", patient.getName())
       .append("species", patient.getSpecies())

@@ -17,10 +17,9 @@ import utils.MongoConnect;
 public class OwnerDAOImpl implements OwnerDAO {
 
   MongoCollection<Document> owners;
-  MongoConnect mc = new MongoConnect();
 
   public void getCollection() {
-    owners = mc.database.getCollection("owners");
+    owners = MongoConnect.database.getCollection("owners");
   }
 
   Document newDoc(Owner owner) {

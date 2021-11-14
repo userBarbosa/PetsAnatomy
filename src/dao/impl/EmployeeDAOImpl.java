@@ -22,12 +22,10 @@ import utils.Security;
 public class EmployeeDAOImpl implements EmployeeDAO {
 
   MongoCollection<Document> employees;
-  MongoConnect mc = new MongoConnect();
   private Formatters fmt = new Formatters();
   
   private void getCollection() {
-	mc.connection();
-    employees = mc.database.getCollection("employees");
+    employees = MongoConnect.database.getCollection("employees");
   }
 
   Document newDoc(Employee employee) {
