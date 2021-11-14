@@ -31,6 +31,7 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 	//  private ScreenStrategy screenSignUp = new SignUpBoundary();
 	//  private ScreenStrategy screenLogin = new LoginBoundary();
 
+	StrategyBoundary dash = new DashboardBoundary();
 	Map<String, StrategyBoundary> boundaries = new HashMap<>();
 
 	private static AnchorPane mainPane = new AnchorPane();
@@ -55,7 +56,7 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 		sideMenu.prefHeight(768.0);
 		sideMenu.prefWidth(300.0);
 		sideMenu.setStyle("-fx-background-color: #000E44;");
-
+		
 		btnHome.setMinSize(300.0, 55.0);
 		btnHome.setFont(fontBtnHome);
 		btnHome.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
@@ -102,7 +103,8 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 
 		sideMenu.getChildren().addAll(btnHome, btnAgenda, btnPacientes, btnClientes, btnFuncionarios, btnConfiguracoes, btnSair);
 		mainPane.setLeftAnchor(sideMenu, 0.0);
-		mainPane.getChildren().add(sideMenu);
+		mainPane.setRightAnchor(dash.generateBoundaryStrategy(), 0.0);
+		mainPane.getChildren().addAll(sideMenu, dash.generateBoundaryStrategy());
 		mainPane.setPrefHeight(768.0);
 		mainPane.setPrefWidth(1366.0);
 

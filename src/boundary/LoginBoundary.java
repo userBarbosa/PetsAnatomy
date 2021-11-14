@@ -28,7 +28,6 @@ public class LoginBoundary extends Application {
 
 	private Button btnLogin = new Button("Login");
 	private Button btnSignUp = new Button("Cadastrar-se");
-	private Button btnForgotPassword = new Button("Esqueceu sua senha?");
 	private Label lblTitle = new Label("PetsAnatomy");
 	
 	Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
@@ -197,18 +196,22 @@ public class LoginBoundary extends Application {
 		stage.setTitle("Clínica Veterinária PetsAnatomy");
 	}
 
-	private String popupForgotPassword() {
+	public void popupResetPassword() {
 		Stage stage = new Stage();
 		stage.initModality(Modality.WINDOW_MODAL);
-
-		VBox popup = new VBox();
+		stage.setResizable(false);
+		
+		AnchorPane popup = new AnchorPane();
 		Scene scn = new Scene(popup, 400, 200);
-
 		stage.setScene(scn);
-
+		
+		PasswordField pfPassword = new PasswordField();
+		TextField tfPassword = new TextField();
+		CheckBox cbPassword = new CheckBox("Mostrar/Esconder Senha");
+		
 		pfPassword.setStyle("-fx-border-color: #000E44;");
 
-		CheckBox cbPassword = new CheckBox("Mostrar/Esconder Senha");
+
 		cbPassword.setFont(fontTxt);
 
 		tfPassword.setFont(fontTf);
@@ -225,8 +228,6 @@ public class LoginBoundary extends Application {
 		});
 		popup.getChildren().addAll(pfPassword, cbPassword, tfPassword, btnDismiss);
 		stage.showAndWait();
-
-		return pfPassword.getText();
 	}
 
 	private void binding() {
