@@ -1,10 +1,13 @@
 package boundary;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 
 import control.PatientControl;
 import entity.Patient;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -91,19 +94,28 @@ public class PatientBoundary implements StrategyBoundary {
 		colBloodtype.setCellValueFactory(new PropertyValueFactory<Patient, String>("bloodtype"));
 
 		TableColumn<Patient, String> colBirthdate = new TableColumn<>("Data de Nascimento");
-		colBirthdate.setCellValueFactory(new PropertyValueFactory<Patient, String>("birthdate"));
+		colBirthdate.setCellValueFactory( (patientProp) -> {
+			Date birthDate = patientProp.getValue().getBirthdate();
+			return new ReadOnlyStringWrapper(control.dateToString(birthDate));
+		} );
 
 		TableColumn<Patient, String> colObs = new TableColumn<>("Observação");
 		colObs.setCellValueFactory(new PropertyValueFactory<Patient, String>("obs"));
 
 		TableColumn<Patient, String> colLastVisit = new TableColumn<>("Última Consulta");
-		colLastVisit.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastVisit"));
+		colLastVisit.setCellValueFactory( (patientProp) -> {
+            Date lastVisit = patientProp.getValue().getLastVisit();
+            return new ReadOnlyStringWrapper(control.dateToString(lastVisit));
+        } );
 
         ObservableList<String> status = FXCollections.observableArrayList("Sim", "Não");
         cbTreatment.setItems(status);
 		
 		TableColumn<Patient, String> colTreatment = new TableColumn<>("Em Tratamento");
-		colTreatment.setCellValueFactory(new PropertyValueFactory<Patient, String>("treatment"));
+		colTreatment.setCellValueFactory( (patientProp) -> {
+			Boolean treatment = patientProp.getValue().getTreatment();
+			return new ReadOnlyStringWrapper(control.treatmentBooleanToString(treatment));
+		} );
 
 		table
 		.getColumns()

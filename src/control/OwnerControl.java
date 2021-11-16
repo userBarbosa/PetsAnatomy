@@ -1,6 +1,7 @@
 package control;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import org.bson.types.ObjectId;
 
@@ -90,6 +91,10 @@ public class OwnerControl {
     identificationNumber.set("");
     lastVisit.set(null);
     this.listAll();
+  }
+  
+  public String dateToString(Date value) {
+	  return fmt.dateToString(value);
   }
   
   public ObservableList<Owner> getListOwners() {

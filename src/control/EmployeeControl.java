@@ -1,6 +1,7 @@
 package control;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -162,4 +163,13 @@ public class EmployeeControl {
       service.findByField("fullname", fullnameProperty().getValue())
     );
   }
+
+  public String dateToString(Date value) {
+	  return fmt.dateToString(value);
+  }
+  
+  public String activeBooleanToString(Boolean value) {
+	return fmt.activeBooleanToString(value);
+  }
+
 }

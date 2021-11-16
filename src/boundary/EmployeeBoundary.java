@@ -1,8 +1,12 @@
 package boundary;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import control.EmployeeControl;
 import entity.Employee;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -55,7 +59,10 @@ public class EmployeeBoundary implements StrategyBoundary {
         cbActive.setItems(status);
 
 		TableColumn<Employee, String> colActive = new TableColumn<>("Status");
-		colActive.setCellValueFactory(new PropertyValueFactory<Employee, String>("active"));
+		colActive.setCellValueFactory( (employeeProp) -> {
+			Boolean active = employeeProp.getValue().getActive();
+			return new ReadOnlyStringWrapper(control.activeBooleanToString(active));
+		} );
 
 		TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
 		colEmail.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
@@ -96,7 +103,11 @@ public class EmployeeBoundary implements StrategyBoundary {
 		colSpecialty.setCellValueFactory(new PropertyValueFactory<Employee, String>("specialty"));
 
 		TableColumn<Employee, String> colBirthDate = new TableColumn<>("Data de Nascimento");
-		colBirthDate.setCellValueFactory(new PropertyValueFactory<Employee, String>("birthDate"));
+		colBirthDate.setCellValueFactory( (employeeProp) -> {
+			Date birthDate = employeeProp.getValue().getBirthDate();
+			return new ReadOnlyStringWrapper(control.dateToString(birthDate));
+		} );
+		
 		
 		table
 		.getColumns()

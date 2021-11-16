@@ -1,6 +1,7 @@
 package control;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -133,6 +134,14 @@ public class PatientControl {
     lastVisit.set(null);
     treatment.set("");
     this.listAll();
+  }
+  
+  public String dateToString(Date value) {
+	  return fmt.dateToString(value);
+  }
+  
+  public String treatmentBooleanToString(Boolean value) {
+	  return fmt.treatmentBooleanToString(value);
   }
   
   public ObservableList<Patient> getListPatients() {
