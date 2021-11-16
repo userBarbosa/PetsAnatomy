@@ -7,6 +7,7 @@ import entity.Patient;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -25,9 +26,9 @@ public class PatientBoundary implements StrategyBoundary {
 	private TextField tfName = new TextField();
 	private TextField tfObs = new TextField();
 	private TextField tfBloodtype = new TextField();
+	private TextField tfFamily = new TextField();
 	private ComboBox<String> cbOwner = new ComboBox<>();
 	private ComboBox<String> cbSpecies = new ComboBox<>();
-	private ComboBox<String> cbFamily = new ComboBox<>();
 	private ComboBox<String> cbTreatment = new ComboBox<>();
 	private DatePicker dpBirthdate = new DatePicker();
 	private DatePicker dpLastVisit = new DatePicker();
@@ -57,9 +58,11 @@ public class PatientBoundary implements StrategyBoundary {
 		
 		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
 		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
-
-		TableColumn<Patient, ObjectId> colOwner = new TableColumn<>("Dono");
-		colOwner.setCellValueFactory(new PropertyValueFactory<Patient, ObjectId>("ownerId"));
+		
+		cbOwner.setItems(control.getAllIdAndNames());
+        
+		TableColumn<Patient, String> colOwner = new TableColumn<>("Dono");
+		colOwner.setCellValueFactory(new PropertyValueFactory<Patient, String>("ownerId"));
 
         ObservableList<String> species = FXCollections.observableArrayList(
         		"Peixe", 
@@ -96,6 +99,9 @@ public class PatientBoundary implements StrategyBoundary {
 		TableColumn<Patient, String> colLastVisit = new TableColumn<>("Última Consulta");
 		colLastVisit.setCellValueFactory(new PropertyValueFactory<Patient, String>("lastVisit"));
 
+        ObservableList<String> status = FXCollections.observableArrayList("Sim", "Não");
+        cbTreatment.setItems(status);
+		
 		TableColumn<Patient, String> colTreatment = new TableColumn<>("Em Tratamento");
 		colTreatment.setCellValueFactory(new PropertyValueFactory<Patient, String>("treatment"));
 
@@ -198,10 +204,11 @@ public class PatientBoundary implements StrategyBoundary {
 		lblFamily.setPrefWidth(46.0);
 		lblFamily.setFont(fontLbls);
 		
-		cbFamily.setLayoutX(95.0);
-		cbFamily.setLayoutY(187.0);
-		cbFamily.setPrefHeight(25.0);
-		cbFamily.setPrefWidth(400.0);
+		tfFamily.setLayoutX(95.0);
+		tfFamily.setLayoutY(187.0);
+		tfFamily.setPrefHeight(25.0);
+		tfFamily.setPrefWidth(400.0);
+		tfFamily.setFont(fontTf);
 		
 		lblObs.setLayoutX(510.0);
 		lblObs.setLayoutY(37.0);
@@ -264,7 +271,7 @@ public class PatientBoundary implements StrategyBoundary {
         }
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
-        		lblFamily, cbFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
+        		lblFamily, tfFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
         		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
         
         btnCreate.setOnAction((e) -> {
@@ -310,7 +317,7 @@ public class PatientBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(cbOwner.valueProperty(), control.ownerIdProperty());
         Bindings.bindBidirectional(tfName.textProperty(), control.nameProperty());
         Bindings.bindBidirectional(cbSpecies.valueProperty(), control.speciesProperty());
-        Bindings.bindBidirectional(cbFamily.valueProperty(), control.familyProperty());
+        Bindings.bindBidirectional(tfFamily.textProperty(), control.familyProperty());
         Bindings.bindBidirectional(tfBloodtype.textProperty(), control.bloodtypeProperty());
         Bindings.bindBidirectional(dpBirthdate.valueProperty(), control.birthdateProperty());
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());

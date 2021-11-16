@@ -112,11 +112,11 @@ public class Formatters {
   }
   
   public String treatmentBooleanToString(Boolean value) {
-	  return value == true ? "Em tratamento" : "Liberado para Alta Hospitalar";
+	  return value == true ? "Sim" : "Não";
   }
 
   public boolean treatmentStringToBoolean(String value) {
-	  if (value.equals("Em tratamento")) {
+	  if (value.equals("Sim")) {
 		  return true;
 	  } else {
 		  return false;

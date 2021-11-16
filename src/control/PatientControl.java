@@ -1,10 +1,13 @@
 package control;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 
+import dao.impl.OwnerDAOImpl;
 import dao.impl.PatientDAOImpl;
+import dao.interfaces.OwnerDAO;
 import dao.interfaces.PatientDAO;
 import entity.Patient;
 import javafx.beans.property.ObjectProperty;
@@ -13,12 +16,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
+import javafx.util.Pair;
 import utils.Formatters;
 
 public class PatientControl {
 
   private ObservableList<Patient> listPatients = FXCollections.observableArrayList();
   private PatientDAO service = new PatientDAOImpl();
+  private OwnerDAO serviceOwner = new OwnerDAOImpl();
   private Formatters fmt = new Formatters();
   
   private StringProperty id = new SimpleStringProperty("");
@@ -35,7 +41,7 @@ public class PatientControl {
   public Patient getEntity() {
 	  Patient patient = new Patient(
 			  nameProperty().getValue(),
-			  new ObjectId(ownerIdProperty().getValue()),
+			  new ObjectId(getIdByName(ownerIdProperty().getValue())),
 			  speciesProperty().getValue(),
 			  familyProperty().getValue()
 			  );
@@ -49,8 +55,8 @@ public class PatientControl {
   }
   
   public void setEntity(Patient patient) {
-      id.set((String) patient.getId().toString());
-      ownerId.set((String) patient.getOwnerId().toString());
+      id.set(patient.getId().toString());
+      ownerId.set(patient.getOwnerId().toString());
       name.set(patient.getName());
       species.set(patient.getSpecies());
       family.set(patient.getFamily());
@@ -62,7 +68,7 @@ public class PatientControl {
   }
 
   public void create() {
-    service.insert(getEntity(), ownerIdProperty().getValue());
+    service.insert(getEntity(), getIdByName(ownerIdProperty().getValue()));
     this.listAll();
   }
 
@@ -85,6 +91,35 @@ public class PatientControl {
 	  listPatients.clear();
 	  listPatients.addAll(service.findByField("name", nameProperty().getValue()));
   }
+  
+  public ObservableList<String> getAllIdAndNames() {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		ObservableList<String> ownersName = FXCollections.observableArrayList();
+		for (Pair<String, String> name : owners) {
+			ownersName.addAll(name.getValue());
+		}
+		return ownersName;
+	}
+  
+  public String getIdByName(String value) {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		for (Pair<String, String> name : owners) {
+			if (name.getValue().equals(value)) {
+				return name.getKey();
+			}
+		}
+		return null;
+	}
+  
+  public String getNameById(String value) {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		for (Pair<String, String> name : owners) {
+			if (name.getKey().equals(value)) {
+				return name.getValue();
+			}
+		}
+		return null;
+	}
 
   public void clearFields() {
     id.set("");

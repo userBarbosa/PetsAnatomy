@@ -55,27 +55,27 @@ public class EmployeeControl {
   }
 
   public void setEntity(Employee employee) {
-    id.setValue((String) employee.getId().toString());
-    active.setValue(fmt.activeBooleanToString(employee.getActive()));
-    email.setValue(employee.getEmail());
-    username.setValue(employee.getUsername());
-    fullname.setValue(employee.getFullname());
-    telephoneNumber.setValue(employee.getTelephoneNumber());
-    bankDetails.setValue(employee.getBankDetails());
-    specialty.setValue(employee.getSpecialty());
-    birthDate.setValue(fmt.DateToLocal(employee.getBirthDate()));
+    id.set((String) employee.getId().toString());
+    active.set(fmt.activeBooleanToString(employee.getActive()));
+    email.set(employee.getEmail());
+    username.set(employee.getUsername());
+    fullname.set(employee.getFullname());
+    telephoneNumber.set(employee.getTelephoneNumber());
+    bankDetails.set(employee.getBankDetails());
+    specialty.set(employee.getSpecialty());
+    birthDate.set(fmt.DateToLocal(employee.getBirthDate()));
   }
 
   public void clearFields() {
-    id.setValue("");
-    active.setValue("");
-    email.setValue("");
-    username.setValue("");
-    fullname.setValue("");
-    telephoneNumber.setValue("");
-    bankDetails.setValue("");
-    specialty.setValue("");
-    birthDate.setValue(null);
+    id.set("");
+    active.set("");
+    email.set("");
+    username.set("");
+    fullname.set("");
+    telephoneNumber.set("");
+    bankDetails.set("");
+    specialty.set("");
+    birthDate.set(null);
     this.listAll();
   }
 

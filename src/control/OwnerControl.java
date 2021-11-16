@@ -57,19 +57,16 @@ public class OwnerControl {
 
   public void create() {
     service.insert(getEntity());
-    this.listAll();
     this.clearFields();
   }
 
   public void updateById() {
     service.update(idProperty().getValue(), getEntity());
-    this.listAll();
     this.clearFields();
   }
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.findByField();
     this.clearFields();
   }
 
