@@ -43,6 +43,7 @@ public class PatientDAOImpl implements PatientDAO {
 
 		Patient p = new Patient(name, ownerId, species, family);
 
+		p.setId(doc.getObjectId("_id"));
 		p.setBloodtype(doc.getString("bloodtype"));
 		p.setObs(doc.getString("obs"));
 		p.setTreatment(doc.getBoolean("treatment"));
@@ -55,6 +56,8 @@ public class PatientDAOImpl implements PatientDAO {
 	}
 
 	public void insert(Patient patient, String ownerId) {
+		if (patient.getLastVisit() == null) patient.setLastVisit(new Date()); 
+
 		Document pat = newDoc(patient);
 
 		pat.put("_id", new ObjectId());

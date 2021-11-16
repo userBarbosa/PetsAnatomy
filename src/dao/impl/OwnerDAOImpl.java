@@ -24,7 +24,7 @@ public class OwnerDAOImpl implements OwnerDAO {
 
 	Document newDoc(Owner owner) {
 		Document customer = new Document("fullname", owner.getFullname())
-				.append("identificationNumber", "")
+				.append("identificationNumber", owner.getIdentificationNumber())
 				.append("email", owner.getEmail())
 				.append("telephoneNumber", owner.getTelephoneNumber())
 				.append("patientsId", owner.getPatientsId())
