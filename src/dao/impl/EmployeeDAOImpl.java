@@ -219,10 +219,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 				new BasicDBObject(field, data).append("updated", new Date())
 				);
 
-		if (field.equals("password") && data.equals("12345")) {
-			updatedData.append("defaultPassword", true);
-		}
-
 		getCollection();
 		employees.updateOne(
 				new BasicDBObject("_id", new ObjectId(id)),
@@ -232,7 +228,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	public void updatePassword(String id, String data) {
 		BasicDBObject updatedData = new BasicDBObject(
-				"$set",
 				new BasicDBObject("password", data).append("updated", new Date())
 				);
 
@@ -245,7 +240,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		getCollection();
 		employees.updateOne(
 				new BasicDBObject("_id", new ObjectId(id)),
-				updatedData
+				new BasicDBObject("$set", updatedData)
 				);
 	}
 

@@ -17,5 +17,6 @@ public interface EmployeeDAO {
   List<Pair<String, String>> getAllIdAndNames();
   void update(String id, Employee employee);
   void updateField(String id, String field, String data);
+  void updatePassword(String id, String data);
   void delete(String id);
 }

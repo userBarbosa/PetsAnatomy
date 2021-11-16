@@ -85,7 +85,7 @@ public class ConfigurationControl {
   }
 
   public void resetPassword() {
-    service.updateField(idProperty().getValue(), "password", "12345");
+    service.updatePassword(idProperty().getValue(), "12345");
     JOptionPane.showMessageDialog(
       null,
       "Senha resetada!",
