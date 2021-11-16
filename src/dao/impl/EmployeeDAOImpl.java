@@ -228,7 +228,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	public void updatePassword(String id, String data) {
 		BasicDBObject updatedData = new BasicDBObject(
-				new BasicDBObject("password", data).append("updated", new Date())
+				new BasicDBObject("password", new Security().encryptPassword(data)).append("updated", new Date())
 				);
 
 		if (data.equals("12345")) {
