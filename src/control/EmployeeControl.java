@@ -32,6 +32,7 @@ public class EmployeeControl {
   private StringProperty telephoneNumber = new SimpleStringProperty("");
   private StringProperty bankDetails = new SimpleStringProperty("");
   private StringProperty specialty = new SimpleStringProperty("");
+  private StringProperty role = new SimpleStringProperty("");
   private ObjectProperty birthDate = new SimpleObjectProperty();
 
   public Employee getEntity() {
@@ -52,6 +53,7 @@ public class EmployeeControl {
     employee.setBirthDate(
       fmt.localToDate((LocalDate) birthDateProperty().getValue())
     );
+    employee.setRole(roleProperty().getValue());
     return employee;
   }
 
@@ -64,6 +66,7 @@ public class EmployeeControl {
     telephoneNumber.set(employee.getTelephoneNumber());
     bankDetails.set(employee.getBankDetails());
     specialty.set(employee.getSpecialty());
+    role.set(employee.getRole());
     birthDate.set(fmt.dateToLocal(employee.getBirthDate()));
   }
 
@@ -77,47 +80,8 @@ public class EmployeeControl {
     bankDetails.set("");
     specialty.set("");
     birthDate.set(null);
+    role.set("");
     this.listAll();
-  }
-
-  public ObservableList<Employee> getListEmployees() {
-    return listEmployees;
-  }
-
-  public StringProperty idProperty() {
-    return id;
-  }
-
-  public StringProperty activeProperty() {
-    return active;
-  }
-
-  public StringProperty emailProperty() {
-    return email;
-  }
-
-  public StringProperty usernameProperty() {
-    return username;
-  }
-
-  public StringProperty fullnameProperty() {
-    return fullname;
-  }
-
-  public StringProperty telephoneNumberProperty() {
-    return telephoneNumber;
-  }
-
-  public StringProperty bankDetailsProperty() {
-    return bankDetails;
-  }
-
-  public StringProperty specialtyProperty() {
-    return specialty;
-  }
-
-  public ObjectProperty birthDateProperty() {
-    return birthDate;
   }
 
   public void create() {
@@ -170,6 +134,50 @@ public class EmployeeControl {
   
   public String activeBooleanToString(Boolean value) {
 	return fmt.activeBooleanToString(value);
+  }
+
+  public ObservableList<Employee> getListEmployees() {
+    return listEmployees;
+  }
+
+  public StringProperty idProperty() {
+    return id;
+  }
+
+  public StringProperty activeProperty() {
+    return active;
+  }
+
+  public StringProperty emailProperty() {
+    return email;
+  }
+
+  public StringProperty usernameProperty() {
+    return username;
+  }
+
+  public StringProperty fullnameProperty() {
+    return fullname;
+  }
+
+  public StringProperty telephoneNumberProperty() {
+    return telephoneNumber;
+  }
+
+  public StringProperty bankDetailsProperty() {
+    return bankDetails;
+  }
+
+  public StringProperty specialtyProperty() {
+    return specialty;
+  }
+
+  public StringProperty roleProperty() {
+    return role;
+  }
+
+  public ObjectProperty birthDateProperty() {
+    return birthDate;
   }
 
 }

@@ -29,9 +29,9 @@ public class OwnerControl {
   private StringProperty telephoneNumber = new SimpleStringProperty("");
   private StringProperty address = new SimpleStringProperty("");
   private StringProperty identificationNumber = new SimpleStringProperty("");
-  private ObjectProperty lastVisit = new SimpleObjectProperty();
+  private StringProperty lastVisit = new SimpleStringProperty("");
 
-  public Owner getEntity() {
+  public Owner getEntity() { //pega dos campos
     Owner owner = new Owner(
       fullnameProperty().getValue(),
       emailProperty().getValue(),
@@ -41,11 +41,11 @@ public class OwnerControl {
     owner.setPatientsId(patientsIdProperty().getValue());
     owner.setTelephoneNumber(telephoneNumberProperty().getValue());
     owner.setAddress(addressProperty().getValue());
-    owner.setLastVisit(fmt.localToDate((LocalDate) lastVisitProperty().getValue()));
+    owner.setLastVisit(fmt.stringToDate(lastVisitProperty().getValue()));
     return owner;
   }
   
-  public void setEntity(Owner owner) {
+  public void setEntity(Owner owner) { //
 	  id.set(owner.getId().toString());
 	  patientsId.set(owner.getPatientsId());
 	  email.set(owner.getEmail());
@@ -53,7 +53,7 @@ public class OwnerControl {
 	  telephoneNumber.set(owner.getTelephoneNumber());
 	  address.set(owner.getAddress());
 	  identificationNumber.set(owner.getIdentificationNumber());
-	  lastVisit.set(fmt.dateToLocal(owner.getLastVisit()));
+	  lastVisit.set(fmt.timeDateToString(owner.getLastVisit()));
   }
 
   public void create() {
@@ -89,7 +89,7 @@ public class OwnerControl {
     telephoneNumber.set("");
     address.set("");
     identificationNumber.set("");
-    lastVisit.set(null);
+    lastVisit.set("");
     this.listAll();
   }
   
@@ -129,8 +129,12 @@ public class OwnerControl {
     return identificationNumber;
   }
 
-  public ObjectProperty lastVisitProperty() {
+  public StringProperty lastVisitProperty() {
     return lastVisit;
+  }
+
+  public String timeDateToString(Date lt) {
+    return fmt.timeDateToString(lt);
   }
 
 }

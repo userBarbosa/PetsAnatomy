@@ -77,6 +77,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	public void update(String id, Employee employee) {
 		Document worker = newDoc(employee);
 		worker.put("updated", new Date());
+		worker.remove("role");
 
 		getCollection();
 		employees.updateOne(

@@ -2,15 +2,11 @@ package boundary;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-
 import control.OwnerControl;
 import entity.Owner;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,7 +25,7 @@ public class OwnerBoundary implements StrategyBoundary {
 	private TextField tfAddress = new TextField();
 	private TextField tfPatients = new TextField();
 	private TextField tfIdentificationNumber = new TextField();
-	private DatePicker dpLastVisit = new DatePicker();
+	private TextField tfLastVisit = new TextField();
 
 	private Label lblId = new Label("Id"); 
 	private Label lblPatients = new Label("Pacientes");
@@ -73,7 +69,7 @@ public class OwnerBoundary implements StrategyBoundary {
 		TableColumn<Owner, String> colLastVisit = new TableColumn<>("Última Consulta");
 		colLastVisit.setCellValueFactory( (ownerProp) -> {
 			Date lastVisit = ownerProp.getValue().getLastVisit();
-			return new ReadOnlyStringWrapper(control.dateToString(lastVisit));
+			return new ReadOnlyStringWrapper(control.timeDateToString(lastVisit));
 		} );
 
 		table
@@ -210,10 +206,12 @@ public class OwnerBoundary implements StrategyBoundary {
 		lblLastVisit.setPrefWidth(100.0);
 		lblLastVisit.setFont(fontLbls);
 
-		dpLastVisit.setLayoutX(645.0);
-		dpLastVisit.setLayoutY(147.0);
-		dpLastVisit.setPrefHeight(25.0);
-		dpLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setLayoutX(645.0);
+		tfLastVisit.setLayoutY(147.0);
+		tfLastVisit.setPrefHeight(25.0);
+		tfLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setDisable(true);
+		tfLastVisit.setEditable(false);
 
         if (getTable().getColumns().size() == 0) {
         	this.generatedTable();
@@ -221,7 +219,7 @@ public class OwnerBoundary implements StrategyBoundary {
 		
 		formPane.getChildren().addAll(lblId, tfId, lblPatients, tfPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
 				lblTelephoneNumber, tfTelephoneNumber, lblAddress, tfAddress, lblIdentificationNumber, tfIdentificationNumber, 
-				lblLastVisit, dpLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
+				lblLastVisit, tfLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 		
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -269,7 +267,7 @@ public class OwnerBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(tfTelephoneNumber.textProperty(), control.telephoneNumberProperty());
         Bindings.bindBidirectional(tfAddress.textProperty(), control.addressProperty());
         Bindings.bindBidirectional(tfIdentificationNumber.textProperty(), control.identificationNumberProperty());
-        Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
+        Bindings.bindBidirectional(tfLastVisit.textProperty(), control.lastVisitProperty());
 	}
 
 	public TableView<Owner> getTable() {
