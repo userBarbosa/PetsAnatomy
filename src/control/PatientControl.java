@@ -62,7 +62,7 @@ public class PatientControl {
       family.set(patient.getFamily());
       bloodtype.set(patient.getBloodtype());
       obs.set(patient.getObs());
-      birthdate.set(fmt.DateToLocal(patient.getBirthdate()));
+      birthdate.set(fmt.dateToLocal(patient.getBirthdate()));
       lastVisit.set(fmt.timeDateToString(patient.getLastVisit()));
       treatment.set(fmt.treatmentBooleanToString(patient.getTreatment()));
   }

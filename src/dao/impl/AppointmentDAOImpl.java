@@ -1,18 +1,22 @@
 package dao.impl;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
-import dao.interfaces.AppointmentDAO;
-import entity.Appointment;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import dao.interfaces.AppointmentDAO;
+import entity.Appointment;
 import utils.MongoConnect;
 
 public class AppointmentDAOImpl implements AppointmentDAO {
@@ -116,9 +120,9 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   public List<Appointment> findByField(String field, String data) {
     List<Appointment> aList = new ArrayList<Appointment>();
     getCollection();
-
+    Pattern regex = Pattern.compile(data, Pattern.CASE_INSENSITIVE);
     MongoCursor<Document> cursor = appointments
-      .find(new BasicDBObject(field, data))
+      .find(new BasicDBObject(field, regex))
       .iterator();
 
     try {

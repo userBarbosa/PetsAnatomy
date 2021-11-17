@@ -9,6 +9,8 @@ import entity.Owner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -103,8 +105,9 @@ public class OwnerDAOImpl implements OwnerDAO {
 	public List<Owner> findByField(String field, String data) {
 		List<Owner> oList = new ArrayList<Owner>();
 		getCollection();
+		Pattern regex = Pattern.compile(data, Pattern.CASE_INSENSITIVE);
 		MongoCursor<Document> cursor = owners
-				.find(new Document(field, data))
+				.find(new Document(field, regex))
 				.iterator();
 
 		try {

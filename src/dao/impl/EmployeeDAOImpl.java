@@ -1,25 +1,27 @@
 package dao.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import dao.interfaces.EmployeeDAO;
-import entity.Employee;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javafx.util.Pair;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import utils.Formatters;
+
+import dao.interfaces.EmployeeDAO;
+import entity.Employee;
+import javafx.util.Pair;
 import utils.MongoConnect;
 import utils.Security;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
 	MongoCollection<Document> employees;
-	private Formatters fmt = new Formatters();
 
 	private void getCollection() {
 		employees = MongoConnect.database.getCollection("employees");
@@ -115,13 +117,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		}
 		return newEmployee(query);
 	}
-
+	
 	public List<Employee> findByField(String field, String data) {
 		List<Employee> eList = new ArrayList<Employee>();
 		getCollection();
-		// String regexQuery = "/^" + data + "/";
+		Pattern regex = Pattern.compile(data, Pattern.CASE_INSENSITIVE);
 		MongoCursor<Document> cursor = employees
-				.find(new Document(field, data))
+				.find(new BasicDBObject(field, regex))
 				.iterator();
 
 		try {

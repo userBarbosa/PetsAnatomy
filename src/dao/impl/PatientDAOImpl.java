@@ -1,17 +1,21 @@
 package dao.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import dao.interfaces.PatientDAO;
-import entity.Patient;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javafx.util.Pair;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import dao.interfaces.PatientDAO;
+import entity.Patient;
+import javafx.util.Pair;
 import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
@@ -110,8 +114,9 @@ public class PatientDAOImpl implements PatientDAO {
 	public List<Patient> findByField(String field, String data) {
 		List<Patient> pList = new ArrayList<Patient>();
 		getCollection();
+		Pattern regex = Pattern.compile(data, Pattern.CASE_INSENSITIVE);
 		MongoCursor<Document> cursor = patients
-				.find(new Document(field, data))
+				.find(new Document(field, regex))
 				.iterator();
 
 		try {
