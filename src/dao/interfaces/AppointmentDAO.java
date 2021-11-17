@@ -13,5 +13,6 @@ public interface AppointmentDAO {
 	List<Appointment> findByDate(String field, Date dateGte, Date dateLte);
 	List<Appointment> getAllAppointments();
 	void update(String id, Appointment appointment);
+	void updateField(String id, String field, String data);
 	void delete(String id);
 }

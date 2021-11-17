@@ -64,7 +64,7 @@ public class EmployeeControl {
     telephoneNumber.set(employee.getTelephoneNumber());
     bankDetails.set(employee.getBankDetails());
     specialty.set(employee.getSpecialty());
-    birthDate.set(fmt.DateToLocal(employee.getBirthDate()));
+    birthDate.set(fmt.dateToLocal(employee.getBirthDate()));
   }
 
   public void clearFields() {

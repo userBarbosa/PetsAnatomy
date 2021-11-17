@@ -2,15 +2,12 @@ package boundary;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-
 import control.PatientControl;
 import entity.Patient;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;

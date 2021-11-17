@@ -17,7 +17,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 import javafx.util.Pair;
 import utils.Formatters;
 
@@ -80,7 +79,7 @@ public class PatientControl {
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.findByField();
+    this.listAll();
   }
 
   public void listAll() {
