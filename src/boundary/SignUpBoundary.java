@@ -29,13 +29,12 @@ public class SignUpBoundary extends Application {
   private Label lblTitle = new Label("PetsAnatomy");
 
   private static SignUpControl control = new SignUpControl();
+  AnchorPane mainPane = new AnchorPane();
+  AnchorPane formPane = new AnchorPane();
+  AnchorPane designPane = new AnchorPane();
 
   @Override
   public void start(Stage stage) throws Exception {
-    AnchorPane mainPane = new AnchorPane();
-    AnchorPane formPane = new AnchorPane();
-    AnchorPane designPane = new AnchorPane();
-
     binding();
 
     Font fontTextField = Font.loadFont(

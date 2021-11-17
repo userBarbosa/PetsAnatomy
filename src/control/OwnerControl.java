@@ -20,6 +20,7 @@ public class OwnerControl {
 
   private ObservableList<Owner> listOwners = FXCollections.observableArrayList();
   private OwnerDAO service = new OwnerDAOImpl();
+  private PatientControl control = new PatientControl();
   private Formatters fmt = new Formatters();
   
   private StringProperty id = new SimpleStringProperty("");
@@ -58,22 +59,24 @@ public class OwnerControl {
 
   public void create() {
     service.insert(getEntity());
-    this.clearFields();
+    this.listAll();
   }
 
   public void updateById() {
     service.update(idProperty().getValue(), getEntity());
-    this.clearFields();
+    this.listAll();
   }
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.clearFields();
+    this.listAll();
   }
 
   public void listAll() {
     listOwners.clear();
     listOwners.addAll(service.getAllOwners());
+    this.clearFields();
+    control.getAllIdAndNames();    
   }
 
   public void findByField() {

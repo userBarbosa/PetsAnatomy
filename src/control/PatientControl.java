@@ -36,7 +36,7 @@ public class PatientControl {
   private StringProperty bloodtype = new SimpleStringProperty("");
   private StringProperty obs = new SimpleStringProperty("");
   private ObjectProperty birthdate = new SimpleObjectProperty();
-  private ObjectProperty lastVisit = new SimpleObjectProperty();
+  private StringProperty lastVisit = new SimpleStringProperty();
   private StringProperty treatment = new SimpleStringProperty("");
 
   public Patient getEntity() {
@@ -50,21 +50,21 @@ public class PatientControl {
 	  patient.setBloodtype(bloodtypeProperty().getValue());
 	  patient.setObs(obsProperty().getValue());
 	  patient.setBirthdate(fmt.localToDate((LocalDate) birthdateProperty().getValue()));
-	  patient.setLastVisit(fmt.localToDate((LocalDate) lastVisitProperty().getValue()));
+	  patient.setLastVisit(fmt.stringToDate(lastVisitProperty().getValue()));
 	  patient.setTreatment(fmt.treatmentStringToBoolean(treatmentProperty().getValue()));
 	  return patient;
   }
   
   public void setEntity(Patient patient) {
       id.set(patient.getId().toString());
-      ownerId.set(patient.getOwnerId().toString());
+      ownerId.set(getNameById(patient.getOwnerId().toString()));
       name.set(patient.getName());
       species.set(patient.getSpecies());
       family.set(patient.getFamily());
       bloodtype.set(patient.getBloodtype());
       obs.set(patient.getObs());
       birthdate.set(fmt.DateToLocal(patient.getBirthdate()));
-      lastVisit.set(fmt.DateToLocal(patient.getLastVisit()));
+      lastVisit.set(fmt.timeDateToString(patient.getLastVisit()));
       treatment.set(fmt.treatmentBooleanToString(patient.getTreatment()));
   }
 
@@ -136,6 +136,10 @@ public class PatientControl {
     this.listAll();
   }
   
+  public String timeDateToString(Date value) {
+	  return fmt.timeDateToString(value);
+  }
+  
   public String dateToString(Date value) {
 	  return fmt.dateToString(value);
   }
@@ -180,7 +184,7 @@ public class PatientControl {
     return birthdate;
   }
 
-  public ObjectProperty lastVisitProperty() {
+  public StringProperty lastVisitProperty() {
     return lastVisit;
   }
 

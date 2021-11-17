@@ -34,7 +34,7 @@ public class PatientBoundary implements StrategyBoundary {
 	private ComboBox<String> cbSpecies = new ComboBox<>();
 	private ComboBox<String> cbTreatment = new ComboBox<>();
 	private DatePicker dpBirthdate = new DatePicker();
-	private DatePicker dpLastVisit = new DatePicker();
+	private TextField tfLastVisit = new TextField();
 
 	private Label lblId = new Label("Id"); 
 	private Label lblOwner = new Label("Dono");
@@ -65,7 +65,10 @@ public class PatientBoundary implements StrategyBoundary {
 		cbOwner.setItems(control.getAllIdAndNames());
         
 		TableColumn<Patient, String> colOwner = new TableColumn<>("Dono");
-		colOwner.setCellValueFactory(new PropertyValueFactory<Patient, String>("ownerId"));
+		colOwner.setCellValueFactory( (patientProp) -> {
+			String ownerId = patientProp.getValue().getOwnerId().toString();
+			return new ReadOnlyStringWrapper(control.getNameById(ownerId));
+		} );
 
         ObservableList<String> species = FXCollections.observableArrayList(
         		"Peixe", 
@@ -105,7 +108,7 @@ public class PatientBoundary implements StrategyBoundary {
 		TableColumn<Patient, String> colLastVisit = new TableColumn<>("Última Consulta");
 		colLastVisit.setCellValueFactory( (patientProp) -> {
             Date lastVisit = patientProp.getValue().getLastVisit();
-            return new ReadOnlyStringWrapper(control.dateToString(lastVisit));
+            return new ReadOnlyStringWrapper(control.timeDateToString(lastVisit));
         } );
 
         ObservableList<String> status = FXCollections.observableArrayList("Sim", "Não");
@@ -262,10 +265,12 @@ public class PatientBoundary implements StrategyBoundary {
 		lblLastVisit.setPrefWidth(100.0);
 		lblLastVisit.setFont(fontLbls);
 		
-		dpLastVisit.setLayoutX(645.0);
-		dpLastVisit.setLayoutY(147.0);
-		dpLastVisit.setPrefHeight(25.0);
-		dpLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setLayoutX(645.0);
+		tfLastVisit.setLayoutY(147.0);
+		tfLastVisit.setPrefHeight(25.0);
+		tfLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setDisable(true);
+		tfLastVisit.setEditable(false);
 		
 		lblTreatment.setLayoutX(510.0);
 		lblTreatment.setLayoutY(189.0);
@@ -284,7 +289,7 @@ public class PatientBoundary implements StrategyBoundary {
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
         		lblFamily, tfFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
-        		tfObs, lblLastVisit, dpLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
+        		tfObs, lblLastVisit, tfLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
         
         btnCreate.setOnAction((e) -> {
             control.create();
@@ -333,7 +338,7 @@ public class PatientBoundary implements StrategyBoundary {
         Bindings.bindBidirectional(tfBloodtype.textProperty(), control.bloodtypeProperty());
         Bindings.bindBidirectional(dpBirthdate.valueProperty(), control.birthdateProperty());
         Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
-        Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
+        Bindings.bindBidirectional(tfLastVisit.textProperty(), control.lastVisitProperty());
         Bindings.bindBidirectional(cbTreatment.valueProperty(), control.treatmentProperty());
 	}
 

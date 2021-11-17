@@ -34,7 +34,8 @@ public class LoginBoundary extends Application {
 	Font fontTxt = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 
 	private static LoginControl control = new LoginControl();
-
+	private static SignUpBoundary signUp = new SignUpBoundary();
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 		AnchorPane mainPane = new AnchorPane();
@@ -107,11 +108,19 @@ public class LoginBoundary extends Application {
 		pfPassword.visibleProperty().bind(cbPassword.selectedProperty().not());
 
 		tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
+		
+		mainPane.setLeftAnchor(formPane, 0.0);
+		mainPane.setRightAnchor(designPane, 0.0);
+		mainPane.getChildren().addAll(formPane, designPane);
 
 		btnLogin.setOnAction(
 				e -> {
-					control.login();
-					tfPassword.setText("");
+					if (tfPassword.getText().equals("12345")) {
+						this.popupResetPassword();
+					} else {
+						control.login();
+						tfPassword.setText("");	
+					}
 				}
 				);
 		btnLogin.setLayoutX(10.0);
@@ -122,7 +131,10 @@ public class LoginBoundary extends Application {
 
 		btnSignUp.setOnAction(
 				e -> {
-					control.signUp();
+					mainPane.getChildren().clear();
+					mainPane.setRightAnchor(designPane, 0.0);
+					mainPane.setLeftAnchor(signUp.formPane, 0.0);
+					mainPane.getChildren().addAll(signUp.formPane, designPane);
 				}
 				);
 		btnSignUp.setLayoutX(97.0);
@@ -180,10 +192,7 @@ public class LoginBoundary extends Application {
 		designPane
 		.getChildren()
 		.addAll(imageViewEstetoscopio, imageViewPata, lblTitle);
-
-		mainPane.setLeftAnchor(formPane, 0.0);
-		mainPane.setRightAnchor(designPane, 0.0);
-		mainPane.getChildren().addAll(formPane, designPane);
+		
 		mainPane.setPrefHeight(768.0);
 		mainPane.setPrefWidth(1366.0);
 
