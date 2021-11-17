@@ -17,7 +17,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 import javafx.util.Pair;
 import utils.Formatters;
 
@@ -63,8 +62,8 @@ public class PatientControl {
       family.set(patient.getFamily());
       bloodtype.set(patient.getBloodtype());
       obs.set(patient.getObs());
-      birthdate.set(fmt.DateToLocal(patient.getBirthdate()));
-      lastVisit.set(fmt.DateToLocal(patient.getLastVisit()));
+      birthdate.set(fmt.dateToLocal(patient.getBirthdate()));
+      lastVisit.set(fmt.dateToLocal(patient.getLastVisit()));
       treatment.set(fmt.treatmentBooleanToString(patient.getTreatment()));
   }
 
@@ -80,7 +79,7 @@ public class PatientControl {
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.findByField();
+    this.listAll();
   }
 
   public void listAll() {

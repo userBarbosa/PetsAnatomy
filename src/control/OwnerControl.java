@@ -53,7 +53,7 @@ public class OwnerControl {
 	  telephoneNumber.set(owner.getTelephoneNumber());
 	  address.set(owner.getAddress());
 	  identificationNumber.set(owner.getIdentificationNumber());
-	  lastVisit.set(fmt.DateToLocal(owner.getLastVisit()));
+	  lastVisit.set(fmt.dateToLocal(owner.getLastVisit()));
   }
 
   public void create() {

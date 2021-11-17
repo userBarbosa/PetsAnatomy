@@ -60,15 +60,23 @@ public class Formatters {
     return dt;
   }
 
+  public LocalTime stringToHour(String schedule){
+    String splitHour[] = schedule.split(":");
+    int hour = Integer.parseInt(splitHour[0]);
+    int minutes = Integer.parseInt(splitHour[0]);
+    LocalTime lt = LocalTime.of(hour, minutes);
+    return lt;
+  }
+
   public Date stringToTimeDate(String date, String schedule) {
     String splitDate[] = date.split("/");
     String splitHour[] = schedule.split(":");
     
-    int year = Integer.parseInt(splitDate[2]);
-    int month = Integer.parseInt(splitDate[1]);
     int day = Integer.parseInt(splitDate[0]);
+    int month = Integer.parseInt(splitDate[1]);
+    int year = Integer.parseInt(splitDate[2]);
     int hour = Integer.parseInt(splitHour[0]);
-    int minutes = Integer.parseInt(splitHour[0]);
+    int minutes = Integer.parseInt(splitHour[1]);
 
     Date dt = Date.from(
       LocalDate
@@ -93,7 +101,7 @@ public class Formatters {
 	  return dt;
   }
 
-  public LocalDate DateToLocal(Date date) {
+  public LocalDate dateToLocal(Date date) {
 	  return date.toInstant()
 		  .atZone(ZoneId.systemDefault())
 		  .toLocalDate();

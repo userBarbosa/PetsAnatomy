@@ -10,8 +10,6 @@ public class Appointment {
 	String obs;
 	int state, financialState;
 	double value;
-	
-	public Appointment() { super(); }
 
 	public Appointment(
 			ObjectId employeeId,
