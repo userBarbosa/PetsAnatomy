@@ -87,6 +87,7 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 		btnSair.setMinSize(300.0, 50.0);
 		btnSair.setFont(fontBtns);
 		btnSair.setOnAction((e) -> {
+			System.out.println("Bye (=");
 			Platform.exit();
 			System.exit(0);
 		});

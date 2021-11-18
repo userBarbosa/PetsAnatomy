@@ -16,5 +16,5 @@ public interface PatientDAO {
 	List<Pair<String, String>> getAllIdAndNames();
 	void update(String id, Patient patient);
 	void delete(String id);
-	
+	void deleteManyByOwnerId(String id);
 }

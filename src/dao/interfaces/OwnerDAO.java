@@ -15,6 +15,7 @@ public interface OwnerDAO {
 	List<Owner> getAllOwners();
 	List<Pair<String, String>> getAllIdAndNames();
 	void update(String id, Owner owner);
+	void updatePatientList(String ownerId, String patientID);
 	void delete(String id);
-
+	void deletePatientId(String ownerId, String patientId);
 }
