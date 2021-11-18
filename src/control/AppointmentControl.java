@@ -1,10 +1,18 @@
 package control;
 
 import dao.impl.AppointmentDAOImpl;
+import dao.impl.EmployeeDAOImpl;
+import dao.impl.OwnerDAOImpl;
+import dao.impl.PatientDAOImpl;
 import dao.interfaces.AppointmentDAO;
+import dao.interfaces.EmployeeDAO;
+import dao.interfaces.OwnerDAO;
+import dao.interfaces.PatientDAO;
 import entity.Appointment;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,170 +23,275 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Pair;
+
 import org.bson.types.ObjectId;
 import utils.Formatters;
 
 public class AppointmentControl {
 
-  private ObservableList<Appointment> listAppointments = FXCollections.observableArrayList();
-  private AppointmentDAO service = new AppointmentDAOImpl();
-  private Formatters fmt = new Formatters();
+	private ObservableList<Appointment> listAppointments = FXCollections.observableArrayList();
+	private AppointmentDAO service = new AppointmentDAOImpl();
+	private PatientDAO servicePatient = new PatientDAOImpl();
+	private OwnerDAO serviceOwner = new OwnerDAOImpl();
+	private EmployeeDAO serviceEmployee = new EmployeeDAOImpl();
+	private Formatters fmt = new Formatters();
 
-  private StringProperty id = new SimpleStringProperty("");
-  private StringProperty patientId = new SimpleStringProperty("");
-  private StringProperty ownerId = new SimpleStringProperty("");
-  private StringProperty employeeId = new SimpleStringProperty("");
-  private StringProperty obs = new SimpleStringProperty("");
-  private IntegerProperty state = new SimpleIntegerProperty();
-  private IntegerProperty financialState = new SimpleIntegerProperty();
-  private DoubleProperty value = new SimpleDoubleProperty();
-  private ObjectProperty date = new SimpleObjectProperty();
-  private ObjectProperty time = new SimpleObjectProperty();
-  
-  private ObjectProperty dateGte = new SimpleObjectProperty();
-  private ObjectProperty dateLte = new SimpleObjectProperty();
+	private StringProperty id = new SimpleStringProperty("");
+	private StringProperty patientId = new SimpleStringProperty("");
+	private StringProperty ownerId = new SimpleStringProperty("");
+	private StringProperty employeeId = new SimpleStringProperty("");
+	private StringProperty obs = new SimpleStringProperty("");
+	private StringProperty state = new SimpleStringProperty("");
+	private StringProperty financialState = new SimpleStringProperty("");
+	private DoubleProperty value = new SimpleDoubleProperty();
+	private ObjectProperty date = new SimpleObjectProperty();
+	private ObjectProperty time = new SimpleObjectProperty();
 
-  public Appointment getEntity() {
-    ObjectId employeeId = new ObjectId(employeeIdProperty().getValue());
-    ObjectId patientId = new ObjectId(patientIdProperty().getValue());
-    ObjectId ownerId = new ObjectId(ownerIdProperty().getValue());
-    Date date = fmt.stringToTimeDate(
-      dateProperty().getValue().toString(),
-      timeProperty().getValue().toString()
-    );
-    double value = valueProperty().getValue();
+	private ObjectProperty dateGte = new SimpleObjectProperty();
+	private ObjectProperty dateLte = new SimpleObjectProperty();
 
-    Appointment appointment = new Appointment(
-      employeeId,
-      patientId,
-      ownerId,
-      date,
-      value
-    );
-    appointment.setId(
-      (idProperty().getValue() == "" || idProperty().getValue() == null)
-        ? new ObjectId()
-        : new ObjectId(idProperty().getValue())
-    );
-    appointment.setObs(obsProperty().getValue());
-    appointment.setState(stateProperty().getValue());
-    appointment.setFinancialState(financialStateProperty().getValue());
-    return appointment;
-  }
+	public Appointment getEntity() {
+		ObjectId employeeId = new ObjectId(getEmployeeIdByName(employeeIdProperty().getValue()));
+		ObjectId patientId = new ObjectId(getPatientIdByName(patientIdProperty().getValue()));
+		ObjectId ownerId = new ObjectId(getOwnerIdByName(ownerIdProperty().getValue()));
+		Date date = fmt.stringToTimeDate(
+				dateProperty().getValue().toString(),
+				timeProperty().getValue().toString()
+				);
+		double value = valueProperty().getValue();
 
-  public void setEntity(Appointment appointment) {
-    id.setValue(appointment.getId().toString());
-    patientId.setValue(appointment.getPatientId().toString());
-    ownerId.setValue(appointment.getOwnerId().toString());
-    employeeId.setValue(appointment.getEmployeeId().toString());
-    obs.setValue(appointment.getObs());
-    state.setValue(appointment.getFinancialState());
-    value.setValue(appointment.getValue());
-    date.setValue(appointment.getDate());
-    time.setValue(fmt.dateToLocal(appointment.getDate()));
-  }
-
-  public void create() {
-    service.insert(getEntity());
-    this.listAll();
-    this.clearFields();
-  }
-
-  public void updateById() {
-    service.update(idProperty().getValue(), getEntity());
-    this.listAll();
-    this.clearFields();
-  }
-
-  public void deleteById() {
-    service.delete(idProperty().getValue());
-    this.listAll();
-  }
-
-  public void listAll() {
-    listAppointments.clear();
-    listAppointments.addAll(service.getAllAppointments());
-  }
-  
-  public void findByField() {
-	  listAppointments.clear();
-	  listAppointments.addAll(service.findByField("patientId", patientIdProperty().getValue()));
+		Appointment appointment = new Appointment(
+				employeeId,
+				patientId,
+				ownerId,
+				date,
+				value
+				);
+		appointment.setId(
+				(idProperty().getValue() == "" || idProperty().getValue() == null)
+				? new ObjectId()
+						: new ObjectId(idProperty().getValue())
+				);
+		appointment.setObs(obsProperty().getValue());
+		appointment.setState(fmt.stateStringToInteger(stateProperty().getValue()));
+		appointment.setFinancialState(fmt.financialStateStringToInteger(financialStateProperty().getValue()));
+		return appointment;
 	}
 
-  public void findByDate() {
-    listAppointments.clear();
-    listAppointments.addAll(service.findByDate("date", (Date) dateGteProperty().getValue(), (Date) dateLteProperty().getValue()));
-    this.clearFields();
-  }
+	public void setEntity(Appointment appointment) {
+		id.set(appointment.getId().toString());
+		patientId.set(appointment.getPatientId().toString());
+		ownerId.set(appointment.getOwnerId().toString());
+		employeeId.set(appointment.getEmployeeId().toString());
+		obs.set(appointment.getObs());
+		financialState.set(fmt.financialStateIntegerToString(appointment.getFinancialState()));
+		state.set(fmt.stateIntegerToString(appointment.getState()));
+		value.set(appointment.getValue());
+		date.set(appointment.getDate());
+		time.setValue(fmt.dateToLocal(appointment.getDate()));
+	}
 
-  public void clearFields() {
-    id.set("");
-    patientId.set("");
-    ownerId.set("");
-    employeeId.set("");
-    obs.set("");
-    state.set(0);
-    value.set(0);
-    financialState.set(0);
-    date.set(null);
-    time.set(null);
-    this.listAll();
-  }
-  
-  public String dateToString(Date value) {
-	  return fmt.dateToString(value);
-  }
+	public void create() {
+		service.insert(getEntity());
+		this.listAll();
+		this.clearFields();
+	}
 
-  public ObservableList<Appointment> getListAppointments() {
-    return listAppointments;
-  }
+	public void updateById() {
+		service.update(idProperty().getValue(), getEntity());
+		this.listAll();
+		this.clearFields();
+	}
 
-  public StringProperty idProperty() {
-    return id;
-  }
+	public void deleteById() {
+		service.delete(idProperty().getValue());
+		this.listAll();
+	}
 
-  public StringProperty patientIdProperty() {
-    return patientId;
-  }
+	public void listAll() {
+		listAppointments.clear();
+		listAppointments.addAll(service.getAllAppointments());
+	}
 
-  public StringProperty ownerIdProperty() {
-    return ownerId;
-  }
+	public void findByField() {
+		listAppointments.clear();
+		listAppointments.addAll(service.findByField("patientId", patientIdProperty().getValue()));
+	}
 
-  public StringProperty employeeIdProperty() {
-    return employeeId;
-  }
+	public void findByDate() {
+		listAppointments.clear();
+		listAppointments.addAll(service.findByDate("date", (Date) dateGteProperty().getValue(), (Date) dateLteProperty().getValue()));
+		this.clearFields();
+	}
 
-  public StringProperty obsProperty() {
-    return obs;
-  }
+	public void clearFields() {
+		id.set("");
+		patientId.set("");
+		ownerId.set("");
+		employeeId.set("");
+		obs.set("");
+		state.set("");
+		value.set(0);
+		financialState.set("");
+		date.set(null);
+		time.set(null);
+		this.listAll();
+	}
+	
+	public ObservableList<String> getAllPatientIdAndNames() {
+		List<Pair<String, String>> patients = servicePatient.getAllIdAndNames();
+		ObservableList<String> patientsName = FXCollections.observableArrayList();
+		for (Pair<String, String> name : patients) {
+			patientsName.addAll(name.getValue());
+		}
+		return patientsName;
+	}
 
-  public IntegerProperty stateProperty() {
-    return state;
-  }
+	public ObservableList<String> getAllOwnerIdAndNames() {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		ObservableList<String> ownersName = FXCollections.observableArrayList();
+		for (Pair<String, String> name : owners) {
+			ownersName.addAll(name.getValue());
+		}
+		return ownersName;
+	}
 
-  public IntegerProperty financialStateProperty() {
-    return financialState;
-  }
+	public ObservableList<String> getAllEmployeeIdAndNames() {
+		List<Pair<String, String>> employees = serviceEmployee.getAllIdAndNames();
+		ObservableList<String> employeesName = FXCollections.observableArrayList();
+		for (Pair<String, String> name : employees) {
+			employeesName.addAll(name.getValue());
+		}
+		return employeesName;
+	}
 
-  public DoubleProperty valueProperty() {
-    return value;
-  }
+	public String getPatientNameById(String value) {
+		List<Pair<String, String>> patients = servicePatient.getAllIdAndNames();
+		for (Pair<String, String> name : patients) {
+			if (name.getKey().equals(value)) {
+				return name.getValue();
+			}
+		}
+		return null;
+	}
 
-  public ObjectProperty dateProperty() {
-    return date;
-  }
+	private String getPatientIdByName(String value) {
+		List<Pair<String, String>> patients = servicePatient.getAllIdAndNames();
+		for (Pair<String, String> name : patients) {
+			if (name.getValue().equals(value)) {
+				return name.getKey();
+			}
+		}
+		return null;
+	}
 
-  public ObjectProperty timeProperty() {
-    return time;
-  }
-  
-  public ObjectProperty dateGteProperty() {
-	    return dateGte;
-  }
-  
-  public ObjectProperty dateLteProperty() {
-	    return dateLte;
-  }
+	public String getOwnerNameById(String value) {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		for (Pair<String, String> name : owners) {
+			if (name.getKey().equals(value)) {
+				return name.getValue();
+			}
+		}
+		return null;
+	}
+
+	private String getOwnerIdByName(String value) {
+		List<Pair<String, String>> owners = serviceOwner.getAllIdAndNames();
+		for (Pair<String, String> name : owners) {
+			if (name.getValue().equals(value)) {
+				return name.getKey();
+			}
+		}
+		return null;
+	}
+
+	public String getEmployeeNameById(String value) {
+		List<Pair<String, String>> employees = serviceEmployee.getAllIdAndNames();
+		for (Pair<String, String> name : employees) {
+			if (name.getKey().equals(value)) {
+				return name.getValue();
+			}
+		}
+		return null;
+	}
+
+	private String getEmployeeIdByName(String value) {
+		List<Pair<String, String>> employees = serviceEmployee.getAllIdAndNames();
+		for (Pair<String, String> name : employees) {
+			if (name.getValue().equals(value)) {
+				return name.getKey();
+			}
+		}
+		return null;
+	}
+	
+	public String dateToString(Date value) {
+		return fmt.dateToString(value);
+	}
+
+	public String hourToString(Date value) {
+		return fmt.hourToString(value);
+	}
+
+	public String stateIntegerToString(Integer value) {
+		return fmt.stateIntegerToString(value);
+	}
+
+	public String financialStateIntegerToString(Integer value) {
+		return fmt.financialStateIntegerToString(value);
+	}
+
+	public ObservableList<Appointment> getListAppointments() {
+		return listAppointments;
+	}
+
+	public StringProperty idProperty() {
+		return id;
+	}
+
+	public StringProperty patientIdProperty() {
+		return patientId;
+	}
+
+	public StringProperty ownerIdProperty() {
+		return ownerId;
+	}
+
+	public StringProperty employeeIdProperty() {
+		return employeeId;
+	}
+
+	public StringProperty obsProperty() {
+		return obs;
+	}
+
+	public StringProperty stateProperty() {
+		return state;
+	}
+
+	public StringProperty financialStateProperty() {
+		return financialState;
+	}
+
+	public DoubleProperty valueProperty() {
+		return value;
+	}
+
+	public ObjectProperty dateProperty() {
+		return date;
+	}
+
+	public ObjectProperty timeProperty() {
+		return time;
+	}
+
+	public ObjectProperty dateGteProperty() {
+		return dateGte;
+	}
+
+	public ObjectProperty dateLteProperty() {
+		return dateLte;
+	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.swing.JOptionPane;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -38,11 +39,11 @@ public class AppointmentBoundary implements StrategyBoundary {
   private TextField tfValue = new TextField();
   private DatePicker dpDate = new DatePicker();
   private ComboBox<String> cbTime = new ComboBox<>();
-  private ComboBox cbPatient = new ComboBox();
-  private ComboBox cbOwner = new ComboBox();
-  private ComboBox cbEmployee = new ComboBox();
-  private ComboBox cbState = new ComboBox();
-  private ComboBox cbFinancialState = new ComboBox();
+  private ComboBox<String> cbPatient = new ComboBox<>();
+  private ComboBox<String> cbOwner = new ComboBox<>();
+  private ComboBox<String> cbEmployee = new ComboBox<>();
+  private ComboBox<String> cbState = new ComboBox<>();
+  private ComboBox<String> cbFinancialState = new ComboBox<>();
 
   private Label lblId = new Label("Id");
   private Label lblDate = new Label("Data");
@@ -70,9 +71,10 @@ public class AppointmentBoundary implements StrategyBoundary {
     control.listAll();
 
     TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
-    colDate.setCellValueFactory(
-      new PropertyValueFactory<Appointment, String>("date")
-    );
+    colDate.setCellValueFactory( (appointmentProp) -> {
+		Date date = appointmentProp.getValue().getDate();
+		return new ReadOnlyStringWrapper(control.dateToString(date));
+	});
 
     ObservableList<String> timeOptions = FXCollections.observableArrayList(
       ws.workShift(8, 17, 30)
@@ -80,41 +82,62 @@ public class AppointmentBoundary implements StrategyBoundary {
     cbTime.setItems(timeOptions);
 
     TableColumn<Appointment, String> colTime = new TableColumn<>("Horário");
-    colTime.setCellValueFactory(
-      new PropertyValueFactory<Appointment, String>("date")
-    );
-
-    TableColumn<Appointment, ObjectId> colPatient = new TableColumn<>(
-      "Paciente"
-    );
-    colPatient.setCellValueFactory(
-      new PropertyValueFactory<Appointment, ObjectId>("patientId")
-    );
+    colTime.setCellValueFactory( (appointmentProp) -> {
+		Date date = appointmentProp.getValue().getDate();
+		return new ReadOnlyStringWrapper(control.hourToString(date));
+	});
+    
+    cbPatient.setItems(control.getAllPatientIdAndNames());
+    
+    TableColumn<Appointment, String> colPatient = new TableColumn<>("Paciente");
+    colPatient.setCellValueFactory( (appointmentProp) -> {
+		String patientId = appointmentProp.getValue().getPatientId().toString();
+		return new ReadOnlyStringWrapper(control.getPatientNameById(patientId));
+	} );
+    
+    cbOwner.setItems(control.getAllOwnerIdAndNames());
 
     TableColumn<Appointment, String> colOwner = new TableColumn<>("Dono");
-    colOwner.setCellValueFactory(
-      new PropertyValueFactory<Appointment, String>("ownerId")
-    );
+    colOwner.setCellValueFactory( (appointmentProp) -> {
+		String ownerId = appointmentProp.getValue().getOwnerId().toString();
+		return new ReadOnlyStringWrapper(control.getOwnerNameById(ownerId));
+	} );
+    
+    cbEmployee.setItems(control.getAllEmployeeIdAndNames());
 
-    TableColumn<Appointment, ObjectId> colEmployee = new TableColumn<>(
-      "Médico"
-    );
-    colEmployee.setCellValueFactory(
-      new PropertyValueFactory<Appointment, ObjectId>("employeeId")
-    );
+    TableColumn<Appointment, String> colEmployee = new TableColumn<>("Médico");
+    colEmployee.setCellValueFactory( (appointmentProp) -> {
+		String employeeId = appointmentProp.getValue().getOwnerId().toString();
+		return new ReadOnlyStringWrapper(control.getEmployeeNameById(employeeId));
+	} );
+    
+    ObservableList<String> states = FXCollections.observableArrayList(
+    		"Agendado", 
+    		"Encerrado",
+    		"Cancelada"
+    		);
+    cbState.setItems(states);
+    
+    TableColumn<Appointment, String> colState = new TableColumn<>("Status");
+    colState.setCellValueFactory( (appointmentProp) -> {
+		Integer state = appointmentProp.getValue().getState();
+		return new ReadOnlyStringWrapper(control.stateIntegerToString(state));
+	} );
+    
+    ObservableList<String> financialStates = FXCollections.observableArrayList(
+    		"Pago", 
+    		"Parcialmente pago",
+    		"Não pago",
+    		"Cancelado"
+    		);
+    cbFinancialState.setItems(financialStates);
 
-    TableColumn<Appointment, Integer> colState = new TableColumn<>("Status");
-    colState.setCellValueFactory(
-      new PropertyValueFactory<Appointment, Integer>("state")
-    );
-
-    TableColumn<Appointment, Integer> colFinancialState = new TableColumn<>(
-      "Pagamento"
-    );
-    colFinancialState.setCellValueFactory(
-      new PropertyValueFactory<Appointment, Integer>("financialState")
-    );
-
+    TableColumn<Appointment, String> colFinancialState = new TableColumn<>("Pagamento");
+    colFinancialState.setCellValueFactory( (appointmentProp) -> {
+		Integer financialState = appointmentProp.getValue().getFinancialState();
+		return new ReadOnlyStringWrapper(control.financialStateIntegerToString(financialState));
+	} );
+    
     TableColumn<Appointment, String> colValue = new TableColumn<>("Valor");
     colValue.setCellValueFactory(
       new PropertyValueFactory<Appointment, String>("value")
