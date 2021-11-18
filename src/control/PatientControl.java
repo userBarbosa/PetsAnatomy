@@ -210,8 +210,12 @@ public class PatientControl {
   }
 
   private Date tryToGetLastVisit(String property) {
-    return (property == "" || property == null)
-      ? new Date()
-      : fmt.stringToDate(property);
+    
+    if (property == "" || property == null) {
+      return new Date();
+    }
+    String splittedDate[] = property.split(" às ");
+    
+    return fmt.stringToTimeDate(splittedDate[1], splittedDate[2]);
   }
 }
