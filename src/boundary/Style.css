@@ -1,0 +1,19 @@
+.button {
+	-fx-background-color: #000C3A; 
+	-fx-text-fill: white;
+	-fx-cursor: hand; 
+} 
+
+.button:hover { 
+	-fx-background-color: #3D4C89; 
+	-fx-text-fill: white;
+	-fx-cursor: hand; 
+} 
+
+.button:focused{
+	-fx-background-color: #ffffff; 
+	-fx-border-color: #3D4C89; 
+	-fx-border-width: 3;
+	-fx-text-fill: #000C3A; 
+	-fx-cursor: hand; 
+}
