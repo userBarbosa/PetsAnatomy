@@ -76,6 +76,7 @@ public class PatientControl {
       p.getOwnerId().toString(),
       p.getId().toString()
     );
+    //should clear fields?
     this.listAll();
   }
 
@@ -90,7 +91,6 @@ public class PatientControl {
       getIdByName(ownerIdProperty().getValue()),
       idProperty().getValue()
     );
-    // deletePatientId needs testing...
     this.listAll();
   }
 
@@ -204,7 +204,7 @@ public class PatientControl {
   }
 
   private ObjectId tryToGetId(String property) {
-    return (property == "" || property == null)
+    return (property.trim().isEmpty() || property == null)
       ? new ObjectId()
       : new ObjectId(property);
   }
@@ -216,6 +216,6 @@ public class PatientControl {
     }
     String splittedDate[] = property.split(" às ");
     
-    return fmt.stringToTimeDate(splittedDate[1], splittedDate[2]);
+    return fmt.stringToTimeDate(splittedDate[0], splittedDate[1]);
   }
 }

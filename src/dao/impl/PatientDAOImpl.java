@@ -1,18 +1,20 @@
 package dao.impl;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
-import dao.interfaces.PatientDAO;
-import entity.Patient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
-import javafx.util.Pair;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import dao.interfaces.PatientDAO;
+import entity.Patient;
+import javafx.util.Pair;
 import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
@@ -25,6 +27,7 @@ public class PatientDAOImpl implements PatientDAO {
 
   Document newDoc(Patient patient) {
     Document pat = new Document("ownerId", patient.getOwnerId())
+      .append("_id", patient.getId())
       .append("name", patient.getName())
       .append("species", patient.getSpecies())
       .append("family", patient.getFamily())
@@ -61,7 +64,6 @@ public class PatientDAOImpl implements PatientDAO {
 
     Document pat = newDoc(patient);
 
-    pat.put("_id", new ObjectId());
     pat.put("created", new Date());
     pat.replace("ownerId", new ObjectId(ownerId));
     getCollection();

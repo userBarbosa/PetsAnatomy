@@ -94,6 +94,7 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 		btnSair.setFont(fontBtns);
 		btnSair.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white; -fx-cursor: hand;");
 		btnSair.setOnAction((e) -> {
+			System.out.println("Bye (=");
 			Platform.exit();
 			System.exit(0);
 		});

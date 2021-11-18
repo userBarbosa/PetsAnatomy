@@ -3,7 +3,6 @@ package dao.impl;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
 import dao.interfaces.OwnerDAO;
 import entity.Owner;
 import java.util.ArrayList;
@@ -170,13 +169,18 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     if (owner != null) {
       String pList = owner.getString("patientsId");
+      patientId = patientId.concat(";");
       pList =
-        (pList == null || pList == "") ? patientId : pList + ";" + patientId;
-
-      owners.updateOne(
-        new BasicDBObject("_id", new ObjectId(ownerId)),
-        new BasicDBObject("$set", new BasicDBObject("patientsId", pList))
-      );
+        (pList == null || pList.trim().isEmpty())
+          ? patientId
+          : pList.concat(patientId);
+      
+      BasicDBObject updated = new BasicDBObject(
+          "$set",
+          new BasicDBObject("patientsId", pList)
+          .append("updated", new Date())
+        );
+        owners.updateOne(new BasicDBObject("_id", new ObjectId(ownerId)), updated);
     }
   }
 
@@ -201,15 +205,19 @@ public class OwnerDAOImpl implements OwnerDAO {
 
       if (oldList != null) {
         for (String each : oldList) {
-          if (!each.equals(patientId)) {
-            newList += (each + ";");
+          if (each != null && !each.trim().isEmpty()) {
+            if (!each.equals(patientId)) {
+              newList = newList.concat(each + ";");
+            }
           }
         }
 
-        owners.updateOne(
-          new BasicDBObject("_id", new ObjectId(ownerId)),
-          new BasicDBObject("$set", new BasicDBObject("patientsId", newList))
+        BasicDBObject updated = new BasicDBObject(
+          "$set",
+          new BasicDBObject("patientsId", newList)
+          .append("updated", new Date())
         );
+        owners.updateOne(new BasicDBObject("_id", new ObjectId(ownerId)), updated);
       }
     }
   }
