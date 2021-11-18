@@ -64,7 +64,7 @@ public class AppointmentBoundary implements StrategyBoundary {
     );
 
     ObservableList<String> timeOptions = FXCollections.observableArrayList(
-      ws.workShift(8, 17, 45)
+      ws.workShift(8, 17, 30)
     );
     cbTime.setItems(timeOptions);
 
@@ -188,95 +188,95 @@ public class AppointmentBoundary implements StrategyBoundary {
     dpDate.setLayoutX(98.0);
     dpDate.setLayoutY(66.0);
     dpDate.setPrefHeight(25.0);
-    dpDate.setPrefWidth(414.0);
+    dpDate.setPrefWidth(170.0);
 
-    lblTime.setLayoutX(24.0);
-    lblTime.setLayoutY(107.0);
+    lblTime.setLayoutX(280.0);
+    lblTime.setLayoutY(70.0);
     lblTime.setPrefHeight(17.0);
     lblTime.setPrefWidth(46.0);
     lblTime.setFont(fontLbls);
 
-    cbTime.setLayoutX(98.0);
-    cbTime.setLayoutY(104.0);
+    cbTime.setLayoutX(340.0);
+    cbTime.setLayoutY(66.0);
     cbTime.setPrefHeight(25.0);
-    cbTime.setPrefWidth(414.0);
+    cbTime.setPrefWidth(170.0);
 
     lblPatient.setLayoutX(25.0);
-    lblPatient.setLayoutY(146.0);
+    lblPatient.setLayoutY(107.0);
     lblPatient.setPrefHeight(17.0);
     lblPatient.setPrefWidth(53.0);
     lblPatient.setFont(fontLbls);
 
     cbPatient.setLayoutX(98.0);
-    cbPatient.setLayoutY(143.0);
+    cbPatient.setLayoutY(104.0);
     cbPatient.setPrefHeight(25.0);
     cbPatient.setPrefWidth(414.0);
 
     lblOwner.setLayoutX(25.0);
-    lblOwner.setLayoutY(184.0);
+    lblOwner.setLayoutY(146.0);
     lblOwner.setPrefHeight(17.0);
     lblOwner.setPrefWidth(46.0);
     lblOwner.setFont(fontLbls);
 
     cbOwner.setLayoutX(98.0);
-    cbOwner.setLayoutY(182.0);
+    cbOwner.setLayoutY(143.0);
     cbOwner.setPrefHeight(25.0);
     cbOwner.setPrefWidth(414.0);
 
-    lblEmployee.setLayoutX(540.0);
-    lblEmployee.setLayoutY(32.0);
+    lblEmployee.setLayoutX(25.0);
+    lblEmployee.setLayoutY(184.0);
     lblEmployee.setPrefHeight(17.0);
     lblEmployee.setPrefWidth(53.0);
     lblEmployee.setFont(fontLbls);
 
-    cbEmployee.setLayoutX(620.0);
-    cbEmployee.setLayoutY(32.0);
+    cbEmployee.setLayoutX(98.0);
+    cbEmployee.setLayoutY(182.0);
     cbEmployee.setPrefHeight(25.0);
     cbEmployee.setPrefWidth(414.0);
 
     lblValue.setLayoutX(540.0);
-    lblValue.setLayoutY(70.0);
+    lblValue.setLayoutY(32.0);
     lblValue.setPrefHeight(17.0);
     lblValue.setPrefWidth(46.0);
     lblValue.setFont(fontLbls);
 
     tfValue.setLayoutX(620.0);
-    tfValue.setLayoutY(66.0);
+    tfValue.setLayoutY(32.0);
     tfValue.setPrefHeight(25.0);
     tfValue.setPrefWidth(414.0);
     tfValue.setFont(fontTf);
 
     lblObs.setLayoutX(540.0);
-    lblObs.setLayoutY(107.0);
+    lblObs.setLayoutY(70.0);
     lblObs.setPrefHeight(17.0);
     lblObs.setPrefWidth(77.0);
     lblObs.setFont(fontLbls);
 
     tfObs.setLayoutX(620.0);
-    tfObs.setLayoutY(104.0);
+    tfObs.setLayoutY(66.0);
     tfObs.setPrefHeight(25.0);
     tfObs.setPrefWidth(414.0);
     tfObs.setFont(fontTf);
 
     lblState.setLayoutX(540.0);
-    lblState.setLayoutY(146.0);
+    lblState.setLayoutY(107.0);
     lblState.setPrefHeight(17.0);
     lblState.setPrefWidth(40.0);
     lblState.setFont(fontLbls);
 
     cbState.setLayoutX(620.0);
-    cbState.setLayoutY(143.0);
+    cbState.setLayoutY(104.0);
     cbState.setPrefHeight(25.0);
     cbState.setPrefWidth(414.0);
 
     lblFinancialState.setLayoutX(540.0);
-    lblFinancialState.setLayoutY(184.0);
+    lblFinancialState.setLayoutY(146.0);
     lblFinancialState.setPrefHeight(17.0);
     lblFinancialState.setPrefWidth(77.0);
     lblFinancialState.setFont(fontLbls);
 
     cbFinancialState.setLayoutX(620.0);
-    cbFinancialState.setLayoutY(180.0);
+    cbFinancialState.setLayoutY(143.0);
     cbFinancialState.setPrefHeight(25.0);
     cbFinancialState.setPrefWidth(414.0);
 
