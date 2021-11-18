@@ -2,11 +2,19 @@ package boundary;
 
 import control.AppointmentControl;
 import entity.Appointment;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
+
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -19,6 +27,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.util.converter.NumberStringConverter;
 import org.bson.types.ObjectId;
+
+import utils.Formatters;
 import utils.WorkShift;
 
 public class AppointmentBoundary implements StrategyBoundary {
@@ -54,7 +64,8 @@ public class AppointmentBoundary implements StrategyBoundary {
   private TableView<Appointment> table = new TableView<Appointment>();
   private static AppointmentControl control = new AppointmentControl();
   private WorkShift ws = new WorkShift();
-
+  private Formatters fmt = new Formatters();
+  
   public void generatedTable() {
     control.listAll();
 
@@ -315,47 +326,51 @@ public class AppointmentBoundary implements StrategyBoundary {
         table
       );
 
-    btnCreate.setOnAction(
-      e -> {
+    btnCreate.setOnAction((e) -> {
         control.create();
-      }
-    );
+    });
     btnCreate.setLayoutX(24.0);
     btnCreate.setLayoutY(246.0);
     btnCreate.setFont(fontBtns);
 
-    btnFind.setOnAction(
-      e -> {
-        control.findByDate();
-      }
-    );
+    btnFind.setOnAction((e) -> {
+        control.findByField();
+    });
     btnFind.setLayoutX(290.0);
     btnFind.setLayoutY(246.0);
     btnFind.setFont(fontBtns);
 
-    btnUpdate.setOnAction(
-      e -> {
+    btnUpdate.setOnAction((e) -> {
         control.updateById();
-      }
-    );
+    });
     btnUpdate.setLayoutX(205.0);
     btnUpdate.setLayoutY(246.0);
     btnUpdate.setFont(fontBtns);
 
     btnDelete.setOnAction(
-      e -> {
-        control.deleteById();
-      }
-    );
+    		(e) -> {
+    	  if (tfId.getText() == "" || tfId.getText()== null) {
+    		  JOptionPane.showMessageDialog(
+    				  null,
+    				  "Selecione uma consulta!",
+    				  "Erro",
+    				  JOptionPane.ERROR_MESSAGE
+    				  );
+    	  } else {
+    		  Alert alert = new Alert(Alert.AlertType.WARNING,
+    				  "Você tem certeza que deseja remover a consulta? ", ButtonType.YES, ButtonType.CANCEL);
+    		  Optional<ButtonType> clicked = alert.showAndWait();
+    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+    			  control.deleteById();
+    		  }}
+      });
     btnDelete.setLayoutX(114.0);
     btnDelete.setLayoutY(246.0);
     btnDelete.setFont(fontBtns);
 
-    btnClear.setOnAction(
-      e -> {
+    btnClear.setOnAction((e) -> {
         control.clearFields();
-      }
-    );
+    });
     btnClear.setLayoutX(459.0);
     btnClear.setLayoutY(246.0);
     btnClear.setFont(fontBtns);
@@ -367,31 +382,12 @@ public class AppointmentBoundary implements StrategyBoundary {
     Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
     Bindings.bindBidirectional(dpDate.valueProperty(), control.dateProperty());
     Bindings.bindBidirectional(cbTime.valueProperty(), control.timeProperty());
-    Bindings.bindBidirectional(
-      cbPatient.valueProperty(),
-      control.patientIdProperty()
-    );
-    Bindings.bindBidirectional(
-      cbOwner.valueProperty(),
-      control.ownerIdProperty()
-    );
-    Bindings.bindBidirectional(
-      cbEmployee.valueProperty(),
-      control.employeeIdProperty()
-    );
-    Bindings.bindBidirectional(
-      cbState.valueProperty(),
-      control.stateProperty()
-    );
-    Bindings.bindBidirectional(
-      cbFinancialState.valueProperty(),
-      control.financialStateProperty()
-    );
-    Bindings.bindBidirectional(
-      tfValue.textProperty(),
-      control.valueProperty(),
-      new NumberStringConverter()
-    );
+    Bindings.bindBidirectional(cbPatient.valueProperty(), control.patientIdProperty());
+    Bindings.bindBidirectional(cbOwner.valueProperty(), control.ownerIdProperty());
+    Bindings.bindBidirectional(cbEmployee.valueProperty(), control.employeeIdProperty());
+    Bindings.bindBidirectional(cbState.valueProperty(), control.stateProperty());
+    Bindings.bindBidirectional(cbFinancialState.valueProperty(),control.financialStateProperty());
+    Bindings.bindBidirectional(tfValue.textProperty(),control.valueProperty(), new NumberStringConverter());
     Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
   }
 

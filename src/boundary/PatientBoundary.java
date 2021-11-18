@@ -1,6 +1,9 @@
 package boundary;
 
 import java.util.Date;
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
 
 import control.PatientControl;
 import entity.Patient;
@@ -8,7 +11,9 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -309,9 +314,22 @@ public class PatientBoundary implements StrategyBoundary {
         btnUpdate.setLayoutY(269.0);
         btnUpdate.setFont(fontBtns);
         
-        btnDelete.setOnAction((e) -> {
-            control.deleteById();
-        });
+		btnDelete.setOnAction((e) -> {
+	    	  if (tfId.getText() == "" || tfId.getText()== null) {
+	    		  JOptionPane.showMessageDialog(
+	    				  null,
+	    				  "Selecione um paciente!",
+	    				  "Erro",
+	    				  JOptionPane.ERROR_MESSAGE
+	    				  );
+	    	  } else {
+	    		  Alert alert = new Alert(Alert.AlertType.WARNING,
+	    				  "Você tem certeza que deseja remover o paciente? ", ButtonType.YES, ButtonType.CANCEL);
+	    		  Optional<ButtonType> clicked = alert.showAndWait();
+	    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+	    			  control.deleteById();
+	    		  }}
+	      });
         btnDelete.setLayoutX(105.0);
         btnDelete.setLayoutY(269.0);
         btnDelete.setFont(fontBtns);

@@ -34,14 +34,9 @@ public class AppointmentControl {
   private DoubleProperty value = new SimpleDoubleProperty();
   private ObjectProperty date = new SimpleObjectProperty();
   private ObjectProperty time = new SimpleObjectProperty();
-
-  String cbOpState[] = { "agendado", "encerrado", "cancelada" };
-  String cbOpFinancialState[] = {
-    "pago",
-    "parcialmente pago",
-    "não pago",
-    "cancelado",
-  };
+  
+  private ObjectProperty dateGte = new SimpleObjectProperty();
+  private ObjectProperty dateLte = new SimpleObjectProperty();
 
   public Appointment getEntity() {
     ObjectId employeeId = new ObjectId(employeeIdProperty().getValue());
@@ -104,12 +99,15 @@ public class AppointmentControl {
     listAppointments.clear();
     listAppointments.addAll(service.getAllAppointments());
   }
+  
+  public void findByField() {
+	  listAppointments.clear();
+	  listAppointments.addAll(service.findByField("patientId", patientIdProperty().getValue()));
+	}
 
   public void findByDate() {
     listAppointments.clear();
-    listAppointments.addAll(
-      service.findByField("state", stateProperty().getValue().toString())
-    );
+    listAppointments.addAll(service.findByDate("date", (Date) dateGteProperty().getValue(), (Date) dateLteProperty().getValue()));
     this.clearFields();
   }
 
@@ -125,6 +123,10 @@ public class AppointmentControl {
     date.set(null);
     time.set(null);
     this.listAll();
+  }
+  
+  public String dateToString(Date value) {
+	  return fmt.dateToString(value);
   }
 
   public ObservableList<Appointment> getListAppointments() {
@@ -170,4 +172,13 @@ public class AppointmentControl {
   public ObjectProperty timeProperty() {
     return time;
   }
+  
+  public ObjectProperty dateGteProperty() {
+	    return dateGte;
+  }
+  
+  public ObjectProperty dateLteProperty() {
+	    return dateLte;
+  }
+
 }

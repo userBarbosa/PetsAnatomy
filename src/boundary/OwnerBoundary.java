@@ -1,12 +1,17 @@
 package boundary;
 
 import java.util.Date;
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
 
 import control.OwnerControl;
 import entity.Owner;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -243,8 +248,21 @@ public class OwnerBoundary implements StrategyBoundary {
 		btnUpdate.setFont(fontBtns);
 
 		btnDelete.setOnAction((e) -> {
-			control.deleteById();
-		});
+	    	  if (tfId.getText() == "" || tfId.getText()== null) {
+	    		  JOptionPane.showMessageDialog(
+	    				  null,
+	    				  "Selecione um dono!",
+	    				  "Erro",
+	    				  JOptionPane.ERROR_MESSAGE
+	    				  );
+	    	  } else {
+	    		  Alert alert = new Alert(Alert.AlertType.WARNING,
+	    				  "Você tem certeza que deseja remover o dono? ", ButtonType.YES, ButtonType.CANCEL);
+	    		  Optional<ButtonType> clicked = alert.showAndWait();
+	    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+	    			  control.deleteById();
+	    		  }}
+	      });
 		btnDelete.setLayoutX(105.0);
 		btnDelete.setLayoutY(269.0);
 		btnDelete.setFont(fontBtns);
