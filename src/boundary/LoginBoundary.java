@@ -26,12 +26,18 @@ public class LoginBoundary extends Application {
 
 	private Button btnLogin = new Button("Login");
 	private Button btnSignUp = new Button("Cadastrar-se");
+	private Button btnForgotPassword = new Button("Esqueci minha senha");
 	private Label lblTitle = new Label("PetsAnatomy");
 	
 	Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
 	Font fontTitle = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 96);
 	Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
 	Font fontTxt = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
+	
+	PasswordField pfResetPassword = new PasswordField();
+	TextField tfResetPassword = new TextField();
+	CheckBox cbResetPassword = new CheckBox("Mostrar/Esconder Senha");
+	Button btnDismiss = new Button("Confirmar");	
 
 	private static LoginControl control = new LoginControl();
 	private static SignUpBoundary signUp = new SignUpBoundary();
@@ -113,30 +119,22 @@ public class LoginBoundary extends Application {
 		mainPane.setRightAnchor(designPane, 0.0);
 		mainPane.getChildren().addAll(formPane, designPane);
 
-		btnLogin.setOnAction(
-				e -> {
-					if (tfPassword.getText().equals("12345")) {
-						this.popupResetPassword();
-					} else {
-						control.login();
-						tfPassword.setText("");	
-					}
-				}
-				);
+		btnLogin.setOnAction((e) -> {
+			control.login();
+			tfPassword.setText("");	
+				});
 		btnLogin.setLayoutX(10.0);
 		btnLogin.setLayoutY(550.0);
 		btnLogin.setMinSize(280.0, 40.0);
 		btnLogin.setFont(fontBtn);
 		btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
-		btnSignUp.setOnAction(
-				e -> {
-					mainPane.getChildren().clear();
-					mainPane.setRightAnchor(designPane, 0.0);
-					mainPane.setLeftAnchor(signUp.formPane, 0.0);
-					mainPane.getChildren().addAll(signUp.formPane, designPane);
-				}
-				);
+		btnSignUp.setOnAction((e) -> {
+			mainPane.getChildren().clear();
+			mainPane.setRightAnchor(designPane, 0.0);
+			mainPane.setLeftAnchor(signUp.formPane, 0.0);
+			mainPane.getChildren().addAll(signUp.formPane, designPane);
+		});
 		btnSignUp.setLayoutX(97.0);
 		btnSignUp.setLayoutY(590.0);
 		btnSignUp.setMinSize(100.0, 30.0);
@@ -144,6 +142,16 @@ public class LoginBoundary extends Application {
 		btnSignUp.setFont(fontTxt);
 		btnSignUp.setStyle("-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;");
 
+		btnForgotPassword.setOnAction((e) -> {
+			this.popupForgotPassword();			
+		});
+		btnForgotPassword.setLayoutX(50.0);
+		btnForgotPassword.setLayoutY(620.0);
+		btnForgotPassword.setMinSize(200.0, 30.0);
+		btnForgotPassword.setFont(fontTxt);
+		btnForgotPassword.setUnderline(true);
+		btnForgotPassword.setStyle("-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;");
+		
 		formPane
 		.getChildren()
 		.addAll(
@@ -152,10 +160,11 @@ public class LoginBoundary extends Application {
 				imageViewUser,
 				pfPassword,
 				tfPassword,
+				cbPassword,
 				imageViewPassword,
 				btnLogin,
 				btnSignUp,
-				cbPassword);
+				btnForgotPassword);
 
 		designPane.setPrefHeight(768.0);
 		designPane.setPrefWidth(1066.0);
@@ -203,38 +212,47 @@ public class LoginBoundary extends Application {
 		stage.setTitle("Clínica Veterinária PetsAnatomy");
 	}
 
-	public void popupResetPassword() {
-		Stage stage = new Stage();
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.setResizable(false);
+	public void popupForgotPassword() {
+		Stage popup = new Stage();
+		popup.initModality(Modality.WINDOW_MODAL);
 		
-		AnchorPane popup = new AnchorPane();
-		Scene scn = new Scene(popup, 400, 200);
-		stage.setScene(scn);
+		AnchorPane pane = new AnchorPane();
+		Scene scene = new Scene(pane, 420, 140);
+		popup.setScene(scene);
 		
-		PasswordField pfPassword = new PasswordField();
-		TextField tfPassword = new TextField();
-		CheckBox cbPassword = new CheckBox("Mostrar/Esconder Senha");
+		tfResetPassword.setLayoutX(25.0);
+		tfResetPassword.setLayoutY(20.0);
+		tfResetPassword.setPrefHeight(25.0);
+		tfResetPassword.setPrefWidth(370.0);	
+		tfResetPassword.setFont(fontTf);
+		tfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty());
+		tfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty());
+		tfResetPassword.textProperty().bindBidirectional(pfPassword.textProperty());
 		
-		pfPassword.setStyle("-fx-border-color: #000E44;");
-
-
-		cbPassword.setFont(fontTxt);
-
-		tfPassword.setFont(fontTf);
-		tfPassword.managedProperty().bind(cbPassword.selectedProperty());
-		tfPassword.visibleProperty().bind(cbPassword.selectedProperty());
-
-		pfPassword.managedProperty().bind(cbPassword.selectedProperty().not());
-		pfPassword.visibleProperty().bind(cbPassword.selectedProperty().not());
-
-		tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
-		Button btnDismiss = new Button("Confirmar");
+		pfResetPassword.setLayoutX(25.0);
+		pfResetPassword.setLayoutY(20.0);
+		pfResetPassword.setPrefHeight(25.0);
+		pfResetPassword.setPrefWidth(370.0);		
+		pfResetPassword.setStyle("-fx-border-color: #000E44;");
+		pfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty().not());
+		pfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty().not());
+		
+		cbResetPassword.setFont(fontTxt);
+		cbResetPassword.setLayoutX(25.0);
+		cbResetPassword.setLayoutY(60.0);
+		
 		btnDismiss.setOnAction( (e) -> {
-			stage.close();
+			popup.close();
 		});
-		popup.getChildren().addAll(pfPassword, cbPassword, tfPassword, btnDismiss);
-		stage.showAndWait();
+		btnDismiss.setLayoutX(25.0);
+		btnDismiss.setLayoutY(90.0);
+		btnDismiss.setFont(fontTf);
+		
+		pane.getChildren().addAll(pfResetPassword, cbResetPassword, tfResetPassword, btnDismiss);
+		
+		popup.setTitle("Esqueci minha senha");	
+		popup.setResizable(false);
+		popup.showAndWait();
 	}
 
 	private void binding() {

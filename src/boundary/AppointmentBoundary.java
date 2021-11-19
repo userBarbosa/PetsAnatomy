@@ -460,17 +460,17 @@ public class AppointmentBoundary implements StrategyBoundary {
 	  popup.showAndWait();
   }
 
-private void binding() {
-    Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
-    Bindings.bindBidirectional(dpDate.valueProperty(), control.dateProperty());
-    Bindings.bindBidirectional(cbTime.valueProperty(), control.timeProperty());
-    Bindings.bindBidirectional(cbPatient.valueProperty(), control.patientIdProperty());
-    Bindings.bindBidirectional(cbOwner.valueProperty(), control.ownerIdProperty());
-    Bindings.bindBidirectional(cbEmployee.valueProperty(), control.employeeIdProperty());
-    Bindings.bindBidirectional(cbState.valueProperty(), control.stateProperty());
-    Bindings.bindBidirectional(cbFinancialState.valueProperty(),control.financialStateProperty());
-    Bindings.bindBidirectional(tfValue.textProperty(),control.valueProperty(), new NumberStringConverter());
-    Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
+  private void binding() {
+	  Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
+	  Bindings.bindBidirectional(dpDate.valueProperty(), control.dateProperty());
+	  Bindings.bindBidirectional(cbTime.valueProperty(), control.timeProperty());
+	  Bindings.bindBidirectional(cbPatient.valueProperty(), control.patientIdProperty());
+	  Bindings.bindBidirectional(cbOwner.valueProperty(), control.ownerIdProperty());
+	  Bindings.bindBidirectional(cbEmployee.valueProperty(), control.employeeIdProperty());
+	  Bindings.bindBidirectional(cbState.valueProperty(), control.stateProperty());
+	  Bindings.bindBidirectional(cbFinancialState.valueProperty(),control.financialStateProperty());
+	  Bindings.bindBidirectional(tfValue.textProperty(),control.valueProperty(), new NumberStringConverter());
+	  Bindings.bindBidirectional(tfObs.textProperty(), control.obsProperty());
   }
 
   public TableView<Appointment> getTable() {
