@@ -27,7 +27,7 @@ public class DashboardControl {
 	}
 
 	private void insertDailyPhrase() {
-		service.insertDailyPhrase("Uma pata e uma mão estendida", 2);
+		service.insertPhrase("Uma pata e uma mão estendida", 2);
 	}
 
 	public static void main(String[] args) {

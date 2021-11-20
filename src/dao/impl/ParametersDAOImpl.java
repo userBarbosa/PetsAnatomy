@@ -25,7 +25,7 @@ public class ParametersDAOImpl implements ParametersDAO {
   }
 
   @Override
-  public boolean insertDailyPhrase(String phrase, int day) {
+  public boolean insertPhrase(String phrase, int day) {
     getCollection();
     try {
       parameters.insertOne(
