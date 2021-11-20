@@ -8,22 +8,26 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import utils.MongoConnect;
 
 public class MainBoundary extends Application implements EventHandler<ActionEvent> {
 
-	private Button btnHome = new Button("PetsAnatomy");	
-	private Button btnAgenda = new Button("Agenda");
-	private Button btnPacientes = new Button("Pacientes");
-	private Button btnClientes = new Button("Clientes");
-	private Button btnFuncionarios = new Button("Funcionários");
-	private Button btnConfiguracoes = new Button("Configurações");
-	private Button btnSair = new Button("Sair");
+	private RadioButton btnHome = new RadioButton("PetsAnatomy");	
+	private RadioButton btnAgenda = new RadioButton("Agenda");
+	private RadioButton btnPacientes = new RadioButton("Pacientes");
+	private RadioButton btnClientes = new RadioButton("Clientes");
+	private RadioButton btnFuncionarios = new RadioButton("Funcionários");
+	private RadioButton btnConfiguracoes = new RadioButton("Configurações");
+	private RadioButton btnSair = new RadioButton("Sair");
 
 	//  private ScreenStrategy screenSignUp = new SignUpBoundary();
 	//  private ScreenStrategy screenLogin = new LoginBoundary();
@@ -47,42 +51,58 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 	public void start(Stage stage) throws Exception {
 
 		Scene scene = new Scene(mainPane, 1366, 768);
-		Font fontBtnHome = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 15);
-		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
+		Font fontBtnHome = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 18);
+		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
 
 		sideMenu.prefHeight(768.0);
 		sideMenu.prefWidth(300.0);
 		sideMenu.setStyle("-fx-background-color: #000E44;");
 		
+		ToggleGroup group = new ToggleGroup();
+		
+		btnHome.setLayoutX(0.0);
 		btnHome.setMinSize(300.0, 55.0);
 		btnHome.setFont(fontBtnHome);
 		btnHome.setOnAction(this);
+		btnHome.setToggleGroup(group);
+		btnHome.setSelected(true);
+		btnHome.setAlignment(Pos.CENTER);
 
 		btnAgenda.setLayoutY(110.0);
 		btnAgenda.setMinSize(300.0, 50.0);
 		btnAgenda.setFont(fontBtns);
 		btnAgenda.setOnAction(this);
+		btnAgenda.setToggleGroup(group);
+		btnAgenda.setAlignment(Pos.CENTER);
 
 		btnPacientes.setLayoutY(180.0);
 		btnPacientes.setMinSize(300.0, 50.0);
 		btnPacientes.setFont(fontBtns);
 		btnPacientes.setOnAction(this);
-
+		btnPacientes.setToggleGroup(group);
+		btnPacientes.setAlignment(Pos.CENTER);
+		
 		btnClientes.setLayoutY(250.0);
 		btnClientes.setMinSize(300.0, 50.0);
 		btnClientes.setFont(fontBtns);
 		btnClientes.setOnAction(this);
-
+		btnClientes.setToggleGroup(group);
+		btnClientes.setAlignment(Pos.CENTER);
+		
 		btnFuncionarios.setLayoutY(320.0);
 		btnFuncionarios.setMinSize(300.0, 50.0);
 		btnFuncionarios.setFont(fontBtns);
 		btnFuncionarios.setOnAction(this);
-
+		btnFuncionarios.setToggleGroup(group);
+		btnFuncionarios.setAlignment(Pos.CENTER);
+		
 		btnConfiguracoes.setLayoutY(390.0);
 		btnConfiguracoes.setMinSize(300.0, 50.0);
 		btnConfiguracoes.setFont(fontBtns);
 		btnConfiguracoes.setOnAction(this);
-
+		btnConfiguracoes.setToggleGroup(group);
+		btnConfiguracoes.setAlignment(Pos.CENTER);
+		
 		btnSair.setLayoutY(718.0);
 		btnSair.setMinSize(300.0, 50.0);
 		btnSair.setFont(fontBtns);
@@ -91,7 +111,9 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 			Platform.exit();
 			System.exit(0);
 		});
-
+		btnSair.setToggleGroup(group);
+		btnSair.setAlignment(Pos.CENTER);
+		
 		sideMenu.getChildren().addAll(btnHome, btnAgenda, btnPacientes, btnClientes, btnFuncionarios, btnConfiguracoes, btnSair);
 		mainPane.setLeftAnchor(sideMenu, 0.0);
 		mainPane.setRightAnchor(dash.generateBoundaryStrategy(), 0.0);
@@ -109,14 +131,17 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 	@Override
 	public void handle(ActionEvent e) {
 		EventTarget target = e.getTarget();
-		if (target instanceof Button) {
-			Button button = (Button) target;
-			String text = button.getText();
+		if (target instanceof RadioButton) {
+			RadioButton radioButton = (RadioButton) target;
+			String text = radioButton.getText();
 			StrategyBoundary boundary = boundaries.get(text);
 			mainPane.getChildren().clear();
 			mainPane.setRightAnchor(boundary.generateBoundaryStrategy(), 0.0);
 			mainPane.setLeftAnchor(sideMenu, 0.0);
 			mainPane.getChildren().addAll(sideMenu, boundary.generateBoundaryStrategy());
+			if(!radioButton.isSelected()) {
+				radioButton.setSelected(true);    
+			}
 		}
 	}
 
