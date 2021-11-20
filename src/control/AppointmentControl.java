@@ -42,52 +42,35 @@ public class AppointmentControl {
   private StringProperty financialState = new SimpleStringProperty("");
   private DoubleProperty value = new SimpleDoubleProperty();
   private ObjectProperty date = new SimpleObjectProperty();
-  private StringProperty time = new SimpleStringProperty();
+  private StringProperty time = new SimpleStringProperty("");
 
   private ObjectProperty dateGte = new SimpleObjectProperty();
   private ObjectProperty dateLt = new SimpleObjectProperty();
 
   public Appointment getEntity() {
-    ObjectId employeeId = new ObjectId(
-      getEmployeeIdByName(employeeIdProperty().getValue())
-    );
-    ObjectId patientId = new ObjectId(
-      getPatientIdByName(patientIdProperty().getValue())
-    );
-    ObjectId ownerId = new ObjectId(
-      getOwnerIdByName(ownerIdProperty().getValue())
-    );
-    Date date = tryToGetDate(
-      (LocalDate) dateProperty().getValue(),
-      timeProperty().getValue().toString()
-    );
     double value = valueProperty().getValue();
 
     Appointment appointment = new Appointment(
-      employeeId,
-      patientId,
-      ownerId,
-      date,
+      new ObjectId(getEmployeeIdByName(employeeIdProperty().getValue())),
+      new ObjectId(getPatientIdByName(patientIdProperty().getValue())),
+      new ObjectId(getOwnerIdByName(ownerIdProperty().getValue())),
+      tryToGetDate((LocalDate) dateProperty().getValue(), timeProperty().getValue().toString()),
       value
     );
     appointment.setId(tryToGetId(idProperty().getValue()));
     appointment.setObs(obsProperty().getValue());
     appointment.setState(fmt.stateStringToInteger(stateProperty().getValue()));
-    appointment.setFinancialState(
-      fmt.financialStateStringToInteger(financialStateProperty().getValue())
-    );
+    appointment.setFinancialState(fmt.financialStateStringToInteger(financialStateProperty().getValue()));
     return appointment;
   }
 
   public void setEntity(Appointment appointment) {
-    id.set(appointment.getId().toString());
-    patientId.set(appointment.getPatientId().toString());
-    ownerId.set(appointment.getOwnerId().toString());
-    employeeId.set(appointment.getEmployeeId().toString());
+    id.set((String)appointment.getId().toString());
+    patientId.set(getPatientNameById(appointment.getPatientId().toString()));
+    ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
+    employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
     obs.set(appointment.getObs());
-    financialState.set(
-      fmt.financialStateIntegerToString(appointment.getFinancialState())
-    );
+    financialState.set(fmt.financialStateIntegerToString(appointment.getFinancialState()));
     state.set(fmt.stateIntegerToString(appointment.getState()));
     value.set(appointment.getValue());
     date.set(fmt.dateToLocal(appointment.getDate()));
@@ -164,7 +147,7 @@ public class AppointmentControl {
     value.set(0);
     financialState.set("");
     date.set(null);
-    time.set(null);
+    time.set("");
     this.listAll();
   }
 

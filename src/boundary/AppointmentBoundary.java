@@ -233,27 +233,27 @@ public class AppointmentBoundary implements StrategyBoundary {
     cbTime.setPrefHeight(25.0);
     cbTime.setPrefWidth(170.0);
 
+    lblOwner.setLayoutX(25.0);
+    lblOwner.setLayoutY(107.0);
+    lblOwner.setPrefHeight(17.0);
+    lblOwner.setPrefWidth(53.0);
+    lblOwner.setFont(fontLbls);
+
+    cbOwner.setLayoutX(98.0);
+    cbOwner.setLayoutY(104.0);
+    cbOwner.setPrefHeight(25.0);
+    cbOwner.setPrefWidth(414.0);
+
     lblPatient.setLayoutX(25.0);
-    lblPatient.setLayoutY(107.0);
+    lblPatient.setLayoutY(146.0);
     lblPatient.setPrefHeight(17.0);
     lblPatient.setPrefWidth(53.0);
     lblPatient.setFont(fontLbls);
 
     cbPatient.setLayoutX(98.0);
-    cbPatient.setLayoutY(104.0);
+    cbPatient.setLayoutY(143.0);
     cbPatient.setPrefHeight(25.0);
     cbPatient.setPrefWidth(414.0);
-
-    lblOwner.setLayoutX(25.0);
-    lblOwner.setLayoutY(146.0);
-    lblOwner.setPrefHeight(17.0);
-    lblOwner.setPrefWidth(46.0);
-    lblOwner.setFont(fontLbls);
-
-    cbOwner.setLayoutX(98.0);
-    cbOwner.setLayoutY(143.0);
-    cbOwner.setPrefHeight(25.0);
-    cbOwner.setPrefWidth(414.0);
 
     lblEmployee.setLayoutX(25.0);
     lblEmployee.setLayoutY(184.0);

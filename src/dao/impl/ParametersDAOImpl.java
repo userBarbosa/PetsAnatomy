@@ -27,7 +27,6 @@ public class ParametersDAOImpl implements ParametersDAO {
     .find(new Document("index", value))
     .first();
     if (phrase != null) {
-      System.out.println(value + "\n" + phrase.getString("phrase"));
       return phrase.getString("phrase");
     }
     return "Onde cuidar significa mais!";
