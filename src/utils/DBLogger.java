@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -11,9 +12,12 @@ public class DBLogger {
 
   final String loggerLib = "org.mongodb.driver";
   final Logger lgr = Logger.getLogger(loggerLib);
-  final String path = "databaselogs.log";
+  final String path = "./resources/logs/databaselogs.log";
 
   public void setupLogger() {
+    File logsDir = new File("./resources/logs/");
+    if (!logsDir.exists() || !logsDir.isDirectory()) logsDir.mkdir();
+
     System.out.println("Logger setup initialized.");
     LogManager.getLogManager().reset();
     lgr.setLevel(Level.ALL);

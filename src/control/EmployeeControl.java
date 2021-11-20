@@ -1,6 +1,7 @@
 package control;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -31,6 +32,7 @@ public class EmployeeControl {
   private StringProperty telephoneNumber = new SimpleStringProperty("");
   private StringProperty bankDetails = new SimpleStringProperty("");
   private StringProperty specialty = new SimpleStringProperty("");
+  private StringProperty role = new SimpleStringProperty("");
   private ObjectProperty birthDate = new SimpleObjectProperty();
 
   public Employee getEntity() {
@@ -51,72 +53,35 @@ public class EmployeeControl {
     employee.setBirthDate(
       fmt.localToDate((LocalDate) birthDateProperty().getValue())
     );
+    employee.setRole(roleProperty().getValue());
     return employee;
   }
 
   public void setEntity(Employee employee) {
-    id.setValue((String) employee.getId().toString());
-    active.setValue(fmt.activeBooleanToString(employee.getActive()));
-    email.setValue(employee.getEmail());
-    username.setValue(employee.getUsername());
-    fullname.setValue(employee.getFullname());
-    telephoneNumber.setValue(employee.getTelephoneNumber());
-    bankDetails.setValue(employee.getBankDetails());
-    specialty.setValue(employee.getSpecialty());
-    birthDate.setValue(fmt.DateToLocal(employee.getBirthDate()));
+    id.set((String) employee.getId().toString());
+    active.set(fmt.activeBooleanToString(employee.getActive()));
+    email.set(employee.getEmail());
+    username.set(employee.getUsername());
+    fullname.set(employee.getFullname());
+    telephoneNumber.set(employee.getTelephoneNumber());
+    bankDetails.set(employee.getBankDetails());
+    specialty.set(employee.getSpecialty());
+    role.set(employee.getRole());
+    birthDate.set(fmt.dateToLocal(employee.getBirthDate()));
   }
 
   public void clearFields() {
-    id.setValue("");
-    active.setValue("");
-    email.setValue("");
-    username.setValue("");
-    fullname.setValue("");
-    telephoneNumber.setValue("");
-    bankDetails.setValue("");
-    specialty.setValue("");
-    birthDate.setValue(null);
+    id.set("");
+    active.set("");
+    email.set("");
+    username.set("");
+    fullname.set("");
+    telephoneNumber.set("");
+    bankDetails.set("");
+    specialty.set("");
+    birthDate.set(null);
+    role.set("");
     this.listAll();
-  }
-
-  public ObservableList<Employee> getListEmployees() {
-    return listEmployees;
-  }
-
-  public StringProperty idProperty() {
-    return id;
-  }
-
-  public StringProperty activeProperty() {
-    return active;
-  }
-
-  public StringProperty emailProperty() {
-    return email;
-  }
-
-  public StringProperty usernameProperty() {
-    return username;
-  }
-
-  public StringProperty fullnameProperty() {
-    return fullname;
-  }
-
-  public StringProperty telephoneNumberProperty() {
-    return telephoneNumber;
-  }
-
-  public StringProperty bankDetailsProperty() {
-    return bankDetails;
-  }
-
-  public StringProperty specialtyProperty() {
-    return specialty;
-  }
-
-  public ObjectProperty birthDateProperty() {
-    return birthDate;
   }
 
   public void create() {
@@ -162,4 +127,57 @@ public class EmployeeControl {
       service.findByField("fullname", fullnameProperty().getValue())
     );
   }
+
+  public String dateToString(Date value) {
+	  return fmt.dateToString(value);
+  }
+  
+  public String activeBooleanToString(Boolean value) {
+	return fmt.activeBooleanToString(value);
+  }
+
+  public ObservableList<Employee> getListEmployees() {
+    return listEmployees;
+  }
+
+  public StringProperty idProperty() {
+    return id;
+  }
+
+  public StringProperty activeProperty() {
+    return active;
+  }
+
+  public StringProperty emailProperty() {
+    return email;
+  }
+
+  public StringProperty usernameProperty() {
+    return username;
+  }
+
+  public StringProperty fullnameProperty() {
+    return fullname;
+  }
+
+  public StringProperty telephoneNumberProperty() {
+    return telephoneNumber;
+  }
+
+  public StringProperty bankDetailsProperty() {
+    return bankDetails;
+  }
+
+  public StringProperty specialtyProperty() {
+    return specialty;
+  }
+
+  public StringProperty roleProperty() {
+    return role;
+  }
+
+  public ObjectProperty birthDateProperty() {
+    return birthDate;
+  }
+
 }

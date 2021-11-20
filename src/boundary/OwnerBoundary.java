@@ -1,13 +1,17 @@
 package boundary;
 
-import org.bson.types.ObjectId;
+import java.util.Date;
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
 
 import control.OwnerControl;
 import entity.Owner;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,10 +28,9 @@ public class OwnerBoundary implements StrategyBoundary {
 	private TextField tfFullname = new TextField();
 	private TextField tfTelephoneNumber = new TextField();
 	private TextField tfAddress = new TextField();
-	private ComboBox<String> cbPatients = new ComboBox<>();
-	private ComboBox<String> cbIdentificationDoc = new ComboBox<>();
+	private TextField tfPatients = new TextField();
 	private TextField tfIdentificationNumber = new TextField();
-	private DatePicker dpLastVisit = new DatePicker();
+	private TextField tfLastVisit = new TextField();
 
 	private Label lblId = new Label("Id"); 
 	private Label lblPatients = new Label("Pacientes");
@@ -35,7 +38,6 @@ public class OwnerBoundary implements StrategyBoundary {
 	private Label lblFullname = new Label("Nome");
 	private Label lblTelephoneNumber = new Label("Telefone");
 	private Label lblAddress = new Label("Endereço");
-	private Label lblIdentificationDoc = new Label("Documento");
 	private Label lblIdentificationNumber = new Label("Número Documento");
 	private Label lblLastVisit = new Label("Última Consulta");
 
@@ -57,8 +59,8 @@ public class OwnerBoundary implements StrategyBoundary {
 		TableColumn<Owner, String> colEmail = new TableColumn<>("Email");
 		colEmail.setCellValueFactory(new PropertyValueFactory<Owner, String>("email"));
 		
-		TableColumn<Owner, ObjectId> colPatients = new TableColumn<>("Pacientes");
-		colPatients.setCellValueFactory(new PropertyValueFactory<Owner, ObjectId>("patientsId"));
+		TableColumn<Owner, String> colPatients = new TableColumn<>("Pacientes");
+		colPatients.setCellValueFactory(new PropertyValueFactory<Owner, String>("petName"));
 
 		TableColumn<Owner, String> colTelephoneNumber = new TableColumn<>("Telefone");
 		colTelephoneNumber.setCellValueFactory(new PropertyValueFactory<Owner, String>("telephoneNumber"));
@@ -70,7 +72,10 @@ public class OwnerBoundary implements StrategyBoundary {
 		colIdentificationNumber.setCellValueFactory(new PropertyValueFactory<Owner, String>("identificationNumber"));
 
 		TableColumn<Owner, String> colLastVisit = new TableColumn<>("Última Consulta");
-		colLastVisit.setCellValueFactory(new PropertyValueFactory<Owner, String>("lastVisit"));
+		colLastVisit.setCellValueFactory( (ownerProp) -> {
+			Date lastVisit = ownerProp.getValue().getLastVisit();
+			return new ReadOnlyStringWrapper(control.timeDateToString(lastVisit));
+		} );
 
 		table
 		.getColumns()
@@ -135,11 +140,13 @@ public class OwnerBoundary implements StrategyBoundary {
 		lblPatients.setPrefWidth(100.0);
 		lblPatients.setFont(fontLbls);
 
-		cbPatients.setLayoutX(95.0);
-		cbPatients.setLayoutY(71.0);
-		cbPatients.setPrefHeight(25.0);
-		cbPatients.setPrefWidth(400.0);
-
+		tfPatients.setLayoutX(95.0);
+		tfPatients.setLayoutY(71.0);
+		tfPatients.setPrefHeight(25.0);
+		tfPatients.setPrefWidth(400.0);
+		tfPatients.setDisable(true);
+		tfPatients.setEditable(false);
+		
 		lblEmail.setLayoutX(15.0);
 		lblEmail.setLayoutY(112.0);
 		lblEmail.setPrefHeight(17.0);
@@ -164,58 +171,60 @@ public class OwnerBoundary implements StrategyBoundary {
 		tfFullname.setPrefWidth(400.0);
 		tfFullname.setFont(fontTf);
 		
-		lblTelephoneNumber.setLayoutX(15.0);
-		lblTelephoneNumber.setLayoutY(189.0);
+		lblTelephoneNumber.setLayoutX(510.0);
+		lblTelephoneNumber.setLayoutY(37.0);
 		lblTelephoneNumber.setPrefHeight(17.0);
 		lblTelephoneNumber.setPrefWidth(100.0);
 		lblTelephoneNumber.setFont(fontLbls);
 
-		tfTelephoneNumber.setLayoutX(95.0);
-		tfTelephoneNumber.setLayoutY(187.0);
+		tfTelephoneNumber.setLayoutX(645.0);
+		tfTelephoneNumber.setLayoutY(33.0);
 		tfTelephoneNumber.setPrefHeight(25.0);
 		tfTelephoneNumber.setPrefWidth(400.0);
 
-		lblAddress.setLayoutX(15.0);
-		lblAddress.setLayoutY(230.0);
+		lblAddress.setLayoutX(510.0);
+		lblAddress.setLayoutY(75.0);
 		lblAddress.setPrefHeight(17.0);
-		lblAddress.setPrefWidth(77.0);
+		lblAddress.setPrefWidth(150.0);
 		lblAddress.setFont(fontLbls);
 
-		tfAddress.setLayoutX(95.0);
-		tfAddress.setLayoutY(226.0);
+		tfAddress.setLayoutX(645.0);
+		tfAddress.setLayoutY(71.0);
 		tfAddress.setPrefHeight(25.0);
 		tfAddress.setPrefWidth(400.0);
 		tfAddress.setFont(fontTf);
 
 		lblIdentificationNumber.setLayoutX(510.0);
-		lblIdentificationNumber.setLayoutY(37.0);
+		lblIdentificationNumber.setLayoutY(112.0);
 		lblIdentificationNumber.setPrefHeight(17.0);
-		lblIdentificationNumber.setPrefWidth(100.0);
+		lblIdentificationNumber.setPrefWidth(150.0);
 		lblIdentificationNumber.setFont(fontLbls);
 
 		tfIdentificationNumber.setLayoutX(645.0);
-		tfIdentificationNumber.setLayoutY(33.0);
+		tfIdentificationNumber.setLayoutY(108.0);
 		tfIdentificationNumber.setPrefHeight(25.0);
 		tfIdentificationNumber.setPrefWidth(400.0);
 
 		lblLastVisit.setLayoutX(510.0);
-		lblLastVisit.setLayoutY(75.0);
+		lblLastVisit.setLayoutY(151.0);
 		lblLastVisit.setPrefHeight(17.0);
-		lblLastVisit.setPrefWidth(150.0);
+		lblLastVisit.setPrefWidth(100.0);
 		lblLastVisit.setFont(fontLbls);
 
-		dpLastVisit.setLayoutX(645.0);
-		dpLastVisit.setLayoutY(71.0);
-		dpLastVisit.setPrefHeight(25.0);
-		dpLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setLayoutX(645.0);
+		tfLastVisit.setLayoutY(147.0);
+		tfLastVisit.setPrefHeight(25.0);
+		tfLastVisit.setPrefWidth(400.0);
+		tfLastVisit.setDisable(true);
+		tfLastVisit.setEditable(false);
 
         if (getTable().getColumns().size() == 0) {
         	this.generatedTable();
         }
 		
-		formPane.getChildren().addAll(lblId, tfId, lblPatients, cbPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
+		formPane.getChildren().addAll(lblId, tfId, lblPatients, tfPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
 				lblTelephoneNumber, tfTelephoneNumber, lblAddress, tfAddress, lblIdentificationNumber, tfIdentificationNumber, 
-				lblLastVisit, dpLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
+				lblLastVisit, tfLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
 		
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -239,8 +248,21 @@ public class OwnerBoundary implements StrategyBoundary {
 		btnUpdate.setFont(fontBtns);
 
 		btnDelete.setOnAction((e) -> {
-			control.deleteById();
-		});
+	    	  if (tfId.getText() == "" || tfId.getText()== null) {
+	    		  JOptionPane.showMessageDialog(
+	    				  null,
+	    				  "Selecione um dono!",
+	    				  "Erro",
+	    				  JOptionPane.ERROR_MESSAGE
+	    				  );
+	    	  } else {
+	    		  Alert alert = new Alert(Alert.AlertType.WARNING,
+	    				  "Você tem certeza que deseja remover o dono? ", ButtonType.YES, ButtonType.CANCEL);
+	    		  Optional<ButtonType> clicked = alert.showAndWait();
+	    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+	    			  control.deleteById();
+	    		  }}
+	      });
 		btnDelete.setLayoutX(105.0);
 		btnDelete.setLayoutY(269.0);
 		btnDelete.setFont(fontBtns);
@@ -257,13 +279,13 @@ public class OwnerBoundary implements StrategyBoundary {
 
 	private void binding() {
         Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
-        Bindings.bindBidirectional(cbPatients.valueProperty(), control.patientsIdProperty());
+        Bindings.bindBidirectional(tfPatients.textProperty(), control.patientsIdProperty());
         Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
         Bindings.bindBidirectional(tfFullname.textProperty(), control.fullnameProperty());
         Bindings.bindBidirectional(tfTelephoneNumber.textProperty(), control.telephoneNumberProperty());
         Bindings.bindBidirectional(tfAddress.textProperty(), control.addressProperty());
         Bindings.bindBidirectional(tfIdentificationNumber.textProperty(), control.identificationNumberProperty());
-        Bindings.bindBidirectional(dpLastVisit.valueProperty(), control.lastVisitProperty());
+        Bindings.bindBidirectional(tfLastVisit.textProperty(), control.lastVisitProperty());
 	}
 
 	public TableView<Owner> getTable() {

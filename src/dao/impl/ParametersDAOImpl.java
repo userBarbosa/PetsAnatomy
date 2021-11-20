@@ -11,10 +11,11 @@ public class ParametersDAOImpl implements ParametersDAO {
 
   MongoCollection<Document> parameters;
 
-  void getCollection() {
+  private void getCollection() {
     parameters = MongoConnect.database.getCollection("parameters");
   }
 
+  @Override
   public String dailyPhrase() {
     getCollection();
     Document phrase = parameters
@@ -23,6 +24,7 @@ public class ParametersDAOImpl implements ParametersDAO {
     return phrase.get("phrase").toString();
   }
 
+  @Override
   public boolean insertDailyPhrase(String phrase, int day) {
     getCollection();
     try {

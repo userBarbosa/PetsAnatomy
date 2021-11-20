@@ -3,12 +3,14 @@ package dao.impl;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
 import dao.interfaces.PatientDAO;
 import entity.Patient;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -16,172 +18,247 @@ import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
 
-	MongoCollection<Document> patients;
+  MongoCollection<Document> patients;
 
-	public void getCollection() {
-		patients = MongoConnect.database.getCollection("patients");
-	}
+  private void getCollection() {
+    patients = MongoConnect.database.getCollection("patients");
+  }
 
-	Document newDoc(Patient patient) {
-		Document pat = new Document("ownerId", patient.getOwnerId())
-				.append("name", patient.getName())
-				.append("species", patient.getSpecies())
-				.append("family", patient.getFamily())
-				.append("bloodtype", patient.getBloodtype())
-				.append("obs", patient.getObs())
-				.append("birthdate", patient.getBirthdate())
-				.append("lastVisit", patient.getLastVisit())
-				.append("treatment", patient.getTreatment());
-		return pat;
-	}
+  Document newDoc(Patient patient) {
+    Document pat = new Document("ownerId", patient.getOwnerId())
+      .append("_id", patient.getId())
+      .append("name", patient.getName())
+      .append("species", patient.getSpecies())
+      .append("family", patient.getFamily())
+      .append("bloodtype", patient.getBloodtype())
+      .append("obs", patient.getObs())
+      .append("birthdate", patient.getBirthdate())
+      .append("lastVisit", patient.getLastVisit())
+      .append("treatment", patient.getTreatment());
+    return pat;
+  }
 
-	Patient newPet(Document doc) {
-		String name = doc.getString("name");
-		ObjectId ownerId = doc.getObjectId("ownerId");
-		String species = doc.getString("species");
-		String family = doc.getString("family");
+  Patient newPet(Document doc) {
+    String name = doc.getString("name");
+    ObjectId ownerId = doc.getObjectId("ownerId");
+    String species = doc.getString("species");
+    String family = doc.getString("family");
 
-		Patient p = new Patient(name, ownerId, species, family);
+    Patient p = new Patient(name, ownerId, species, family);
 
-		p.setBloodtype(doc.getString("bloodtype"));
-		p.setObs(doc.getString("obs"));
-		p.setTreatment(doc.getBoolean("treatment"));
-		p.setBirthdate(doc.getDate("birthdate"));
-		p.setLastVisit(doc.getDate("lastVisit"));
-		p.setCreated(doc.getDate("created"));
-		p.setUpdated(doc.getDate("updated"));
+    p.setId(doc.getObjectId("_id"));
+    p.setBloodtype(doc.getString("bloodtype"));
+    p.setObs(doc.getString("obs"));
+    p.setTreatment(doc.getBoolean("treatment"));
+    p.setBirthdate(doc.getDate("birthdate"));
+    p.setLastVisit(doc.getDate("lastVisit"));
+    p.setCreated(doc.getDate("created"));
+    p.setUpdated(doc.getDate("updated"));
 
-		return p;
-	}
+    return p;
+  }
 
-	public void insert(Patient patient, String ownerId) {
-		Document pat = newDoc(patient);
+  @Override
+  public void insert(Patient patient, String ownerId) {
+    if (patient.getLastVisit() == null) patient.setLastVisit(new Date());
 
-		pat.put("_id", new ObjectId());
-		pat.put("created", new Date());
-		pat.replace("ownerId", new ObjectId(ownerId));
-		getCollection();
-		patients.insertOne(pat);
-	}
+    Document pat = newDoc(patient);
 
-	public void update(String id, Patient patient) {
-		Document pat = newDoc(patient);
-		pat.put("updated", new Date());
+    pat.put("created", new Date());
+    pat.replace("ownerId", new ObjectId(ownerId));
+    getCollection();
+    patients.insertOne(pat);
+  }
 
-		BasicDBObject update = new BasicDBObject("$set", pat);
-		getCollection();
-		patients.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
-	}
+  @Override
+  public List<Patient> getAllPatients() {
+    List<Patient> pList = new ArrayList<Patient>();
+    getCollection();
+    MongoCursor<Document> cursor = patients.find().iterator();
 
-	public void delete(String id) {
-		getCollection();
-		patients.deleteOne(Filters.eq("_id", new ObjectId(id)));
-	}
+    try {
+      while (cursor.hasNext()) {
+        pList.add(newPet(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
+    return pList;
+  }
 
-	public List<Patient> getAllPatients() {
-		List<Patient> pList = new ArrayList<Patient>();
-		getCollection();
-		MongoCursor<Document> cursor = patients.find().iterator();
+  @Override
+  public Patient findByID(String field, String id) {
+    Document query = new Document();
+    getCollection();
+    try {
+      query = patients.find(new Document("_id", new ObjectId(id))).first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return newPet(query);
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				pList.add(newPet(cursor.next()));
-			}
-		} finally {
-			cursor.close();
-		}
-		return pList;
-	}  
+  @Override
+  public List<Patient> findByField(String field, String data) {
+    List<Patient> pList = new ArrayList<Patient>();
+    getCollection();
+    Pattern regex = Pattern.compile(data, Pattern.CASE_INSENSITIVE);
+    MongoCursor<Document> cursor = patients
+      .find(new Document(field, regex))
+      .iterator();
 
-	public Patient findByID(String field, String id) {
-		Document query = new Document();
-		getCollection();
-		try {
-			query = patients.find(new Document("_id", new ObjectId(id))).first();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return newPet(query);
-	}
+    try {
+      while (cursor.hasNext()) {
+        pList.add(newPet(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
 
-	public List<Patient> findByField(String field, String data) {
-		List<Patient> pList = new ArrayList<Patient>();
-		getCollection();
-		MongoCursor<Document> cursor = patients
-				.find(new Document(field, data))
-				.iterator();
+    return pList;
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				pList.add(newPet(cursor.next()));
-			}
-		} finally {
-			cursor.close();
-		}
+  @Override
+  public List<Patient> findByDate(String field, Date dateGte, Date dateLt) {
+    BasicDBObject betweenDates = new BasicDBObject(
+      field,
+      new Document("$gte", dateGte).append("$lte", dateLt)
+    );
 
-		return pList;
-	}
+    List<Patient> pList = new ArrayList<Patient>();
+    getCollection();
+    MongoCursor<Document> cursor = patients.find(betweenDates).iterator();
 
-	public List<Patient> findByDate(String field, Date dateGte, Date dateLte) {
-		BasicDBObject betweenDates = new BasicDBObject(
-				field,
-				new Document("$gte", dateGte).append("$lte", dateLte)
-				);
+    try {
+      while (cursor.hasNext()) {
+        pList.add(newPet(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
 
-		List<Patient> pList = new ArrayList<Patient>();
-		getCollection();
-		MongoCursor<Document> cursor = patients.find(betweenDates).iterator();
+    return pList;
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				pList.add(newPet(cursor.next()));
-			}
-		} finally {
-			cursor.close();
-		}
+  @Override
+  public List<Pair<String, String>> getAllIdAndNames() {
+    List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
+    getCollection();
+    MongoCursor<Document> cursor = patients.find().iterator();
 
-		return pList;
-	}
+    try {
+      while (cursor.hasNext()) {
+        Document temp = cursor.next();
+        cbList.add(
+          new Pair<String, String>(
+            temp.get("_id").toString(),
+            temp.get("name").toString()
+          )
+        );
+      }
+    } finally {
+      cursor.close();
+    }
 
-	public List<Pair<String, String>> getAllIdAndNames() {
-		List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
-		getCollection();
-		MongoCursor<Document> cursor = patients.find().iterator();
+    return cbList;
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				Document temp = cursor.next();
-				cbList.add(
-						new Pair<String, String>(
-								temp.get("_id").toString(),
-								temp.get("name").toString()
-								)
-						);
-			}
-		} finally {
-			cursor.close();
-		}
+  @Override
+  public boolean findScheduleAppointments(Date date, String patientId) {
+    Document query = new Document();
+    getCollection();
 
-		return cbList;
-	}
+    LocalDateTime dateGte = date
+      .toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDateTime();
+    LocalDateTime dateLt = dateGte.plusMinutes(29);
 
-	public List<String> petsByOwner(String ownerId) {
-		List<String> cbPets = new ArrayList<String>();
-		getCollection();
-		MongoCursor<Document> cursor = patients
-				.find(new Document("ownerId", new ObjectId(ownerId)))
-				.iterator();
+    try {
+      query =
+        patients
+          .find(
+            new Document("_id", new ObjectId(patientId))
+            .append(
+                "date",
+                new BasicDBObject("$gte", dateGte).append("$lt", dateLt)
+              )
+          )
+          .first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if (query != null) {
+      return true;
+    }
+    return false;
+  }
 
-		try {
-			while (cursor.hasNext()) {
-				Document temp = cursor.next();
-				cbPets.add(temp.get("name").toString());
-			}
-		} finally {
-			cursor.close();
-		}
+  @Override
+  public List<String> getPetsByOwner(String ownerId) {
+    List<String> cbPets = new ArrayList<String>();
+    getCollection();
+    MongoCursor<Document> cursor = patients
+      .find(new Document("ownerId", new ObjectId(ownerId)))
+      .iterator();
 
-		return cbPets;
-	}
+    try {
+      while (cursor.hasNext()) {
+        Document temp = cursor.next();
+        cbPets.add(temp.get("name").toString());
+      }
+    } finally {
+      cursor.close();
+    }
+    return cbPets;
+  }
 
+  @Override
+  public void update(String id, Patient patient) {
+    Document pat = newDoc(patient);
+    pat.put("updated", new Date());
+
+    BasicDBObject update = new BasicDBObject("$set", pat);
+    getCollection();
+    patients.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
+  }
+
+  @Override
+  public void updateLastVisit(String id, Date date) {
+    BasicDBObject updatedData = new BasicDBObject(
+      "$set",
+      new BasicDBObject("lastVisit", date).append("updated", new Date())
+    );
+
+    getCollection();
+
+    patients.updateOne(
+      new BasicDBObject("_id", new ObjectId(id)),
+      updatedData
+      );
+  }
+  
+  @Override
+  public void delete(String id) {
+    getCollection();
+    patients.deleteOne(new BasicDBObject("_id", new ObjectId(id)));
+  }
+
+  @Override
+  public void deleteManyByOwnerId(String ownerId) {
+    getCollection();
+    MongoCursor<Document> cursor = patients
+      .find(new BasicDBObject("ownerId", new ObjectId(ownerId)))
+      .iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        patients.deleteOne(
+          new BasicDBObject("_id", cursor.next().getObjectId("_id"))
+        );
+      }
+    } finally {
+      cursor.close();
+    }
+  }
 }

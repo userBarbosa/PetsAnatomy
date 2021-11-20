@@ -1,26 +1,25 @@
 package control;
 
-import java.time.LocalDate;
-
-import org.bson.types.ObjectId;
-
 import dao.impl.OwnerDAOImpl;
+import dao.impl.PatientDAOImpl;
 import dao.interfaces.OwnerDAO;
+import dao.interfaces.PatientDAO;
 import entity.Owner;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import java.util.Date;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.bson.types.ObjectId;
 import utils.Formatters;
 
 public class OwnerControl {
 
   private ObservableList<Owner> listOwners = FXCollections.observableArrayList();
   private OwnerDAO service = new OwnerDAOImpl();
+  private PatientDAO servicePatient = new PatientDAOImpl();
   private Formatters fmt = new Formatters();
-  
+
   private StringProperty id = new SimpleStringProperty("");
   private StringProperty patientsId = new SimpleStringProperty("");
   private StringProperty email = new SimpleStringProperty("");
@@ -28,49 +27,47 @@ public class OwnerControl {
   private StringProperty telephoneNumber = new SimpleStringProperty("");
   private StringProperty address = new SimpleStringProperty("");
   private StringProperty identificationNumber = new SimpleStringProperty("");
-  private ObjectProperty lastVisit = new SimpleObjectProperty();
+  private StringProperty lastVisit = new SimpleStringProperty("");
 
-  public Owner getEntity() {
+  public Owner getEntity() { //pega dos campos
     Owner owner = new Owner(
       fullnameProperty().getValue(),
       emailProperty().getValue(),
       identificationNumberProperty().getValue()
     );
-    owner.setId((idProperty().getValue() == "" || idProperty().getValue() == null) ? new ObjectId() : new ObjectId(idProperty().getValue()));
+    owner.setId(tryToGetId(idProperty().getValue()));
     owner.setPatientsId(patientsIdProperty().getValue());
     owner.setTelephoneNumber(telephoneNumberProperty().getValue());
     owner.setAddress(addressProperty().getValue());
-    owner.setLastVisit(fmt.localToDate((LocalDate) lastVisitProperty().getValue()));
+    owner.setLastVisit(fmt.stringToDate(lastVisitProperty().getValue()));
     return owner;
   }
-  
-  public void setEntity(Owner owner) {
-	  id.set(owner.getId().toString());
-	  patientsId.set(owner.getPatientsId());
-	  email.set(owner.getEmail());
-	  fullname.set(owner.getFullname());
-	  telephoneNumber.set(owner.getTelephoneNumber());
-	  address.set(owner.getAddress());
-	  identificationNumber.set(owner.getIdentificationNumber());
-	  lastVisit.set(fmt.DateToLocal(owner.getLastVisit()));
+
+  public void setEntity(Owner owner) { //
+    id.set(owner.getId().toString());
+    patientsId.set(owner.getPatientsId());
+    email.set(owner.getEmail());
+    fullname.set(owner.getFullname());
+    telephoneNumber.set(owner.getTelephoneNumber());
+    address.set(owner.getAddress());
+    identificationNumber.set(owner.getIdentificationNumber());
+    lastVisit.set(fmt.timeDateToString(owner.getLastVisit()));
   }
 
   public void create() {
     service.insert(getEntity());
     this.listAll();
-    this.clearFields();
   }
 
   public void updateById() {
     service.update(idProperty().getValue(), getEntity());
     this.listAll();
-    this.clearFields();
   }
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    this.findByField();
-    this.clearFields();
+    servicePatient.deleteManyByOwnerId(idProperty().getValue());
+    this.listAll();
   }
 
   public void listAll() {
@@ -80,7 +77,9 @@ public class OwnerControl {
 
   public void findByField() {
     listOwners.clear();
-    listOwners.addAll(service.findByField("fullname", fullnameProperty().getValue()));
+    listOwners.addAll(
+      service.findByField("fullname", fullnameProperty().getValue())
+    );
   }
 
   public void clearFields() {
@@ -91,14 +90,18 @@ public class OwnerControl {
     telephoneNumber.set("");
     address.set("");
     identificationNumber.set("");
-    lastVisit.set(null);
+    lastVisit.set("");
     this.listAll();
   }
-  
-  public ObservableList<Owner> getListOwners() {
-	  return listOwners;
+
+  public String dateToString(Date value) {
+    return fmt.dateToString(value);
   }
-  
+
+  public ObservableList<Owner> getListOwners() {
+    return listOwners;
+  }
+
   public StringProperty idProperty() {
     return id;
   }
@@ -127,8 +130,17 @@ public class OwnerControl {
     return identificationNumber;
   }
 
-  public ObjectProperty lastVisitProperty() {
+  public StringProperty lastVisitProperty() {
     return lastVisit;
   }
 
+  public String timeDateToString(Date lt) {
+    return fmt.timeDateToString(lt);
+  }
+
+  private ObjectId tryToGetId(String id) {
+    return (id == "" || id == null)
+      ? new ObjectId()
+      : new ObjectId(id);
+  }
 }

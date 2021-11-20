@@ -1,11 +1,19 @@
 package boundary;
 
+import java.util.Date;
+import java.util.Optional;
+
+import javax.swing.JOptionPane;
+
 import control.EmployeeControl;
 import entity.Employee;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -55,7 +63,10 @@ public class EmployeeBoundary implements StrategyBoundary {
         cbActive.setItems(status);
 
 		TableColumn<Employee, String> colActive = new TableColumn<>("Status");
-		colActive.setCellValueFactory(new PropertyValueFactory<Employee, String>("active"));
+		colActive.setCellValueFactory( (employeeProp) -> {
+			Boolean active = employeeProp.getValue().getActive();
+			return new ReadOnlyStringWrapper(control.activeBooleanToString(active));
+		} );
 
 		TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
 		colEmail.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
@@ -96,7 +107,11 @@ public class EmployeeBoundary implements StrategyBoundary {
 		colSpecialty.setCellValueFactory(new PropertyValueFactory<Employee, String>("specialty"));
 
 		TableColumn<Employee, String> colBirthDate = new TableColumn<>("Data de Nascimento");
-		colBirthDate.setCellValueFactory(new PropertyValueFactory<Employee, String>("birthDate"));
+		colBirthDate.setCellValueFactory( (employeeProp) -> {
+			Date birthDate = employeeProp.getValue().getBirthDate();
+			return new ReadOnlyStringWrapper(control.dateToString(birthDate));
+		} );
+		
 		
 		table
 		.getColumns()
@@ -280,8 +295,21 @@ public class EmployeeBoundary implements StrategyBoundary {
 		btnUpdate.setFont(fontBtns);
 
 		btnDelete.setOnAction((e) -> {
-			control.deleteById();
-		});
+		    	  if (tfId.getText() == "" || tfId.getText()== null) {
+		    		  JOptionPane.showMessageDialog(
+		    				  null,
+		    				  "Selecione um funcionário!",
+		    				  "Erro",
+		    				  JOptionPane.ERROR_MESSAGE
+		    				  );
+		    	  } else {
+		    		  Alert alert = new Alert(Alert.AlertType.WARNING,
+		    				  "Você tem certeza que deseja remover o funcionário? ", ButtonType.YES, ButtonType.CANCEL);
+		    		  Optional<ButtonType> clicked = alert.showAndWait();
+		    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+		    			  control.deleteById();
+		    		  }}
+		      });
 		btnDelete.setLayoutX(105.0);
 		btnDelete.setLayoutY(269.0);
 		btnDelete.setFont(fontBtns);

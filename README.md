@@ -37,13 +37,12 @@ Projeto foi desenvolvido durante a disciplina de **POO - Programação Orientada
 ---
 ## ⚙️ Funcionalidades
 
-- [ ] Agendamento
-- [ ] Gerenciamento de Consultas
-- [ ] Gerenciamento de Pacientes
-- [ ] Gerenciamento de Profissionais (Controle de especialidade)
-- [ ] Gerenciamento de Usuários
-- [ ] Gerenciamento de Procedimentos
-- [ ] Gerenciamento de Adoções
+- [ ] Login
+- [ ] Cadastro
+- [ ] Crud Agendamentos
+- [ ] Crud Pacientes
+- [ ] Crud Donos
+- [ ] Crud Funcionários
 
 ---
 

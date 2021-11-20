@@ -56,44 +56,38 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 		
 		btnHome.setMinSize(300.0, 55.0);
 		btnHome.setFont(fontBtnHome);
-		btnHome.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnHome.setOnAction(this);
 
 		btnAgenda.setLayoutY(110.0);
 		btnAgenda.setMinSize(300.0, 50.0);
 		btnAgenda.setFont(fontBtns);
-		btnAgenda.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnAgenda.setOnAction(this);
 
 		btnPacientes.setLayoutY(180.0);
 		btnPacientes.setMinSize(300.0, 50.0);
 		btnPacientes.setFont(fontBtns);
-		btnPacientes.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnPacientes.setOnAction(this);
 
 		btnClientes.setLayoutY(250.0);
 		btnClientes.setMinSize(300.0, 50.0);
 		btnClientes.setFont(fontBtns);
-		btnClientes.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnClientes.setOnAction(this);
 
 		btnFuncionarios.setLayoutY(320.0);
 		btnFuncionarios.setMinSize(300.0, 50.0);
 		btnFuncionarios.setFont(fontBtns);
-		btnFuncionarios.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnFuncionarios.setOnAction(this);
 
 		btnConfiguracoes.setLayoutY(390.0);
 		btnConfiguracoes.setMinSize(300.0, 50.0);
 		btnConfiguracoes.setFont(fontBtns);
-		btnConfiguracoes.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnConfiguracoes.setOnAction(this);
 
 		btnSair.setLayoutY(718.0);
 		btnSair.setMinSize(300.0, 50.0);
 		btnSair.setFont(fontBtns);
-		btnSair.setStyle("-fx-background-color: #000C3A; -fx-text-fill: white;");
 		btnSair.setOnAction((e) -> {
+			System.out.println("Bye (=");
 			Platform.exit();
 			System.exit(0);
 		});
@@ -105,6 +99,7 @@ public class MainBoundary extends Application implements EventHandler<ActionEven
 		mainPane.setPrefHeight(768.0);
 		mainPane.setPrefWidth(1366.0);
 
+		sideMenu.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());;
 		stage.setTitle("Clínica Veterinária PetsAnatomy");	
 		stage.setResizable(false);
 		stage.setScene(scene);
