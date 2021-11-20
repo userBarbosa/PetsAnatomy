@@ -204,7 +204,7 @@ public class PatientControl {
   }
 
   private ObjectId tryToGetId(String property) {
-    return (property.trim().isEmpty() || property == null)
+    return (property.isBlank() || property == null)
       ? new ObjectId()
       : new ObjectId(property);
   }

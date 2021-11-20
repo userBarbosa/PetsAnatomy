@@ -1,14 +1,12 @@
 package boundary;
 
-import control.AppointmentControl;
-import entity.Appointment;
-
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
 
+import control.AppointmentControl;
+import entity.Appointment;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -30,9 +28,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
-import org.bson.types.ObjectId;
-
-import utils.Formatters;
 import utils.WorkShift;
 
 public class AppointmentBoundary implements StrategyBoundary {
@@ -49,9 +44,9 @@ public class AppointmentBoundary implements StrategyBoundary {
   private ComboBox<String> cbFinancialState = new ComboBox<>();
   
   private Label lblDateGte = new Label("Data Inicial");
-  private Label lblDateLte = new Label("Data Final");
+  private Label lblDateLt = new Label("Data Final");
   private DatePicker dpDateGte = new DatePicker();
-  private DatePicker dpDateLte = new DatePicker();
+  private DatePicker dpDateLt = new DatePicker();
   private Button btnDismiss = new Button("Buscar");
   
   private Label lblId = new Label("Id");
@@ -79,7 +74,6 @@ public class AppointmentBoundary implements StrategyBoundary {
   private TableView<Appointment> table = new TableView<Appointment>();
   private static AppointmentControl control = new AppointmentControl();
   private WorkShift ws = new WorkShift();
-  private Formatters fmt = new Formatters();
   
   public void generatedTable() {
     control.listAll();
@@ -433,16 +427,16 @@ public class AppointmentBoundary implements StrategyBoundary {
 	  dpDateGte.setPrefHeight(25.0);
 	  dpDateGte.setPrefWidth(100.0);
 
-	  lblDateLte.setLayoutX(220.0);
-	  lblDateLte.setLayoutY(20.0);
-	  lblDateLte.setPrefHeight(17.0);
-	  lblDateLte.setPrefWidth(100.0);
-	  lblDateLte.setFont(fontLbls);
+	  lblDateLt.setLayoutX(220.0);
+	  lblDateLt.setLayoutY(20.0);
+	  lblDateLt.setPrefHeight(17.0);
+	  lblDateLt.setPrefWidth(100.0);
+	  lblDateLt.setFont(fontLbls);
 
-	  dpDateLte.setLayoutX(290.0);
-	  dpDateLte.setLayoutY(17.0);
-	  dpDateLte.setPrefHeight(25.0);
-	  dpDateLte.setPrefWidth(100.0);	  
+	  dpDateLt.setLayoutX(290.0);
+	  dpDateLt.setLayoutY(17.0);
+	  dpDateLt.setPrefHeight(25.0);
+	  dpDateLt.setPrefWidth(100.0);	  
 
 	  btnDismiss.setOnAction((e) -> {
 		  popup.close();
@@ -453,7 +447,7 @@ public class AppointmentBoundary implements StrategyBoundary {
 
 	  pane
 	  .getChildren()
-	  .addAll(btnDismiss, lblDateGte, dpDateGte, lblDateLte, dpDateLte);
+	  .addAll(btnDismiss, lblDateGte, dpDateGte, lblDateLt, dpDateLt);
 
 	  popup.setTitle("Pesquisar consulta por data");	
 	  popup.setResizable(false);

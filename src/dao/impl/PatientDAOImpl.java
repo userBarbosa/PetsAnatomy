@@ -1,27 +1,26 @@
 package dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import dao.interfaces.PatientDAO;
+import entity.Patient;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-
+import javafx.util.Pair;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-
-import dao.interfaces.PatientDAO;
-import entity.Patient;
-import javafx.util.Pair;
 import utils.MongoConnect;
 
 public class PatientDAOImpl implements PatientDAO {
 
   MongoCollection<Document> patients;
 
-  public void getCollection() {
+  private void getCollection() {
     patients = MongoConnect.database.getCollection("patients");
   }
 
@@ -59,6 +58,7 @@ public class PatientDAOImpl implements PatientDAO {
     return p;
   }
 
+  @Override
   public void insert(Patient patient, String ownerId) {
     if (patient.getLastVisit() == null) patient.setLastVisit(new Date());
 
@@ -70,6 +70,7 @@ public class PatientDAOImpl implements PatientDAO {
     patients.insertOne(pat);
   }
 
+  @Override
   public List<Patient> getAllPatients() {
     List<Patient> pList = new ArrayList<Patient>();
     getCollection();
@@ -85,6 +86,7 @@ public class PatientDAOImpl implements PatientDAO {
     return pList;
   }
 
+  @Override
   public Patient findByID(String field, String id) {
     Document query = new Document();
     getCollection();
@@ -96,6 +98,7 @@ public class PatientDAOImpl implements PatientDAO {
     return newPet(query);
   }
 
+  @Override
   public List<Patient> findByField(String field, String data) {
     List<Patient> pList = new ArrayList<Patient>();
     getCollection();
@@ -115,10 +118,11 @@ public class PatientDAOImpl implements PatientDAO {
     return pList;
   }
 
-  public List<Patient> findByDate(String field, Date dateGte, Date dateLte) {
+  @Override
+  public List<Patient> findByDate(String field, Date dateGte, Date dateLt) {
     BasicDBObject betweenDates = new BasicDBObject(
       field,
-      new Document("$gte", dateGte).append("$lte", dateLte)
+      new Document("$gte", dateGte).append("$lte", dateLt)
     );
 
     List<Patient> pList = new ArrayList<Patient>();
@@ -136,6 +140,7 @@ public class PatientDAOImpl implements PatientDAO {
     return pList;
   }
 
+  @Override
   public List<Pair<String, String>> getAllIdAndNames() {
     List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
     getCollection();
@@ -158,7 +163,39 @@ public class PatientDAOImpl implements PatientDAO {
     return cbList;
   }
 
-  public List<String> petsByOwner(String ownerId) {
+  @Override
+  public boolean findScheduleAppointments(Date date, String patientId) {
+    Document query = new Document();
+    getCollection();
+
+    LocalDateTime dateGte = date
+      .toInstant()
+      .atZone(ZoneId.systemDefault())
+      .toLocalDateTime();
+    LocalDateTime dateLt = dateGte.plusMinutes(29);
+
+    try {
+      query =
+        patients
+          .find(
+            new Document("_id", new ObjectId(patientId))
+            .append(
+                "date",
+                new BasicDBObject("$gte", dateGte).append("$lt", dateLt)
+              )
+          )
+          .first();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if (query != null) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public List<String> getPetsByOwner(String ownerId) {
     List<String> cbPets = new ArrayList<String>();
     getCollection();
     MongoCursor<Document> cursor = patients
@@ -176,6 +213,7 @@ public class PatientDAOImpl implements PatientDAO {
     return cbPets;
   }
 
+  @Override
   public void update(String id, Patient patient) {
     Document pat = newDoc(patient);
     pat.put("updated", new Date());
@@ -185,6 +223,22 @@ public class PatientDAOImpl implements PatientDAO {
     patients.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
   }
 
+  @Override
+  public void updateLastVisit(String id, Date date) {
+    BasicDBObject updatedData = new BasicDBObject(
+      "$set",
+      new BasicDBObject("lastVisit", date).append("updated", new Date())
+    );
+
+    getCollection();
+
+    patients.updateOne(
+      new BasicDBObject("_id", new ObjectId(id)),
+      updatedData
+      );
+  }
+  
+  @Override
   public void delete(String id) {
     getCollection();
     patients.deleteOne(new BasicDBObject("_id", new ObjectId(id)));

@@ -18,7 +18,7 @@ public class OwnerDAOImpl implements OwnerDAO {
 
   MongoCollection<Document> owners;
 
-  public void getCollection() {
+  private void getCollection() {
     owners = MongoConnect.database.getCollection("owners");
   }
 
@@ -50,6 +50,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     return o;
   }
 
+  @Override
   public void insert(Owner owner) {
     Document customer = newDoc(owner);
 
@@ -59,6 +60,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     owners.insertOne(customer);
   }
 
+  @Override
   public List<Owner> getAllOwners() {
     List<Owner> oList = new ArrayList<Owner>();
     getCollection();
@@ -74,6 +76,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     return oList;
   }
 
+  @Override
   public Owner findByID(String id) {
     Document query = new Document();
     getCollection();
@@ -85,6 +88,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     return newOwner(query);
   }
 
+  @Override
   public List<Owner> findByField(String field, String data) {
     List<Owner> oList = new ArrayList<Owner>();
     getCollection();
@@ -104,10 +108,11 @@ public class OwnerDAOImpl implements OwnerDAO {
     return oList;
   }
 
-  public List<Owner> findByDate(String field, Date dateGte, Date dateLte) {
+  @Override
+  public List<Owner> findByDate(String field, Date dateGte, Date dateLt) {
     BasicDBObject betweenDates = new BasicDBObject(
       field,
-      new Document("$gte", dateGte).append("$lte", dateLte)
+      new Document("$gte", dateGte).append("$lte", dateLt)
     );
 
     List<Owner> oList = new ArrayList<Owner>();
@@ -125,6 +130,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     return oList;
   }
 
+  @Override
   public List<Pair<String, String>> getAllIdAndNames() {
     List<Pair<String, String>> cbList = new ArrayList<Pair<String, String>>();
     getCollection();
@@ -147,6 +153,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     return cbList;
   }
 
+  @Override
   public void update(String id, Owner owner) {
     Document customer = newDoc(owner);
 
@@ -157,6 +164,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     owners.updateOne(new BasicDBObject("_id", new ObjectId(id)), update);
   }
 
+  @Override
   public void updatePatientList(String ownerId, String patientId) {
     getCollection();
     Document owner = new Document();
@@ -171,24 +179,28 @@ public class OwnerDAOImpl implements OwnerDAO {
       String pList = owner.getString("patientsId");
       patientId = patientId.concat(";");
       pList =
-        (pList == null || pList.trim().isEmpty())
+        (pList == null || pList.isBlank())
           ? patientId
           : pList.concat(patientId);
-      
+
       BasicDBObject updated = new BasicDBObject(
-          "$set",
-          new BasicDBObject("patientsId", pList)
-          .append("updated", new Date())
-        );
-        owners.updateOne(new BasicDBObject("_id", new ObjectId(ownerId)), updated);
+        "$set",
+        new BasicDBObject("patientsId", pList).append("updated", new Date())
+      );
+      owners.updateOne(
+        new BasicDBObject("_id", new ObjectId(ownerId)),
+        updated
+      );
     }
   }
 
+  @Override
   public void delete(String id) {
     getCollection();
     owners.deleteOne(new BasicDBObject("_id", new ObjectId(id)));
   }
 
+  @Override
   public void deletePatientId(String ownerId, String patientId) {
     getCollection();
     Document owner = new Document();
@@ -205,19 +217,21 @@ public class OwnerDAOImpl implements OwnerDAO {
 
       if (oldList != null) {
         for (String each : oldList) {
-          if (each != null && !each.trim().isEmpty()) {
+          if (each != null && !each.isBlank()) {
             if (!each.equals(patientId)) {
               newList = newList.concat(each + ";");
             }
           }
         }
 
-        BasicDBObject updated = new BasicDBObject(
+        BasicDBObject updatedList = new BasicDBObject(
           "$set",
-          new BasicDBObject("patientsId", newList)
-          .append("updated", new Date())
+          new BasicDBObject("patientsId", newList).append("updated", new Date())
         );
-        owners.updateOne(new BasicDBObject("_id", new ObjectId(ownerId)), updated);
+        owners.updateOne(
+          new BasicDBObject("_id", new ObjectId(ownerId)),
+          updatedList
+        );
       }
     }
   }

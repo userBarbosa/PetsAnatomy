@@ -11,10 +11,13 @@ public interface PatientDAO {
 	void insert(Patient patient, String ownerId);
 	Patient findByID(String field, String id);
 	List<Patient> findByField(String field, String data);
-	List<Patient> findByDate(String field, Date dateGte, Date dateLte);
+	List<Patient> findByDate(String field, Date dateGte, Date dateLt);
+	boolean findScheduleAppointments(Date date, String patientId);
 	List<Patient> getAllPatients();
+	List<String> getPetsByOwner(String ownerId);
 	List<Pair<String, String>> getAllIdAndNames();
 	void update(String id, Patient patient);
+	void updateLastVisit(String id, Date date);
 	void delete(String id);
 	void deleteManyByOwnerId(String id);
 }

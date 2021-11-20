@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -23,7 +22,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
   MongoCollection<Document> appointments;
 
-  public void getCollection() {
+  private void getCollection() {
     appointments = MongoConnect.database.getCollection("appointments");
   }
 
@@ -62,6 +61,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return app;
   }
 
+  @Override
   public void insert(Appointment appointment) {
     Document app = newDoc(appointment);
 
@@ -72,22 +72,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     appointments.insertOne(app);
   }
 
-  public void update(String id, Appointment appointment) {
-    Document appointed = newDoc(appointment);
-    appointed.put("updated", new Date());
-
-    getCollection();
-    appointments.updateOne(
-      new BasicDBObject("_id", new ObjectId(id)),
-      new BasicDBObject("$set", appointed)
-    );
-  }
-
-  public void delete(String id) {
-    getCollection();
-    appointments.deleteOne(Filters.eq("_id", new ObjectId(id)));
-  }
-
+  @Override
   public List<Appointment> getAllAppointments() {
     List<Appointment> aList = new ArrayList<Appointment>();
     getCollection();
@@ -105,6 +90,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return aList;
   }
 
+  @Override
   public Appointment findByID(String id) {
     Document query = new Document();
     getCollection();
@@ -117,6 +103,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return newApp(query);
   }
 
+  @Override
   public List<Appointment> findByField(String field, String data) {
     List<Appointment> aList = new ArrayList<Appointment>();
     getCollection();
@@ -136,14 +123,15 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return aList;
   }
 
+  @Override
   public List<Appointment> findByDate(
     String field,
     Date dateGte,
-    Date dateLte
+    Date dateLt
   ) {
     BasicDBObject betweenDates = new BasicDBObject(
       field,
-      new Document("$gte", dateGte).append("$lte", dateLte)
+      new Document("$gte", dateGte).append("$lte", dateLt)
     );
     getCollection();
 
@@ -162,7 +150,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return aList;
   }
 
-  public boolean findScheduleAppointment(Date date, String docId) {
+  @Override
+  public boolean findScheduleAppointment(Date date, String employeeId) {
     Document query = new Document();
     getCollection();
 
@@ -170,16 +159,16 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       .toInstant()
       .atZone(ZoneId.systemDefault())
       .toLocalDateTime();
-    LocalDateTime dateLte = dateGte.plusMinutes(30);
+    LocalDateTime dateLt = dateGte.plusMinutes(29);
 
     try {
       query =
         appointments
           .find(
-            new Document("employeeId", new ObjectId(docId))
+            new Document("employeeId", new ObjectId(employeeId))
             .append(
                 "date",
-                new BasicDBObject("$gte", dateGte).append("$lte", dateLte)
+                new BasicDBObject("$gte", dateGte).append("$lt", dateLt)
               )
           )
           .first();
@@ -192,6 +181,19 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     return false;
   }
 
+  @Override
+  public void update(String id, Appointment appointment) {
+    Document appointed = newDoc(appointment);
+    appointed.put("updated", new Date());
+
+    getCollection();
+    appointments.updateOne(
+      new BasicDBObject("_id", new ObjectId(id)),
+      new BasicDBObject("$set", appointed)
+    );
+  }
+
+  @Override
   public void updateField(String id, String field, String data) {
     BasicDBObject updatedData = new BasicDBObject(
       "$set",
@@ -203,5 +205,36 @@ public class AppointmentDAOImpl implements AppointmentDAO {
       new BasicDBObject("_id", new ObjectId(id)),
       updatedData
     );
+  }
+
+  @Override
+  public void getNextAppointment(String employeeId) {
+    Date instantDate = new Date();
+    Date result = instantDate;
+
+    BasicDBObject query = new BasicDBObject(
+      "employeeId",
+      new ObjectId(employeeId)
+    )
+    .append("date", new BasicDBObject("$gte", instantDate));
+    getCollection();
+
+    MongoCursor<Document> cursor = appointments.find(query).iterator();
+    try {
+      while (cursor.hasNext()) {
+        Date temp = cursor.next().getDate("date");
+        if (result.after(temp)) {
+          result = temp;
+        }
+      }
+    } finally {
+      cursor.close();
+    }
+  }
+
+  @Override
+  public void delete(String id) {
+    getCollection();
+    appointments.deleteOne(new BasicDBObject("_id", new ObjectId(id)));
   }
 }
