@@ -9,6 +9,7 @@ import dao.interfaces.EmployeeDAO;
 import dao.interfaces.OwnerDAO;
 import dao.interfaces.PatientDAO;
 import entity.Appointment;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
@@ -41,7 +42,7 @@ public class AppointmentControl {
   private StringProperty financialState = new SimpleStringProperty("");
   private DoubleProperty value = new SimpleDoubleProperty();
   private ObjectProperty date = new SimpleObjectProperty();
-  private ObjectProperty time = new SimpleObjectProperty();
+  private StringProperty time = new SimpleStringProperty();
 
   private ObjectProperty dateGte = new SimpleObjectProperty();
   private ObjectProperty dateLt = new SimpleObjectProperty();
@@ -56,8 +57,8 @@ public class AppointmentControl {
     ObjectId ownerId = new ObjectId(
       getOwnerIdByName(ownerIdProperty().getValue())
     );
-    Date date = fmt.stringToTimeDate(
-      dateProperty().getValue().toString(),
+    Date date = tryToGetDate(
+      (LocalDate) dateProperty().getValue(),
       timeProperty().getValue().toString()
     );
     double value = valueProperty().getValue();
@@ -89,8 +90,8 @@ public class AppointmentControl {
     );
     state.set(fmt.stateIntegerToString(appointment.getState()));
     value.set(appointment.getValue());
-    date.set(appointment.getDate());
-    time.setValue(fmt.dateToLocal(appointment.getDate()));
+    date.set(fmt.dateToLocal(appointment.getDate()));
+    time.set(fmt.hourToString(appointment.getDate()));
   }
 
   public void create() {
@@ -106,7 +107,10 @@ public class AppointmentControl {
       )
     ) {
       service.insert(app);
-      servicePatient.updateLastVisit(app.getPatientId().toString(), app.getDate());
+      servicePatient.updateLastVisit(
+        app.getPatientId().toString(),
+        app.getDate()
+      );
       //should update owner lastVisit?
       // serviceOwner.updateLastVist(app.getOwnerId(), app.getDate());
     }
@@ -307,7 +311,7 @@ public class AppointmentControl {
     return date;
   }
 
-  public ObjectProperty timeProperty() {
+  public StringProperty timeProperty() {
     return time;
   }
 
@@ -323,5 +327,9 @@ public class AppointmentControl {
     return (property.isBlank() || property == null)
       ? new ObjectId()
       : new ObjectId(property);
+  }
+
+  private Date tryToGetDate(LocalDate dateProperty, String timeProperty) {
+    return fmt.stringToTimeDate(fmt.localToString(dateProperty), timeProperty);
   }
 }

@@ -99,6 +99,12 @@ public class Formatters {
     return dt;
   }
 
+  public String localToString(LocalDate date) {
+    return normalizeDateOutcome(date.getDayOfMonth()) + "/" +
+           normalizeDateOutcome(date.getMonthValue()) + "/" +
+           date.getYear();
+  }
+
   public LocalDate dateToLocal(Date date) {
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
   }

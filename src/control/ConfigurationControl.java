@@ -97,8 +97,8 @@ public class ConfigurationControl {
     );
   }
 
-  public void createPhrase(String frase) {
-	  serviceParameters.insertPhrase(frase, 2);
+  public void createPhrase(String phrase) {
+	  serviceParameters.insertPhrase(phrase);
   }
   
 }

@@ -22,19 +22,8 @@ public class DashboardControl {
   }
 	private ParametersDAO service = new ParametersDAOImpl();
 
-	public String getDailyPhrase() {
-		return service.dailyPhrase();
+	public String getRandomPhrase() {
+		return service.getRandomPhrase();
 	}
-
-	private void insertDailyPhrase() {
-		service.insertPhrase("Uma pata e uma mão estendida", 2);
-	}
-
-	public static void main(String[] args) {
-		DashboardControl dc = new DashboardControl();
-
-		dc.getDailyPhrase();
-	}
-
-
 }
+
