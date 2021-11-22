@@ -44,9 +44,6 @@ public class AppointmentControl {
   private ObjectProperty date = new SimpleObjectProperty();
   private StringProperty time = new SimpleStringProperty("");
 
-  private ObjectProperty dateGte = new SimpleObjectProperty();
-  private ObjectProperty dateLt = new SimpleObjectProperty();
-
   public Appointment getEntity() {
     double value = valueProperty().getValue();
 
@@ -65,16 +62,20 @@ public class AppointmentControl {
   }
 
   public void setEntity(Appointment appointment) {
-    id.set((String)appointment.getId().toString());
-    patientId.set(getPatientNameById(appointment.getPatientId().toString()));
-    ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
-    employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
-    obs.set(appointment.getObs());
-    financialState.set(fmt.financialStateIntegerToString(appointment.getFinancialState()));
-    state.set(fmt.stateIntegerToString(appointment.getState()));
-    value.set(appointment.getValue());
-    date.set(fmt.dateToLocal(appointment.getDate()));
-    time.set(fmt.hourToString(appointment.getDate()));
+    try {
+      id.set(appointment.getId().toString());
+      patientId.set(getPatientNameById(appointment.getPatientId().toString()));
+      ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
+      employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
+      obs.set(appointment.getObs());
+      financialState.set(fmt.financialStateIntegerToString(appointment.getFinancialState()));
+      state.set(fmt.stateIntegerToString(appointment.getState()));
+      value.set(appointment.getValue());
+      date.set(fmt.dateToLocal(appointment.getDate()));
+      time.set(fmt.hourToString(appointment.getDate()));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void create() {
@@ -125,13 +126,13 @@ public class AppointmentControl {
     );
   }
 
-  public void findByDate() {
+  public void findByDate(LocalDate dateGte, LocalDate dateLt) {
     listAppointments.clear();
     listAppointments.addAll(
       service.findByDate(
         "date",
-        (Date) dateGteProperty().getValue(),
-        (Date) dateLtProperty().getValue()
+        fmt.localToDate(dateGte),
+        fmt.localToDate(dateLt)
       )
     );
     this.clearFields();
@@ -298,14 +299,6 @@ public class AppointmentControl {
     return time;
   }
 
-  public ObjectProperty dateGteProperty() {
-    return dateGte;
-  }
-
-  public ObjectProperty dateLtProperty() {
-    return dateLt;
-  }
-
   private ObjectId tryToGetId(String property) {
     return (property.isBlank() || property == null)
       ? new ObjectId()
@@ -315,4 +308,9 @@ public class AppointmentControl {
   private Date tryToGetDate(LocalDate dateProperty, String timeProperty) {
     return fmt.stringToTimeDate(fmt.localToString(dateProperty), timeProperty);
   }
+
+  public List<String> getPatientByOwnerName(String newer) {
+    return servicePatient.getPetsByOwner(getOwnerIdByName(newer));
+  }
+
 }
