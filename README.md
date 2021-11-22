@@ -11,13 +11,13 @@
 </p>
 
 <h1 align="center">
-    <img alt="PetsAnatomy" title="#PetsAnatomy" src="./.github/Banner.png"/>
+    <img alt="PetsAnatomy" title="#PetsAnatomy" src="./.github/banner.png"/>
 </h1>
 
-<h4 align="center"> 
-	🚧  PetsAnatomy Em Construção 🏗️  🚧
+<h3 align="center"> 
+	<b>🚧  PetsAnatomy Em Construção 🏗️  🚧</b>
   <img alt="GifPets" title="#GifPets" src="./.github/pets-outline.gif"/>
-</h4>
+</h3>
 
 <p align="center">
  <a href="#-sobre-o-projeto">Sobre</a> •
@@ -57,7 +57,8 @@ O layout da aplicação está disponível no Figma:
 
 <p align="center">
   <img alt="Login" title="#Login" src="./.github/login.png" width="1000px">
-  <img alt="Cadastro" title="#Cadastro" src="./.github/cadastrar-se.png" width="1000px">
+  <img alt="Cadastro" title="#Cadastro" src="./.github/signUp.png" width="1000px">
+    <img alt="Cadastro" title="#Cadastro" src="./.github/dashboard.png" width="1000px">
 </p>
 
 ---
