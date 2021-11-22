@@ -91,7 +91,6 @@ public class OwnerControl {
     address.set("");
     identificationNumber.set("");
     lastVisit.set("");
-    this.listAll();
   }
 
   public String dateToString(Date value) {

@@ -149,7 +149,6 @@ public class AppointmentControl {
     financialState.set("");
     date.set(null);
     time.set("");
-    this.listAll();
   }
 
   public ObservableList<String> getAllPatientIdAndNames() {

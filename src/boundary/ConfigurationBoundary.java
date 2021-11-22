@@ -34,7 +34,8 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	private Button btnClear = new Button("Limpar");
 	private Button btnResetPassword = new Button("Resetar Senha");
 	private Button btnUpdate = new Button("Atualizar");
-	
+	private Button btnUpdateList = new Button("Atualizar Lista");
+
 	Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 	Font fontLbls = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 	Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -144,7 +145,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
         	this.generatedTable();
         }
 
-		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, btnCreatePhrase, table);
+		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, btnCreatePhrase, btnUpdateList, table);
 
 		btnUpdate.setOnAction((e) -> {
 			control.updateRole();
@@ -166,11 +167,18 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		btnCreatePhrase.setLayoutX(230);
 		btnCreatePhrase.setLayoutY(151.0);
 		btnCreatePhrase.setFont(fontBtns);
+
+	    btnUpdateList.setOnAction((e) -> {
+	    	control.listAll();
+	    });
+	    btnUpdateList.setLayoutX(355.0);
+	    btnUpdateList.setLayoutY(151.0);
+	    btnUpdateList.setFont(fontBtns);
 		
 		btnClear.setOnAction((e) -> {
 			control.clearFields();
 		});
-		btnClear.setLayoutX(440.0);
+		btnClear.setLayoutX(980.0);
 		btnClear.setLayoutY(151.0);
 		btnClear.setFont(fontBtns);
 		

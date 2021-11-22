@@ -54,7 +54,6 @@ public class ConfigurationControl {
     email.set("");
     username.set("");
     role.set("");
-    this.listAll();
   }
 
   public ObservableList<Employee> getListEmployees() {

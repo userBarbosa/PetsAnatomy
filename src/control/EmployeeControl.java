@@ -81,7 +81,6 @@ public class EmployeeControl {
     specialty.set("");
     birthDate.set(null);
     role.set("");
-    this.listAll();
   }
 
   public void create() {

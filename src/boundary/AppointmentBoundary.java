@@ -67,7 +67,8 @@ public class AppointmentBoundary implements StrategyBoundary {
   private Button btnFindByDate = new Button("Pesquisar por Data");
   private Button btnCreate = new Button("Adicionar");
   private Button btnDelete = new Button("Remover");
-
+  private Button btnUpdateList = new Button("Atualizar Lista");
+  
   Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
   Font fontLbls = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
   Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -78,6 +79,45 @@ public class AppointmentBoundary implements StrategyBoundary {
 
   public void generatedTable() {
     control.listAll();
+    
+    ObservableList<String> timeOptions = FXCollections.observableArrayList(ws.workShift(8, 17, 30));
+    cbTime.setItems(timeOptions);
+    
+    cbOwner.setItems(control.getAllOwnerIdAndNames());
+    
+    cbOwner
+    .valueProperty()
+    .addListener(
+      (obs, older, newer) -> {
+        if (newer == null || newer == "") {
+          cbPatient.setDisable(true);
+          cbPatient.getItems().clear();
+        } else {
+          List<String> patientsByOwner = control.getPatientByOwnerName(newer);
+          cbPatient.getItems().setAll(patientsByOwner);
+          cbPatient.setDisable(false);
+        }
+      }
+    );
+    
+    cbPatient.setDisable(true);
+
+    cbEmployee.setItems(control.getAllEmployeeIdAndNames());
+    
+    ObservableList<String> states = FXCollections.observableArrayList(
+    	      "Agendado",
+    	      "Encerrado",
+    	      "Cancelada"
+    	    );
+    cbState.setItems(states);
+    
+    ObservableList<String> financialStates = FXCollections.observableArrayList(
+    	      "Pago",
+    	      "Parcialmente pago",
+    	      "Não pago",
+    	      "Cancelado"
+    	    );
+    cbFinancialState.setItems(financialStates);
 
     TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
     colDate.setCellValueFactory(
@@ -87,11 +127,6 @@ public class AppointmentBoundary implements StrategyBoundary {
       }
     );
 
-    ObservableList<String> timeOptions = FXCollections.observableArrayList(
-      ws.workShift(8, 17, 30)
-    );
-    cbTime.setItems(timeOptions);
-
     TableColumn<Appointment, String> colTime = new TableColumn<>("Horário");
     colTime.setCellValueFactory(
       appointmentProp -> {
@@ -99,8 +134,6 @@ public class AppointmentBoundary implements StrategyBoundary {
         return new ReadOnlyStringWrapper(control.hourToString(date));
       }
     );
-
-    cbOwner.setItems(control.getAllOwnerIdAndNames());
 
     TableColumn<Appointment, String> colOwner = new TableColumn<>("Dono");
     colOwner.setCellValueFactory(
@@ -110,21 +143,6 @@ public class AppointmentBoundary implements StrategyBoundary {
       }
     );
 
-    cbOwner
-      .valueProperty()
-      .addListener(
-        (obs, older, newer) -> {
-          if (newer == null || newer == "") {
-            cbPatient.setDisable(true);
-            cbPatient.getItems().clear();
-          } else {
-            List<String> patientsByOwner = control.getPatientByOwnerName(newer);
-            cbPatient.getItems().setAll(patientsByOwner);
-            cbPatient.setDisable(false);
-          }
-        }
-      );
-
     TableColumn<Appointment, String> colPatient = new TableColumn<>("Paciente");
     colPatient.setCellValueFactory(
       appointmentProp -> {
@@ -132,10 +150,6 @@ public class AppointmentBoundary implements StrategyBoundary {
         return new ReadOnlyStringWrapper(control.getPatientNameById(patientId));
       }
     );
-
-    cbPatient.setDisable(true);
-
-    cbEmployee.setItems(control.getAllEmployeeIdAndNames());
 
     TableColumn<Appointment, String> colEmployee = new TableColumn<>("Médico");
     colEmployee.setCellValueFactory(
@@ -150,13 +164,6 @@ public class AppointmentBoundary implements StrategyBoundary {
       }
     );
 
-    ObservableList<String> states = FXCollections.observableArrayList(
-      "Agendado",
-      "Encerrado",
-      "Cancelada"
-    );
-    cbState.setItems(states);
-
     TableColumn<Appointment, String> colState = new TableColumn<>("Status");
     colState.setCellValueFactory(
       appointmentProp -> {
@@ -164,14 +171,6 @@ public class AppointmentBoundary implements StrategyBoundary {
         return new ReadOnlyStringWrapper(control.stateIntegerToString(state));
       }
     );
-
-    ObservableList<String> financialStates = FXCollections.observableArrayList(
-      "Pago",
-      "Parcialmente pago",
-      "Não pago",
-      "Cancelado"
-    );
-    cbFinancialState.setItems(financialStates);
 
     TableColumn<Appointment, String> colFinancialState = new TableColumn<>(
       "Pagamento"
@@ -386,20 +385,18 @@ public class AppointmentBoundary implements StrategyBoundary {
         btnUpdate,
         btnDelete,
         btnClear,
+        btnUpdateList,
         table
       );
 
-    btnCreate.setOnAction(
-      e -> {
+    btnCreate.setOnAction((e) -> {
         control.create();
-      }
-    );
+    });
     btnCreate.setLayoutX(24.0);
     btnCreate.setLayoutY(246.0);
     btnCreate.setFont(fontBtns);
 
-    btnDelete.setOnAction(
-      e -> {
+    btnDelete.setOnAction((e) -> {
         if (tfId.getText() == "" || tfId.getText() == null) {
           JOptionPane.showMessageDialog(
             null,
@@ -425,43 +422,41 @@ public class AppointmentBoundary implements StrategyBoundary {
     btnDelete.setLayoutY(246.0);
     btnDelete.setFont(fontBtns);
 
-    btnUpdate.setOnAction(
-      e -> {
+    btnUpdate.setOnAction((e) -> {
         control.updateById();
-      }
-    );
+    });
     btnUpdate.setLayoutX(205.0);
     btnUpdate.setLayoutY(246.0);
     btnUpdate.setFont(fontBtns);
 
-    btnFind.setOnAction(
-      e -> {
+    btnFind.setOnAction((e) -> {
         control.findByField();
-      }
-    );
+    });
     btnFind.setLayoutX(290.0);
     btnFind.setLayoutY(246.0);
     btnFind.setFont(fontBtns);
 
-    btnFindByDate.setOnAction(
-      e -> {
+    btnFindByDate.setOnAction((e) -> {
         this.findByDatePopup();
-        //        control.findByDate();
-      }
-    );
+    });
     btnFindByDate.setLayoutX(380.0);
     btnFindByDate.setLayoutY(246.0);
     btnFindByDate.setFont(fontBtns);
+    
+    btnUpdateList.setOnAction((e) -> {
+    	control.listAll();
+    });
+    btnUpdateList.setLayoutX(540.0);
+    btnUpdateList.setLayoutY(246.0);
+    btnUpdateList.setFont(fontBtns);
 
-    btnClear.setOnAction(
-      e -> {
+    btnClear.setOnAction((e) -> {
         control.clearFields();
-      }
-    );
-    btnClear.setLayoutX(540.0);
+    });
+    btnClear.setLayoutX(980.0);
     btnClear.setLayoutY(246.0);
     btnClear.setFont(fontBtns);
-
+    
     return formPane;
   }
 
@@ -495,12 +490,10 @@ public class AppointmentBoundary implements StrategyBoundary {
     dpDateLt.setPrefHeight(25.0);
     dpDateLt.setPrefWidth(100.0);
 
-    btnDismiss.setOnAction(
-      e -> {
+    btnDismiss.setOnAction((e) -> {
         control.findByDate(dpDateGte.getValue(), dpDateLt.getValue());
         popup.close();
-      }
-    );
+    });
     btnDismiss.setLayoutX(25.0);
     btnDismiss.setLayoutY(60.0);
     btnDismiss.setFont(fontBtns);

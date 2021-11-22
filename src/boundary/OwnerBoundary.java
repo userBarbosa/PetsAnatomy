@@ -46,6 +46,7 @@ public class OwnerBoundary implements StrategyBoundary {
 	private Button btnFind = new Button("Pesquisar");
 	private Button btnCreate = new Button("Adicionar");
 	private Button btnDelete = new Button("Remover");
+	private Button btnUpdateList = new Button("Atualizar Lista");
 
 	private static OwnerControl control = new OwnerControl();
 	private TableView<Owner> table = new TableView<Owner>();
@@ -224,7 +225,7 @@ public class OwnerBoundary implements StrategyBoundary {
 		
 		formPane.getChildren().addAll(lblId, tfId, lblPatients, tfPatients, lblEmail, tfEmail, lblFullname, tfFullname, 
 				lblTelephoneNumber, tfTelephoneNumber, lblAddress, tfAddress, lblIdentificationNumber, tfIdentificationNumber, 
-				lblLastVisit, tfLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
+				lblLastVisit, tfLastVisit, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, btnUpdateList, table);
 		
 		btnCreate.setOnAction((e) -> {
 			control.create();
@@ -232,21 +233,7 @@ public class OwnerBoundary implements StrategyBoundary {
 		btnCreate.setLayoutX(15.0);
 		btnCreate.setLayoutY(269.0);
 		btnCreate.setFont(fontBtns);
-
-		btnFind.setOnAction((e) -> {
-			control.findByField();
-		});
-		btnFind.setLayoutX(281.0);
-		btnFind.setLayoutY(269.0);
-		btnFind.setFont(fontBtns);
-
-		btnUpdate.setOnAction((e) -> {
-			control.updateById();
-		});
-		btnUpdate.setLayoutX(196.0);
-		btnUpdate.setLayoutY(269.0);
-		btnUpdate.setFont(fontBtns);
-
+		
 		btnDelete.setOnAction((e) -> {
 	    	  if (tfId.getText() == "" || tfId.getText()== null) {
 	    		  JOptionPane.showMessageDialog(
@@ -267,10 +254,31 @@ public class OwnerBoundary implements StrategyBoundary {
 		btnDelete.setLayoutY(269.0);
 		btnDelete.setFont(fontBtns);
 
+		btnUpdate.setOnAction((e) -> {
+			control.updateById();
+		});
+		btnUpdate.setLayoutX(196.0);
+		btnUpdate.setLayoutY(269.0);
+		btnUpdate.setFont(fontBtns);
+		
+		btnFind.setOnAction((e) -> {
+			control.findByField();
+		});
+		btnFind.setLayoutX(281.0);
+		btnFind.setLayoutY(269.0);
+		btnFind.setFont(fontBtns);
+		
+        btnUpdateList.setOnAction((e) -> {
+        	control.listAll();
+        });
+        btnUpdateList.setLayoutX(380.0);
+        btnUpdateList.setLayoutY(269.0);
+        btnUpdateList.setFont(fontBtns);
+
 		btnClear.setOnAction((e) -> {
 			control.clearFields();
 		});
-		btnClear.setLayoutX(450.0);
+		btnClear.setLayoutX(980.0);
 		btnClear.setLayoutY(269.0);
 		btnClear.setFont(fontBtns);
 

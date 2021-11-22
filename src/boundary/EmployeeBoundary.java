@@ -50,6 +50,7 @@ public class EmployeeBoundary implements StrategyBoundary {
   private Button btnFind = new Button("Pesquisar");
   private Button btnCreate = new Button("Adicionar");
   private Button btnDelete = new Button("Remover");
+  private Button btnUpdateList = new Button("Atualizar Lista");
 
   private static EmployeeControl control = new EmployeeControl();
   private TableView<Employee> table = new TableView<Employee>();
@@ -62,6 +63,25 @@ public class EmployeeBoundary implements StrategyBoundary {
       "Inativo"
     );
     cbActive.setItems(status);
+    
+    ObservableList<String> specialty = FXCollections.observableArrayList(
+    	      "Acupunturista",
+    	      "Cardiologista",
+    	      "Comportamento animal",
+    	      "Dermatologista",
+    	      "Endocrinologista",
+    	      "Fisioterapeuta",
+    	      "Hematologista",
+    	      "Homeopata",
+    	      "Nefrologista",
+    	      "Neurologista",
+    	      "Nutrólogo",
+    	      "Dentista",
+    	      "Oftalmologista",
+    	      "Ortopedista",
+    	      "Pediatra"
+    	    );
+    cbSpecialty.setItems(specialty);
 
     TableColumn<Employee, String> colActive = new TableColumn<>("Status");
     colActive.setCellValueFactory(
@@ -101,25 +121,6 @@ public class EmployeeBoundary implements StrategyBoundary {
     colBankDetails.setCellValueFactory(
       new PropertyValueFactory<Employee, String>("bankDetails")
     );
-
-    ObservableList<String> specialty = FXCollections.observableArrayList(
-      "Acupunturista",
-      "Cardiologista",
-      "Comportamento animal",
-      "Dermatologista",
-      "Endocrinologista",
-      "Fisioterapeuta",
-      "Hematologista",
-      "Homeopata",
-      "Nefrologista",
-      "Neurologista",
-      "Nutrólogo",
-      "Dentista",
-      "Oftalmologista",
-      "Ortopedista",
-      "Pediatra"
-    );
-    cbSpecialty.setItems(specialty);
 
     TableColumn<Employee, String> colSpecialty = new TableColumn<>(
       "Especialidade"
@@ -327,38 +328,18 @@ public class EmployeeBoundary implements StrategyBoundary {
         btnUpdate,
         btnDelete,
         btnClear,
+        btnUpdateList,
         table
       );
 
-    btnCreate.setOnAction(
-      e -> {
-        control.create();
-      }
-    );
+    btnCreate.setOnAction((e) -> {
+    	control.create();
+    });
     btnCreate.setLayoutX(15.0);
     btnCreate.setLayoutY(269.0);
     btnCreate.setFont(fontBtns);
-
-    btnFind.setOnAction(
-      e -> {
-        control.findByField();
-      }
-    );
-    btnFind.setLayoutX(281.0);
-    btnFind.setLayoutY(269.0);
-    btnFind.setFont(fontBtns);
-
-    btnUpdate.setOnAction(
-      e -> {
-        control.updateById();
-      }
-    );
-    btnUpdate.setLayoutX(196.0);
-    btnUpdate.setLayoutY(269.0);
-    btnUpdate.setFont(fontBtns);
-
-    btnDelete.setOnAction(
-      e -> {
+    
+    btnDelete.setOnAction((e) -> {
         if (tfId.getText() == "" || tfId.getText() == null) {
           JOptionPane.showMessageDialog(
             null,
@@ -383,13 +364,32 @@ public class EmployeeBoundary implements StrategyBoundary {
     btnDelete.setLayoutX(105.0);
     btnDelete.setLayoutY(269.0);
     btnDelete.setFont(fontBtns);
+    
+    btnUpdate.setOnAction((e) -> {
+        control.updateById();
+    });
+    btnUpdate.setLayoutX(196.0);
+    btnUpdate.setLayoutY(269.0);
+    btnUpdate.setFont(fontBtns);
 
-    btnClear.setOnAction(
-      e -> {
-        control.clearFields();
-      }
-    );
-    btnClear.setLayoutX(450.0);
+    btnFind.setOnAction((e) -> {
+    	control.findByField();
+    });
+    btnFind.setLayoutX(281.0);
+    btnFind.setLayoutY(269.0);
+    btnFind.setFont(fontBtns);
+    
+    btnUpdateList.setOnAction((e) -> {
+    	control.listAll();
+    });
+    btnUpdateList.setLayoutX(380.0);
+    btnUpdateList.setLayoutY(269.0);
+    btnUpdateList.setFont(fontBtns);
+
+    btnClear.setOnAction((e) -> {
+    	control.clearFields();
+	});
+    btnClear.setLayoutX(980.0);
     btnClear.setLayoutY(269.0);
     btnClear.setFont(fontBtns);
 

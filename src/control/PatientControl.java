@@ -144,7 +144,6 @@ public class PatientControl {
     birthdate.set(null);
     lastVisit.set(null);
     treatment.set("");
-    this.listAll();
   }
 
   public String timeDateToString(Date value) {
