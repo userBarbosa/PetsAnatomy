@@ -15,7 +15,8 @@
 </h1>
 
 <h4 align="center"> 
-	🚧  PetsAnatomy <img alt="GifPets" title="#GifPets" src="./.github/pets-outline.gif" /> Em Construção 🏗️  🚧
+	🚧  PetsAnatomy Em Construção 🏗️  🚧
+  <img alt="GifPets" title="#GifPets" src="./.github/pets-outline.gif"/>
 </h4>
 
 <p align="center">
