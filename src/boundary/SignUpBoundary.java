@@ -1,7 +1,8 @@
 package boundary;
 
-import control.SignUpControl;
 import java.io.FileInputStream;
+
+import control.SignUpControl;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import utils.MongoConnect;
 
 public class SignUpBoundary extends Application {
 
@@ -260,6 +262,8 @@ public class SignUpBoundary extends Application {
   }
 
   public static void main(String[] args) {
+    MongoConnect mc = new MongoConnect();
+		mc.connection();
     launch(args);
   }
 }
