@@ -12,7 +12,6 @@ public interface PatientDAO {
 	Patient findByID(String field, String id);
 	List<Patient> findByField(String field, String data);
 	List<Patient> findByDate(String field, Date dateGte, Date dateLt);
-	boolean findScheduleAppointments(Date date, String patientId);
 	List<Patient> getAllPatients();
 	List<String> getPetsByOwner(String ownerId);
 	List<Pair<String, String>> getAllIdAndNames();

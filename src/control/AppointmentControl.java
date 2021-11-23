@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
+import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
 import utils.Formatters;
 
@@ -51,43 +52,49 @@ public class AppointmentControl {
       new ObjectId(getEmployeeIdByName(employeeIdProperty().getValue())),
       new ObjectId(getPatientIdByName(patientIdProperty().getValue())),
       new ObjectId(getOwnerIdByName(ownerIdProperty().getValue())),
-      tryToGetDate((LocalDate) dateProperty().getValue(), timeProperty().getValue().toString()),
+      tryToGetDate(
+        (LocalDate) dateProperty().getValue(),
+        timeProperty().getValue().toString()
+      ),
       value
     );
     appointment.setId(tryToGetId(idProperty().getValue()));
     appointment.setObs(obsProperty().getValue());
     appointment.setState(fmt.stateStringToInteger(stateProperty().getValue()));
-    appointment.setFinancialState(fmt.financialStateStringToInteger(financialStateProperty().getValue()));
+    appointment.setFinancialState(
+      fmt.financialStateStringToInteger(financialStateProperty().getValue())
+    );
     return appointment;
   }
 
   public void setEntity(Appointment appointment) {
-    try {
-      id.set(appointment.getId().toString());
-      patientId.set(getPatientNameById(appointment.getPatientId().toString()));
-      ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
-      employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
-      obs.set(appointment.getObs());
-      financialState.set(fmt.financialStateIntegerToString(appointment.getFinancialState()));
-      state.set(fmt.stateIntegerToString(appointment.getState()));
-      value.set(appointment.getValue());
-      date.set(fmt.dateToLocal(appointment.getDate()));
-      time.set(fmt.hourToString(appointment.getDate()));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    id.set(appointment.getId().toString());
+    patientId.set(getPatientNameById(appointment.getPatientId().toString()));
+    ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
+    employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
+    obs.set(appointment.getObs());
+    financialState.set(
+      fmt.financialStateIntegerToString(appointment.getFinancialState())
+    );
+    state.set(fmt.stateIntegerToString(appointment.getState()));
+    value.set(appointment.getValue());
+    date.set(fmt.dateToLocal(appointment.getDate()));
+    time.set(fmt.hourToString(appointment.getDate()));
   }
 
   public void create() {
     Appointment app = getEntity();
+
     if (
       !service.findScheduleAppointment(
-        app.getDate(),
-        app.getEmployeeId().toString()
+        "employeeId",
+        app.getEmployeeId().toString(),
+        app.getDate()
       ) &&
-      !servicePatient.findScheduleAppointments(
-        app.getDate(),
-        app.getPatientId().toString()
+      !service.findScheduleAppointment(
+        "patientId",
+        app.getPatientId().toString(),
+        app.getDate()
       )
     ) {
       service.insert(app);
@@ -97,10 +104,16 @@ public class AppointmentControl {
       );
       //should update owner lastVisit?
       // serviceOwner.updateLastVist(app.getOwnerId(), app.getDate());
+      this.listAll();
+      this.clearFields();
+    } else {
+      JOptionPane.showMessageDialog(
+        null,
+        "Médico ou pacientes ocupados nessa data e horario",
+        "Error",
+        JOptionPane.ERROR_MESSAGE
+      );
     }
-
-    this.listAll();
-    this.clearFields();
   }
 
   public void updateById() {
@@ -122,7 +135,10 @@ public class AppointmentControl {
   public void findByField() {
     listAppointments.clear();
     listAppointments.addAll(
-      service.findByField("patientId", patientIdProperty().getValue())
+      service.findManyById(
+        "patientId",
+        getPatientIdByName(patientIdProperty().getValue())
+      )
     );
   }
 
@@ -132,7 +148,7 @@ public class AppointmentControl {
       service.findByDate(
         "date",
         fmt.localToDate(dateGte),
-        fmt.localToDate(dateLt)
+        fmt.localToDate(dateLt.plusDays(1))
       )
     );
     this.clearFields();
@@ -311,5 +327,4 @@ public class AppointmentControl {
   public List<String> getPatientByOwnerName(String newer) {
     return servicePatient.getPetsByOwner(getOwnerIdByName(newer));
   }
-
 }

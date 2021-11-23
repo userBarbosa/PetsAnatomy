@@ -164,37 +164,6 @@ public class PatientDAOImpl implements PatientDAO {
   }
 
   @Override
-  public boolean findScheduleAppointments(Date date, String patientId) {
-    Document query = new Document();
-    getCollection();
-
-    LocalDateTime dateGte = date
-      .toInstant()
-      .atZone(ZoneId.systemDefault())
-      .toLocalDateTime();
-    LocalDateTime dateLt = dateGte.plusMinutes(29);
-
-    try {
-      query =
-        patients
-          .find(
-            new Document("_id", new ObjectId(patientId))
-            .append(
-                "date",
-                new BasicDBObject("$gte", dateGte).append("$lt", dateLt)
-              )
-          )
-          .first();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    if (query != null) {
-      return true;
-    }
-    return false;
-  }
-
-  @Override
   public List<String> getPetsByOwner(String ownerId) {
     List<String> cbPets = new ArrayList<String>();
     getCollection();

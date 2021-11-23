@@ -493,6 +493,8 @@ public class AppointmentBoundary implements StrategyBoundary {
     btnDismiss.setOnAction((e) -> {
         control.findByDate(dpDateGte.getValue(), dpDateLt.getValue());
         popup.close();
+        dpDateGte.setValue(null);
+        dpDateLt.setValue(null);
     });
     btnDismiss.setLayoutX(25.0);
     btnDismiss.setLayoutY(60.0);
