@@ -14,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
-public class SideMenuBoundary implements StrategyBoundary, EventHandler<ActionEvent> {
+public class SideMenuBoundary implements StrategyBoundary {
 
 	private RadioButton btnHome = new RadioButton("PetsAnatomy");	
 	private RadioButton btnAgenda = new RadioButton("Agenda");
@@ -25,17 +25,15 @@ public class SideMenuBoundary implements StrategyBoundary, EventHandler<ActionEv
 	private RadioButton btnSair = new RadioButton("Sair");
 
 	private static AnchorPane sideMenu = new AnchorPane();
-	AnchorPane mainPane = MainBoundary.mainPane;
-	Map<String, StrategyBoundary> boundaries = new HashMap<>();
-
-	public SideMenuBoundary() {
-		boundaries.put("PetsAnatomy", new DashboardBoundary());
-		boundaries.put("Agenda", new AppointmentBoundary());
-		boundaries.put("Pacientes", new PatientBoundary());
-		boundaries.put("Clientes", new OwnerBoundary());
-		boundaries.put("Funcionários", new EmployeeBoundary());
-		boundaries.put("Configurações", new ConfigurationBoundary());
-	}
+	
+	MainBoundary main = new MainBoundary();
+	
+	StrategyBoundary dash = new DashboardBoundary();
+	StrategyBoundary appointment = new AppointmentBoundary();
+	StrategyBoundary patient = new PatientBoundary();
+	StrategyBoundary owner = new OwnerBoundary();
+	StrategyBoundary employee = new EmployeeBoundary();
+	StrategyBoundary configuration = new ConfigurationBoundary();
 	
 	@Override
 	public Pane generateBoundaryStrategy() {
@@ -51,7 +49,12 @@ public class SideMenuBoundary implements StrategyBoundary, EventHandler<ActionEv
 		btnHome.setLayoutX(0.0);
 		btnHome.setMinSize(300.0, 55.0);
 		btnHome.setFont(fontBtnHome);
-		btnHome.setOnAction(this);
+		btnHome.setOnAction((e) -> {
+			main.setRightPane(dash.generateBoundaryStrategy());
+			if (!btnHome.isSelected()) {
+				btnHome.setSelected(true);    
+			}
+		});
 		btnHome.setToggleGroup(group);
 		btnHome.setSelected(true);
 		btnHome.setAlignment(Pos.CENTER);
@@ -59,35 +62,60 @@ public class SideMenuBoundary implements StrategyBoundary, EventHandler<ActionEv
 		btnAgenda.setLayoutY(110.0);
 		btnAgenda.setMinSize(300.0, 50.0);
 		btnAgenda.setFont(fontBtns);
-		btnAgenda.setOnAction(this);
+		btnAgenda.setOnAction((e) -> {
+			main.setRightPane(patient.generateBoundaryStrategy());
+			if (!btnAgenda.isSelected()) {
+				btnAgenda.setSelected(true);    
+			}
+		});
 		btnAgenda.setToggleGroup(group);
 		btnAgenda.setAlignment(Pos.CENTER);
 
 		btnPacientes.setLayoutY(180.0);
 		btnPacientes.setMinSize(300.0, 50.0);
 		btnPacientes.setFont(fontBtns);
-		btnPacientes.setOnAction(this);
+		btnPacientes.setOnAction((e) -> {
+			main.setRightPane(patient.generateBoundaryStrategy());
+			if(!btnPacientes.isSelected()) {
+				btnPacientes.setSelected(true);    
+			}
+		});
 		btnPacientes.setToggleGroup(group);
 		btnPacientes.setAlignment(Pos.CENTER);
 		
 		btnClientes.setLayoutY(250.0);
 		btnClientes.setMinSize(300.0, 50.0);
 		btnClientes.setFont(fontBtns);
-		btnClientes.setOnAction(this);
+		btnClientes.setOnAction((e) -> {
+			main.setRightPane(owner.generateBoundaryStrategy());
+			if(!btnClientes.isSelected()) {
+				btnClientes.setSelected(true);    
+			}
+		});
 		btnClientes.setToggleGroup(group);
 		btnClientes.setAlignment(Pos.CENTER);
 		
 		btnFuncionarios.setLayoutY(320.0);
 		btnFuncionarios.setMinSize(300.0, 50.0);
 		btnFuncionarios.setFont(fontBtns);
-		btnFuncionarios.setOnAction(this);
+		btnFuncionarios.setOnAction((e) -> {
+			main.setRightPane(employee.generateBoundaryStrategy());
+			if (!btnFuncionarios.isSelected()) {
+				btnFuncionarios.setSelected(true);    
+			}
+		});
 		btnFuncionarios.setToggleGroup(group);
 		btnFuncionarios.setAlignment(Pos.CENTER);
 		
 		btnConfiguracoes.setLayoutY(390.0);
 		btnConfiguracoes.setMinSize(300.0, 50.0);
 		btnConfiguracoes.setFont(fontBtns);
-		btnConfiguracoes.setOnAction(this);
+		btnConfiguracoes.setOnAction((e) -> {
+			main.setRightPane(configuration.generateBoundaryStrategy());
+			if (!btnConfiguracoes.isSelected()) {
+				btnConfiguracoes.setSelected(true);    
+			}
+		});
 		btnConfiguracoes.setToggleGroup(group);
 		btnConfiguracoes.setAlignment(Pos.CENTER);
 		
@@ -103,24 +131,9 @@ public class SideMenuBoundary implements StrategyBoundary, EventHandler<ActionEv
 		btnSair.setAlignment(Pos.CENTER);
 		
 		sideMenu.getChildren().addAll(btnHome, btnAgenda, btnPacientes, btnClientes, btnFuncionarios, btnConfiguracoes, btnSair);
-
+		sideMenu.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());;
+		
 		return sideMenu;
 	}
 
-	@Override
-	public void handle(ActionEvent e) {
-		EventTarget target = e.getTarget();
-		if (target instanceof RadioButton) {
-			RadioButton radioButton = (RadioButton) target;
-			String text = radioButton.getText();
-			StrategyBoundary boundary = boundaries.get(text);
-			mainPane.getChildren().clear();
-			mainPane.setRightAnchor(boundary.generateBoundaryStrategy(), 0.0);
-			mainPane.setLeftAnchor(sideMenu, 0.0);
-			mainPane.getChildren().addAll(sideMenu, boundary.generateBoundaryStrategy());
-			if(!radioButton.isSelected()) {
-				radioButton.setSelected(true);    
-			}
-		}
-	}
 }

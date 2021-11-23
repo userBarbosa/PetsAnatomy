@@ -26,7 +26,7 @@ public class LoginBoundary implements StrategyBoundary {
   private TextField tfPassword = new TextField();
 
   private Button btnLogin = new Button("Login");
-  private Button btnSignUp = new Button("Cadastrar-se");
+  public Button btnSignUp = new Button("Cadastrar-se");
   private Button btnForgotPassword = new Button("Esqueci minha senha");
 
   Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
@@ -40,8 +40,6 @@ public class LoginBoundary implements StrategyBoundary {
   Button btnDismiss = new Button("Confirmar");
 
   private static LoginControl control = new LoginControl();
-
-  // private static SignUpBoundary signUp = new SignUpBoundary();
 
   @Override
   public Pane generateBoundaryStrategy() {
