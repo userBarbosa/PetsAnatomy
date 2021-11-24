@@ -35,6 +35,7 @@ public class LoginBoundary extends Application {
 	Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
 	Font fontTxt = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 	
+	TextField tfResetUsername = new TextField();
 	PasswordField pfResetPassword = new PasswordField();
 	TextField tfResetPassword = new TextField();
 	CheckBox cbResetPassword = new CheckBox("Mostrar/Esconder Senha");
@@ -218,39 +219,49 @@ public class LoginBoundary extends Application {
 		popup.initModality(Modality.WINDOW_MODAL);
 		
 		AnchorPane pane = new AnchorPane();
-		Scene scene = new Scene(pane, 420, 140);
+		Scene scene = new Scene(pane, 420, 160);
 		popup.setScene(scene);
 		
+		tfResetUsername.setLayoutX(25.0);
+		tfResetUsername.setLayoutY(10.0);
+		tfResetUsername.setPrefHeight(25.0);
+		tfResetUsername.setPrefWidth(370.0);	
+		tfResetUsername.setFont(fontTf);
+		tfResetUsername.setPromptText("Digite o usuário");
+		
 		tfResetPassword.setLayoutX(25.0);
-		tfResetPassword.setLayoutY(20.0);
+		tfResetPassword.setLayoutY(50.0);
 		tfResetPassword.setPrefHeight(25.0);
 		tfResetPassword.setPrefWidth(370.0);	
 		tfResetPassword.setFont(fontTf);
 		tfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty());
 		tfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty());
-		tfResetPassword.textProperty().bindBidirectional(pfPassword.textProperty());
+		tfResetPassword.textProperty().bindBidirectional(pfResetPassword.textProperty());
 		
 		pfResetPassword.setLayoutX(25.0);
-		pfResetPassword.setLayoutY(20.0);
+		pfResetPassword.setLayoutY(50.0);
 		pfResetPassword.setPrefHeight(25.0);
 		pfResetPassword.setPrefWidth(370.0);		
 		pfResetPassword.setStyle("-fx-border-color: #000E44;");
 		pfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty().not());
 		pfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty().not());
+		pfResetPassword.setPromptText("Digite a senha");
 		
 		cbResetPassword.setFont(fontTxt);
 		cbResetPassword.setLayoutX(25.0);
-		cbResetPassword.setLayoutY(60.0);
+		cbResetPassword.setLayoutY(90.0);
 		
 		btnDismiss.setOnAction( (e) -> {
-	        control.forgotPassword(tfUsername.getText(), pfResetPassword.getText());
+	        control.forgotPassword(tfResetUsername.getText(), pfResetPassword.getText());
 			popup.close();
+			tfResetUsername.setText("");
+			pfResetPassword.setText("");
 		});
 		btnDismiss.setLayoutX(25.0);
-		btnDismiss.setLayoutY(90.0);
+		btnDismiss.setLayoutY(120.0);
 		btnDismiss.setFont(fontTf);
 		
-		pane.getChildren().addAll(pfResetPassword, cbResetPassword, tfResetPassword, btnDismiss);
+		pane.getChildren().addAll(tfResetUsername, pfResetPassword, cbResetPassword, tfResetPassword, btnDismiss);
 		
 		popup.setTitle("Esqueci minha senha");	
 		popup.setResizable(false);
