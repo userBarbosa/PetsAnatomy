@@ -55,6 +55,30 @@ public class ConfigurationControl {
     username.set("");
     role.set("");
   }
+  
+  public void updateRole() {
+	  service.updateField(
+			  idProperty().getValue(),
+			  "role",
+			  roleProperty().getValue()
+			  );
+	  this.listAll();
+	  this.clearFields();
+  }
+
+  public void resetPassword() {
+	  service.updatePassword(idProperty().getValue(), "12345");
+	  JOptionPane.showMessageDialog(
+			  null,
+			  "Senha resetada!",
+			  "Sucesso",
+			  JOptionPane.INFORMATION_MESSAGE
+			  );
+  }
+
+  public void createPhrase(String phrase) {
+	  serviceParameters.insertPhrase(phrase);
+  }
 
   public ObservableList<Employee> getListEmployees() {
     return listEmployees;
@@ -74,30 +98,6 @@ public class ConfigurationControl {
 
   public StringProperty roleProperty() {
     return role;
-  }
-
-  public void updateRole() {
-    service.updateField(
-      idProperty().getValue(),
-      "role",
-      roleProperty().getValue()
-    );
-    this.listAll();
-    this.clearFields();
-  }
-
-  public void resetPassword() {
-    service.updatePassword(idProperty().getValue(), "12345");
-    JOptionPane.showMessageDialog(
-      null,
-      "Senha resetada!",
-      "Sucesso",
-      JOptionPane.INFORMATION_MESSAGE
-    );
-  }
-
-  public void createPhrase(String phrase) {
-	  serviceParameters.insertPhrase(phrase);
   }
   
 }

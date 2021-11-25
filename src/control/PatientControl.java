@@ -76,7 +76,6 @@ public class PatientControl {
       p.getOwnerId().toString(),
       p.getId().toString()
     );
-    //should clear fields?
     this.listAll();
   }
 
@@ -157,6 +156,22 @@ public class PatientControl {
   public String treatmentBooleanToString(Boolean value) {
     return fmt.treatmentBooleanToString(value);
   }
+  
+  private ObjectId tryToGetId(String property) {
+	  return (property.isBlank() || property == null)
+			  ? new ObjectId()
+					  : new ObjectId(property);
+  }
+
+  private Date tryToGetLastVisit(String property) {
+
+	  if (property == "" || property == null) {
+		  return new Date();
+	  }
+	  String splittedDate[] = property.split(" às ");
+
+	  return fmt.stringToTimeDate(splittedDate[0], splittedDate[1]);
+  }
 
   public ObservableList<Patient> getListPatients() {
     return listPatients;
@@ -202,19 +217,4 @@ public class PatientControl {
     return treatment;
   }
 
-  private ObjectId tryToGetId(String property) {
-    return (property.isBlank() || property == null)
-      ? new ObjectId()
-      : new ObjectId(property);
-  }
-
-  private Date tryToGetLastVisit(String property) {
-    
-    if (property == "" || property == null) {
-      return new Date();
-    }
-    String splittedDate[] = property.split(" às ");
-    
-    return fmt.stringToTimeDate(splittedDate[0], splittedDate[1]);
-  }
 }

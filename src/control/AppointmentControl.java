@@ -273,6 +273,20 @@ public class AppointmentControl {
   public ObservableList<Appointment> getListAppointments() {
     return listAppointments;
   }
+  
+  private ObjectId tryToGetId(String property) {
+	  return (property.isBlank() || property == null)
+			  ? new ObjectId()
+					  : new ObjectId(property);
+  }
+
+  private Date tryToGetDate(LocalDate dateProperty, String timeProperty) {
+	  return fmt.stringToTimeDate(fmt.localToString(dateProperty), timeProperty);
+  }
+
+  public List<String> getPatientByOwnerName(String newer) {
+	  return servicePatient.getPetsByOwner(getOwnerIdByName(newer));
+  }
 
   public StringProperty idProperty() {
     return id;
@@ -313,18 +327,5 @@ public class AppointmentControl {
   public StringProperty timeProperty() {
     return time;
   }
-
-  private ObjectId tryToGetId(String property) {
-    return (property.isBlank() || property == null)
-      ? new ObjectId()
-      : new ObjectId(property);
-  }
-
-  private Date tryToGetDate(LocalDate dateProperty, String timeProperty) {
-    return fmt.stringToTimeDate(fmt.localToString(dateProperty), timeProperty);
-  }
-
-  public List<String> getPatientByOwnerName(String newer) {
-    return servicePatient.getPetsByOwner(getOwnerIdByName(newer));
-  }
+  
 }
