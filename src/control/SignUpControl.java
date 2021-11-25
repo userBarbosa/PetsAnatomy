@@ -87,4 +87,5 @@ public class SignUpControl {
   public StringProperty passwordProperty() {
     return password;
   }
+  
 }

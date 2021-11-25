@@ -29,7 +29,7 @@ public class OwnerControl {
   private StringProperty identificationNumber = new SimpleStringProperty("");
   private StringProperty lastVisit = new SimpleStringProperty("");
 
-  public Owner getEntity() { //pega dos campos
+  public Owner getEntity() { 
     Owner owner = new Owner(
       fullnameProperty().getValue(),
       emailProperty().getValue(),
@@ -43,7 +43,7 @@ public class OwnerControl {
     return owner;
   }
 
-  public void setEntity(Owner owner) { //
+  public void setEntity(Owner owner) { 
     id.set(owner.getId().toString());
     patientsId.set(owner.getPatientsId());
     email.set(owner.getEmail());
@@ -96,6 +96,16 @@ public class OwnerControl {
   public String dateToString(Date value) {
     return fmt.dateToString(value);
   }
+  
+  public String timeDateToString(Date lt) {
+	  return fmt.timeDateToString(lt);
+  }
+
+  private ObjectId tryToGetId(String id) {
+	  return (id == "" || id == null)
+			  ? new ObjectId()
+					  : new ObjectId(id);
+  }
 
   public ObservableList<Owner> getListOwners() {
     return listOwners;
@@ -133,13 +143,4 @@ public class OwnerControl {
     return lastVisit;
   }
 
-  public String timeDateToString(Date lt) {
-    return fmt.timeDateToString(lt);
-  }
-
-  private ObjectId tryToGetId(String id) {
-    return (id == "" || id == null)
-      ? new ObjectId()
-      : new ObjectId(id);
-  }
 }
