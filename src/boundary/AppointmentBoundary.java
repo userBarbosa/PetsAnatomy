@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -68,7 +66,7 @@ public class AppointmentBoundary implements StrategyBoundary {
   private Button btnCreate = new Button("Adicionar");
   private Button btnDelete = new Button("Remover");
   private Button btnUpdateList = new Button("Atualizar Lista");
-  
+
   Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
   Font fontLbls = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
   Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
@@ -76,46 +74,48 @@ public class AppointmentBoundary implements StrategyBoundary {
   private TableView<Appointment> table = new TableView<Appointment>();
   private static AppointmentControl control = new AppointmentControl();
   private WorkShift ws = new WorkShift();
-  
+
   public void generatedComboBox() {
-	  ObservableList<String> timeOptions = FXCollections.observableArrayList(ws.workShift(8, 17, 30));
-	  cbTime.setItems(timeOptions);
+    ObservableList<String> timeOptions = FXCollections.observableArrayList(
+      ws.workShift(8, 17, 30)
+    );
+    cbTime.setItems(timeOptions);
 
-	  cbOwner.setItems(control.getAllOwnerIdAndNames());
+    cbOwner.setItems(control.getAllOwnerIdAndNames());
 
-	  cbOwner
-	  .valueProperty()
-	  .addListener(
-			  (obs, older, newer) -> {
-				  if (newer == null || newer == "") {
-					  cbPatient.setDisable(true);
-					  cbPatient.getItems().clear();
-				  } else {
-					  List<String> patientsByOwner = control.getPatientByOwnerName(newer);
-					  cbPatient.getItems().setAll(patientsByOwner);
-					  cbPatient.setDisable(false);
-				  }
-			  }
-			  );
+    cbOwner
+      .valueProperty()
+      .addListener(
+        (obs, older, newer) -> {
+          if (newer == null || newer == "") {
+            cbPatient.setDisable(true);
+            cbPatient.getItems().clear();
+          } else {
+            List<String> patientsByOwner = control.getPatientByOwnerName(newer);
+            cbPatient.getItems().setAll(patientsByOwner);
+            cbPatient.setDisable(false);
+          }
+        }
+      );
 
-	  cbPatient.setDisable(true);
+    cbPatient.setDisable(true);
 
-	  cbEmployee.setItems(control.getAllEmployeeIdAndNames());
+    cbEmployee.setItems(control.getAllEmployeeIdAndNames());
 
-	  ObservableList<String> states = FXCollections.observableArrayList(
-			  "Agendado",
-			  "Encerrado",
-			  "Cancelada"
-			  );
-	  cbState.setItems(states);
+    ObservableList<String> states = FXCollections.observableArrayList(
+      "Agendado",
+      "Encerrado",
+      "Cancelada"
+    );
+    cbState.setItems(states);
 
-	  ObservableList<String> financialStates = FXCollections.observableArrayList(
-			  "Pago",
-			  "Parcialmente pago",
-			  "Não pago",
-			  "Cancelado"
-			  );
-	  cbFinancialState.setItems(financialStates);
+    ObservableList<String> financialStates = FXCollections.observableArrayList(
+      "Pago",
+      "Parcialmente pago",
+      "Não pago",
+      "Cancelado"
+    );
+    cbFinancialState.setItems(financialStates);
   }
 
   public void generatedTable() {
@@ -392,14 +392,17 @@ public class AppointmentBoundary implements StrategyBoundary {
         table
       );
 
-    btnCreate.setOnAction((e) -> {
+    btnCreate.setOnAction(
+      e -> {
         control.create();
-    });
+      }
+    );
     btnCreate.setLayoutX(24.0);
     btnCreate.setLayoutY(246.0);
     btnCreate.setFont(fontBtns);
 
-    btnDelete.setOnAction((e) -> {
+    btnDelete.setOnAction(
+      e -> {
         if (tfId.getText() == "" || tfId.getText() == null) {
           JOptionPane.showMessageDialog(
             null,
@@ -425,45 +428,55 @@ public class AppointmentBoundary implements StrategyBoundary {
     btnDelete.setLayoutY(246.0);
     btnDelete.setFont(fontBtns);
 
-    btnUpdate.setOnAction((e) -> {
+    btnUpdate.setOnAction(
+      e -> {
         control.updateById();
-    });
+      }
+    );
     btnUpdate.setLayoutX(205.0);
     btnUpdate.setLayoutY(246.0);
     btnUpdate.setFont(fontBtns);
 
-    btnFind.setOnAction((e) -> {
+    btnFind.setOnAction(
+      e -> {
         control.findByField();
-    });
+      }
+    );
     btnFind.setLayoutX(290.0);
     btnFind.setLayoutY(246.0);
     btnFind.setFont(fontBtns);
 
-    btnFindByDate.setOnAction((e) -> {
+    btnFindByDate.setOnAction(
+      e -> {
         this.findByDatePopup();
-    });
+      }
+    );
     btnFindByDate.setLayoutX(380.0);
     btnFindByDate.setLayoutY(246.0);
     btnFindByDate.setFont(fontBtns);
-    
-    btnUpdateList.setOnAction((e) -> {
-    	control.listAll();
-    });
+
+    btnUpdateList.setOnAction(
+      e -> {
+        control.listAll();
+      }
+    );
     btnUpdateList.setLayoutX(540.0);
     btnUpdateList.setLayoutY(246.0);
     btnUpdateList.setFont(fontBtns);
 
-    btnClear.setOnAction((e) -> {
+    btnClear.setOnAction(
+      e -> {
         control.clearFields();
-    });
+      }
+    );
     btnClear.setLayoutX(980.0);
     btnClear.setLayoutY(246.0);
     btnClear.setFont(fontBtns);
-    
+
     return formPane;
   }
 
-private void findByDatePopup() {
+  private void findByDatePopup() {
     Stage popup = new Stage();
     popup.initModality(Modality.WINDOW_MODAL);
 
@@ -493,12 +506,14 @@ private void findByDatePopup() {
     dpDateLt.setPrefHeight(25.0);
     dpDateLt.setPrefWidth(100.0);
 
-    btnDismiss.setOnAction((e) -> {
+    btnDismiss.setOnAction(
+      e -> {
         control.findByDate(dpDateGte.getValue(), dpDateLt.getValue());
         popup.close();
         dpDateGte.setValue(null);
         dpDateLt.setValue(null);
-    });
+      }
+    );
     btnDismiss.setLayoutX(25.0);
     btnDismiss.setLayoutY(60.0);
     btnDismiss.setFont(fontBtns);
@@ -516,7 +531,10 @@ private void findByDatePopup() {
     Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
     Bindings.bindBidirectional(dpDate.valueProperty(), control.dateProperty());
     Bindings.bindBidirectional(cbTime.valueProperty(), control.timeProperty());
-    Bindings.bindBidirectional(cbPatient.valueProperty(),control.patientIdProperty());
+    Bindings.bindBidirectional(
+      cbPatient.valueProperty(),
+      control.patientIdProperty()
+    );
     Bindings.bindBidirectional(
       cbOwner.valueProperty(),
       control.ownerIdProperty()

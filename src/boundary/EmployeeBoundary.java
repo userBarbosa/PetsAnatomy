@@ -55,31 +55,31 @@ public class EmployeeBoundary implements StrategyBoundary {
   private static EmployeeControl control = new EmployeeControl();
   private TableView<Employee> table = new TableView<Employee>();
   static AppointmentBoundary appointment = new AppointmentBoundary();
-  
+
   public void generatedComboBox() {
     ObservableList<String> status = FXCollections.observableArrayList(
-    	      "Ativo",
-    	      "Inativo"
-    	    );
+      "Ativo",
+      "Inativo"
+    );
     cbActive.setItems(status);
-    	    
+
     ObservableList<String> specialty = FXCollections.observableArrayList(
-    	      "Acupunturista",
-    	      "Cardiologista",
-    	      "Comportamento animal",
-    	      "Dermatologista",
-    	      "Endocrinologista",
-    	      "Fisioterapeuta",
-    	      "Hematologista",
-    	      "Homeopata",
-    	      "Nefrologista",
-    	      "Neurologista",
-    	      "Nutrólogo",
-    	      "Dentista",
-    	      "Oftalmologista",
-    	      "Ortopedista",
-    	      "Pediatra"
-    	    );
+      "Acupunturista",
+      "Cardiologista",
+      "Comportamento animal",
+      "Dermatologista",
+      "Endocrinologista",
+      "Fisioterapeuta",
+      "Hematologista",
+      "Homeopata",
+      "Nefrologista",
+      "Neurologista",
+      "Nutrólogo",
+      "Dentista",
+      "Oftalmologista",
+      "Ortopedista",
+      "Pediatra"
+    );
     cbSpecialty.setItems(specialty);
   }
 
@@ -336,15 +336,18 @@ public class EmployeeBoundary implements StrategyBoundary {
         table
       );
 
-    btnCreate.setOnAction((e) -> {
-    	control.create();
-    	appointment.generatedComboBox();
-    });
+    btnCreate.setOnAction(
+      e -> {
+        control.create();
+        appointment.generatedComboBox();
+      }
+    );
     btnCreate.setLayoutX(15.0);
     btnCreate.setLayoutY(269.0);
     btnCreate.setFont(fontBtns);
-    
-    btnDelete.setOnAction((e) -> {
+
+    btnDelete.setOnAction(
+      e -> {
         if (tfId.getText() == "" || tfId.getText() == null) {
           JOptionPane.showMessageDialog(
             null,
@@ -370,32 +373,40 @@ public class EmployeeBoundary implements StrategyBoundary {
     btnDelete.setLayoutX(105.0);
     btnDelete.setLayoutY(269.0);
     btnDelete.setFont(fontBtns);
-    
-    btnUpdate.setOnAction((e) -> {
+
+    btnUpdate.setOnAction(
+      e -> {
         control.updateById();
         appointment.generatedComboBox();
-    });
+      }
+    );
     btnUpdate.setLayoutX(196.0);
     btnUpdate.setLayoutY(269.0);
     btnUpdate.setFont(fontBtns);
 
-    btnFind.setOnAction((e) -> {
-    	control.findByField();
-    });
+    btnFind.setOnAction(
+      e -> {
+        control.findByField();
+      }
+    );
     btnFind.setLayoutX(281.0);
     btnFind.setLayoutY(269.0);
     btnFind.setFont(fontBtns);
-    
-    btnUpdateList.setOnAction((e) -> {
-    	control.listAll();
-    });
+
+    btnUpdateList.setOnAction(
+      e -> {
+        control.listAll();
+      }
+    );
     btnUpdateList.setLayoutX(380.0);
     btnUpdateList.setLayoutY(269.0);
     btnUpdateList.setFont(fontBtns);
 
-    btnClear.setOnAction((e) -> {
-    	control.clearFields();
-	});
+    btnClear.setOnAction(
+      e -> {
+        control.clearFields();
+      }
+    );
     btnClear.setLayoutX(980.0);
     btnClear.setLayoutY(269.0);
     btnClear.setFont(fontBtns);

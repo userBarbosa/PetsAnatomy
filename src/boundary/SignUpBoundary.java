@@ -1,12 +1,9 @@
 package boundary;
 
+import control.SignUpControl;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import control.SignUpControl;
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -17,8 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import utils.MongoConnect;
 
 public class SignUpBoundary implements StrategyBoundary {
 
@@ -31,7 +26,7 @@ public class SignUpBoundary implements StrategyBoundary {
   private Button btnSignUp = new Button("Cadastrar");
   private Button btnLogin = new Button("Já é cadastrado? Login");
   private Label lblTitle = new Label("PetsAnatomy");
-  
+
   private static SignUpControl control = new SignUpControl();
   static MainBoundary main = new MainBoundary();
   static StrategyBoundary login = new LoginBoundary();
@@ -39,8 +34,8 @@ public class SignUpBoundary implements StrategyBoundary {
 
   @Override
   public Pane generateBoundaryStrategy() {
-	AnchorPane formPane = new AnchorPane();	  
-	
+    AnchorPane formPane = new AnchorPane();
+
     binding();
 
     Font fontTextField = Font.loadFont(
@@ -57,31 +52,26 @@ public class SignUpBoundary implements StrategyBoundary {
     formPane.setPrefHeight(768.0);
     formPane.setPrefWidth(300.0);
     formPane.setStyle("-fx-background-color: #ffffff;");
-    
+
     FileInputStream inputLogo = null;
     FileInputStream inputFullName = null;
     FileInputStream inputEmail = null;
     FileInputStream inputPassword = null;
     FileInputStream inputUsername = null;
-	try {
-		inputEmail = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/email.png"
-				);
-		inputPassword = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/password.png"
-				);
-		inputLogo = new FileInputStream(
-			      "@../../../PetsAnatomy/src/assets/logo.png"
-			    );
-	    inputFullName = new FileInputStream(
-	    	      "@../../../PetsAnatomy/src/assets/user.png"
-	    	    );
-	    inputUsername = new FileInputStream(
-	    	      "@../../../PetsAnatomy/src/assets/user.png"
-	    	    );
-	} catch (FileNotFoundException e1) {
-		e1.printStackTrace();
-	}
+    try {
+      inputEmail =
+        new FileInputStream("@../../../PetsAnatomy/src/assets/email.png");
+      inputPassword =
+        new FileInputStream("@../../../PetsAnatomy/src/assets/password.png");
+      inputLogo =
+        new FileInputStream("@../../../PetsAnatomy/src/assets/logo.png");
+      inputFullName =
+        new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
+      inputUsername =
+        new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
+    } catch (FileNotFoundException e1) {
+      e1.printStackTrace();
+    }
 
     Image imageLogo = new Image(inputLogo);
     ImageView imageViewlogo = new ImageView(imageLogo);
@@ -167,20 +157,30 @@ public class SignUpBoundary implements StrategyBoundary {
 
     tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
 
-    btnSignUp.setOnAction((e) -> {
+    btnSignUp.setOnAction(
+      e -> {
         control.signUp();
         tfPassword.setText("");
-        main.setPaneLeftRightAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
+        main.setPaneLeftRightAnchor(
+          login.generateBoundaryStrategy(),
+          image.generateBoundaryStrategy()
+        );
       }
     );
     btnSignUp.setLayoutX(10.0);
     btnSignUp.setLayoutY(606.0);
     btnSignUp.setMinSize(280.0, 40.0);
     btnSignUp.setFont(fontBtn);
-    btnSignUp.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
+    btnSignUp.setStyle(
+      "-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;"
+    );
 
-    btnLogin.setOnAction((e) -> {
-    	main.setPaneLeftRightAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
+    btnLogin.setOnAction(
+      e -> {
+        main.setPaneLeftRightAnchor(
+          login.generateBoundaryStrategy(),
+          image.generateBoundaryStrategy()
+        );
       }
     );
     btnLogin.setLayoutX(67.0);
@@ -188,7 +188,9 @@ public class SignUpBoundary implements StrategyBoundary {
     btnLogin.setMinSize(173.0, 30.0);
     btnLogin.setUnderline(true);
     btnLogin.setFont(fontSmallText);
-    btnLogin.setStyle("-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;");
+    btnLogin.setStyle(
+      "-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;"
+    );
 
     formPane
       .getChildren()
@@ -226,5 +228,4 @@ public class SignUpBoundary implements StrategyBoundary {
       control.passwordProperty()
     );
   }
-
 }
