@@ -76,48 +76,50 @@ public class AppointmentBoundary implements StrategyBoundary {
   private TableView<Appointment> table = new TableView<Appointment>();
   private static AppointmentControl control = new AppointmentControl();
   private WorkShift ws = new WorkShift();
+  
+  public void generatedComboBox() {
+	  ObservableList<String> timeOptions = FXCollections.observableArrayList(ws.workShift(8, 17, 30));
+	  cbTime.setItems(timeOptions);
+
+	  cbOwner.setItems(control.getAllOwnerIdAndNames());
+
+	  cbOwner
+	  .valueProperty()
+	  .addListener(
+			  (obs, older, newer) -> {
+				  if (newer == null || newer == "") {
+					  cbPatient.setDisable(true);
+					  cbPatient.getItems().clear();
+				  } else {
+					  List<String> patientsByOwner = control.getPatientByOwnerName(newer);
+					  cbPatient.getItems().setAll(patientsByOwner);
+					  cbPatient.setDisable(false);
+				  }
+			  }
+			  );
+
+	  cbPatient.setDisable(true);
+
+	  cbEmployee.setItems(control.getAllEmployeeIdAndNames());
+
+	  ObservableList<String> states = FXCollections.observableArrayList(
+			  "Agendado",
+			  "Encerrado",
+			  "Cancelada"
+			  );
+	  cbState.setItems(states);
+
+	  ObservableList<String> financialStates = FXCollections.observableArrayList(
+			  "Pago",
+			  "Parcialmente pago",
+			  "Não pago",
+			  "Cancelado"
+			  );
+	  cbFinancialState.setItems(financialStates);
+  }
 
   public void generatedTable() {
     control.listAll();
-    
-    ObservableList<String> timeOptions = FXCollections.observableArrayList(ws.workShift(8, 17, 30));
-    cbTime.setItems(timeOptions);
-    
-    cbOwner.setItems(control.getAllOwnerIdAndNames());
-    
-    cbOwner
-    .valueProperty()
-    .addListener(
-      (obs, older, newer) -> {
-        if (newer == null || newer == "") {
-          cbPatient.setDisable(true);
-          cbPatient.getItems().clear();
-        } else {
-          List<String> patientsByOwner = control.getPatientByOwnerName(newer);
-          cbPatient.getItems().setAll(patientsByOwner);
-          cbPatient.setDisable(false);
-        }
-      }
-    );
-    
-    cbPatient.setDisable(true);
-
-    cbEmployee.setItems(control.getAllEmployeeIdAndNames());
-    
-    ObservableList<String> states = FXCollections.observableArrayList(
-    	      "Agendado",
-    	      "Encerrado",
-    	      "Cancelada"
-    	    );
-    cbState.setItems(states);
-    
-    ObservableList<String> financialStates = FXCollections.observableArrayList(
-    	      "Pago",
-    	      "Parcialmente pago",
-    	      "Não pago",
-    	      "Cancelado"
-    	    );
-    cbFinancialState.setItems(financialStates);
 
     TableColumn<Appointment, String> colDate = new TableColumn<>("Data");
     colDate.setCellValueFactory(
@@ -354,6 +356,7 @@ public class AppointmentBoundary implements StrategyBoundary {
 
     if (getTable().getColumns().size() == 0) {
       this.generatedTable();
+      this.generatedComboBox();
     }
 
     formPane
@@ -460,7 +463,7 @@ public class AppointmentBoundary implements StrategyBoundary {
     return formPane;
   }
 
-  private void findByDatePopup() {
+private void findByDatePopup() {
     Stage popup = new Stage();
     popup.initModality(Modality.WINDOW_MODAL);
 

@@ -54,16 +54,15 @@ public class EmployeeBoundary implements StrategyBoundary {
 
   private static EmployeeControl control = new EmployeeControl();
   private TableView<Employee> table = new TableView<Employee>();
-
-  public void generatedTable() {
-    control.listAll();
-
+  static AppointmentBoundary appointment = new AppointmentBoundary();
+  
+  public void generatedComboBox() {
     ObservableList<String> status = FXCollections.observableArrayList(
-      "Ativo",
-      "Inativo"
-    );
+    	      "Ativo",
+    	      "Inativo"
+    	    );
     cbActive.setItems(status);
-    
+    	    
     ObservableList<String> specialty = FXCollections.observableArrayList(
     	      "Acupunturista",
     	      "Cardiologista",
@@ -82,6 +81,10 @@ public class EmployeeBoundary implements StrategyBoundary {
     	      "Pediatra"
     	    );
     cbSpecialty.setItems(specialty);
+  }
+
+  public void generatedTable() {
+    control.listAll();
 
     TableColumn<Employee, String> colActive = new TableColumn<>("Status");
     colActive.setCellValueFactory(
@@ -300,6 +303,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 
     if (getTable().getColumns().size() == 0) {
       this.generatedTable();
+      this.generatedComboBox();
     }
 
     formPane
@@ -334,6 +338,7 @@ public class EmployeeBoundary implements StrategyBoundary {
 
     btnCreate.setOnAction((e) -> {
     	control.create();
+    	appointment.generatedComboBox();
     });
     btnCreate.setLayoutX(15.0);
     btnCreate.setLayoutY(269.0);
@@ -359,6 +364,7 @@ public class EmployeeBoundary implements StrategyBoundary {
             control.deleteById();
           }
         }
+        appointment.generatedComboBox();
       }
     );
     btnDelete.setLayoutX(105.0);
@@ -367,6 +373,7 @@ public class EmployeeBoundary implements StrategyBoundary {
     
     btnUpdate.setOnAction((e) -> {
         control.updateById();
+        appointment.generatedComboBox();
     });
     btnUpdate.setLayoutX(196.0);
     btnUpdate.setLayoutY(269.0);

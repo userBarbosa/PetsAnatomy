@@ -50,7 +50,9 @@ public class OwnerBoundary implements StrategyBoundary {
 
 	private static OwnerControl control = new OwnerControl();
 	private TableView<Owner> table = new TableView<Owner>();
-
+	static PatientBoundary patient = new PatientBoundary();
+	static AppointmentBoundary appointment = new AppointmentBoundary();
+	
 	public void generatedTable() {
 		control.listAll();
 
@@ -229,33 +231,40 @@ public class OwnerBoundary implements StrategyBoundary {
 		
 		btnCreate.setOnAction((e) -> {
 			control.create();
+			patient.generatedComboBox();
+			appointment.generatedComboBox();
 		});
 		btnCreate.setLayoutX(15.0);
 		btnCreate.setLayoutY(269.0);
 		btnCreate.setFont(fontBtns);
 		
 		btnDelete.setOnAction((e) -> {
-	    	  if (tfId.getText() == "" || tfId.getText()== null) {
-	    		  JOptionPane.showMessageDialog(
-	    				  null,
-	    				  "Selecione um dono!",
-	    				  "Erro",
-	    				  JOptionPane.ERROR_MESSAGE
-	    				  );
-	    	  } else {
-	    		  Alert alert = new Alert(Alert.AlertType.WARNING,
-	    				  "Você tem certeza que deseja remover o dono? ", ButtonType.YES, ButtonType.CANCEL);
-	    		  Optional<ButtonType> clicked = alert.showAndWait();
-	    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
-	    			  control.deleteById();
-	    		  }}
-	      });
+			if (tfId.getText() == "" || tfId.getText()== null) {
+				JOptionPane.showMessageDialog(
+						null,
+						"Selecione um dono!",
+						"Erro",
+						JOptionPane.ERROR_MESSAGE
+						);
+			} else {
+				Alert alert = new Alert(Alert.AlertType.WARNING,
+						"Você tem certeza que deseja remover o dono? ", ButtonType.YES, ButtonType.CANCEL);
+				Optional<ButtonType> clicked = alert.showAndWait();
+				if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+					control.deleteById();
+				}
+			}
+			patient.generatedComboBox();
+			appointment.generatedComboBox();
+		});
 		btnDelete.setLayoutX(105.0);
 		btnDelete.setLayoutY(269.0);
 		btnDelete.setFont(fontBtns);
 
 		btnUpdate.setOnAction((e) -> {
 			control.updateById();
+			patient.generatedComboBox();
+			appointment.generatedComboBox();
 		});
 		btnUpdate.setLayoutX(196.0);
 		btnUpdate.setLayoutY(269.0);

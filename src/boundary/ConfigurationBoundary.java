@@ -47,17 +47,20 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	
 	private static ConfigurationControl control = new ConfigurationControl();
 	private TableView<Employee> table = new TableView<Employee>();
+	
+	public void generatedComboBox() {
+	    ObservableList<String> roles = FXCollections.observableArrayList("admin", "receptionist", "doctor");
+	    cbRole.setItems(roles);
+	}
 
 	public void generatedTable() {
 		control.listAll();
+		
 		TableColumn<Employee, String> colEmail = new TableColumn<>("Email");
 		colEmail.setCellValueFactory(new PropertyValueFactory<Employee, String>("email"));
 
 		TableColumn<Employee, String> colUsername = new TableColumn<>("Username");
 		colUsername.setCellValueFactory(new PropertyValueFactory<Employee, String>("username"));
-
-	    ObservableList<String> roles = FXCollections.observableArrayList("admin", "receptionist", "doctor");
-	    cbRole.setItems(roles);
 
 		TableColumn<Employee, String> colRole = new TableColumn<>("Role");
 		colRole.setCellValueFactory(new PropertyValueFactory<Employee, String>("role"));
@@ -143,6 +146,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		
         if (getTable().getColumns().size() == 0) {
         	this.generatedTable();
+            this.generatedComboBox();
         }
 
 		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, btnCreatePhrase, btnUpdateList, table);

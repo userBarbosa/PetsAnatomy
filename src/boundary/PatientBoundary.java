@@ -58,21 +58,11 @@ public class PatientBoundary implements StrategyBoundary {
 
 	private static PatientControl control = new PatientControl();
 	private TableView<Patient> table = new TableView<Patient>();
-	  
-	public void generatedTable() {
-		control.listAll();
-		
-		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
-		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
-		
+	static AppointmentBoundary appointment = new AppointmentBoundary();
+	
+	public void generatedComboBox() {
 		cbOwner.setItems(control.getAllIdAndNames());
-        
-		TableColumn<Patient, String> colOwner = new TableColumn<>("Dono");
-		colOwner.setCellValueFactory( (patientProp) -> {
-			String ownerId = patientProp.getValue().getOwnerId().toString();
-			return new ReadOnlyStringWrapper(control.getNameById(ownerId));
-		} );
-
+		
         ObservableList<String> species = FXCollections.observableArrayList(
         		"Peixe", 
         		"Réptil",
@@ -89,6 +79,22 @@ public class PatientBoundary implements StrategyBoundary {
         		"Equinodermo"
         		);
         cbSpecies.setItems(species);
+        
+        ObservableList<String> status = FXCollections.observableArrayList("Sim", "Não");
+        cbTreatment.setItems(status);
+	}
+	  
+	public void generatedTable() {
+		control.listAll();
+		
+		TableColumn<Patient, String> colName = new TableColumn<>("Nome");
+		colName.setCellValueFactory(new PropertyValueFactory<Patient, String>("name"));
+        
+		TableColumn<Patient, String> colOwner = new TableColumn<>("Dono");
+		colOwner.setCellValueFactory( (patientProp) -> {
+			String ownerId = patientProp.getValue().getOwnerId().toString();
+			return new ReadOnlyStringWrapper(control.getNameById(ownerId));
+		} );
         
 		TableColumn<Patient, String> colSpecies = new TableColumn<>("Espécie");
 		colSpecies.setCellValueFactory(new PropertyValueFactory<Patient, String>("species"));
@@ -113,9 +119,6 @@ public class PatientBoundary implements StrategyBoundary {
             Date lastVisit = patientProp.getValue().getLastVisit();
             return new ReadOnlyStringWrapper(control.timeDateToString(lastVisit));
         } );
-
-        ObservableList<String> status = FXCollections.observableArrayList("Sim", "Não");
-        cbTreatment.setItems(status);
 		
 		TableColumn<Patient, String> colTreatment = new TableColumn<>("Em Tratamento");
 		colTreatment.setCellValueFactory( (patientProp) -> {
@@ -288,6 +291,7 @@ public class PatientBoundary implements StrategyBoundary {
 		
         if (getTable().getColumns().size() == 0) {
         	this.generatedTable();
+            this.generatedComboBox();
         }
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
@@ -296,6 +300,7 @@ public class PatientBoundary implements StrategyBoundary {
         
         btnCreate.setOnAction((e) -> {
             control.create();
+            appointment.generatedComboBox();
         });
         btnCreate.setLayoutX(15.0);
         btnCreate.setLayoutY(269.0);
@@ -316,6 +321,7 @@ public class PatientBoundary implements StrategyBoundary {
         		if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
         			control.deleteById();
         		}}
+        	appointment.generatedComboBox();
         });
         btnDelete.setLayoutX(105.0);
         btnDelete.setLayoutY(269.0);
@@ -323,6 +329,7 @@ public class PatientBoundary implements StrategyBoundary {
         
         btnUpdate.setOnAction((e) -> {
             control.updateById();
+            appointment.generatedComboBox();
         });
         btnUpdate.setLayoutX(196.0);
         btnUpdate.setLayoutY(269.0);
