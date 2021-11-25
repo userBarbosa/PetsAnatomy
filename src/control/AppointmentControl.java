@@ -102,8 +102,6 @@ public class AppointmentControl {
         app.getPatientId().toString(),
         app.getDate()
       );
-      //should update owner lastVisit?
-      // serviceOwner.updateLastVist(app.getOwnerId(), app.getDate());
       this.listAll();
       this.clearFields();
     } else {
