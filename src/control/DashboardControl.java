@@ -8,7 +8,10 @@ public class DashboardControl {
 	private ParametersDAO service = new ParametersDAOImpl();
 
 	public String getRandomPhrase() {
-		return service.getRandomPhrase();
+	    if (service.getRandomPhrase() != null) {
+	        return service.getRandomPhrase();
+	      }
+	      return "Onde cuidar significa mais!";
 	}
 	
 }
