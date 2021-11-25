@@ -1,21 +1,18 @@
 package dao.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import dao.interfaces.AppointmentDAO;
+import entity.Appointment;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-
 import org.bson.Document;
 import org.bson.types.ObjectId;
-
-import dao.interfaces.AppointmentDAO;
-import entity.Appointment;
 import utils.MongoConnect;
 
 public class AppointmentDAOImpl implements AppointmentDAO {
@@ -91,7 +88,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
-  public Appointment findByID(String id) {
+  public Appointment findById(String id) {
     Document query = new Document();
     getCollection();
     try {
@@ -124,11 +121,26 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
-  public List<Appointment> findByDate(
-    String field,
-    Date dateGte,
-    Date dateLt
-  ) {
+  public List<Appointment> findManyById(String field, String id) {
+    List<Appointment> aList = new ArrayList<Appointment>();
+    getCollection();
+    MongoCursor<Document> cursor = appointments
+      .find(new BasicDBObject(field, new ObjectId(id)))
+      .iterator();
+
+    try {
+      while (cursor.hasNext()) {
+        aList.add(newApp(cursor.next()));
+      }
+    } finally {
+      cursor.close();
+    }
+
+    return aList;
+  }
+
+  @Override
+  public List<Appointment> findByDate(String field, Date dateGte, Date dateLt) {
     BasicDBObject betweenDates = new BasicDBObject(
       field,
       new Document("$gte", dateGte).append("$lte", dateLt)
@@ -151,21 +163,17 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
-  public boolean findScheduleAppointment(Date date, String employeeId) {
+  public boolean findScheduleAppointment(String field, String id, Date dateGte) {
     Document query = new Document();
     getCollection();
 
-    LocalDateTime dateGte = date
-      .toInstant()
-      .atZone(ZoneId.systemDefault())
-      .toLocalDateTime();
-    LocalDateTime dateLt = dateGte.plusMinutes(29);
+    Date dateLt = new Date(dateGte.getTime() + (30 * 60 * 1000));
 
     try {
       query =
         appointments
           .find(
-            new Document("employeeId", new ObjectId(employeeId))
+            new Document(field, new ObjectId(id))
             .append(
                 "date",
                 new BasicDBObject("$gte", dateGte).append("$lt", dateLt)

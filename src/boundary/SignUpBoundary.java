@@ -1,7 +1,9 @@
 package boundary;
 
-import control.SignUpControl;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import control.SignUpControl;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
@@ -13,10 +15,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import utils.MongoConnect;
 
-public class SignUpBoundary extends Application {
+public class SignUpBoundary implements StrategyBoundary {
 
   private TextField tfFullname = new TextField();
   private TextField tfUsername = new TextField();
@@ -27,14 +31,16 @@ public class SignUpBoundary extends Application {
   private Button btnSignUp = new Button("Cadastrar");
   private Button btnLogin = new Button("Já é cadastrado? Login");
   private Label lblTitle = new Label("PetsAnatomy");
-
+  
   private static SignUpControl control = new SignUpControl();
-  AnchorPane mainPane = new AnchorPane();
-  AnchorPane formPane = new AnchorPane();
-  AnchorPane designPane = new AnchorPane();
+  static MainBoundary main = new MainBoundary();
+  static StrategyBoundary login = new LoginBoundary();
+  static StrategyBoundary image = new ImageBoundary();
 
   @Override
-  public void start(Stage stage) throws Exception {
+  public Pane generateBoundaryStrategy() {
+	AnchorPane formPane = new AnchorPane();	  
+	
     binding();
 
     Font fontTextField = Font.loadFont(
@@ -51,11 +57,32 @@ public class SignUpBoundary extends Application {
     formPane.setPrefHeight(768.0);
     formPane.setPrefWidth(300.0);
     formPane.setStyle("-fx-background-color: #ffffff;");
-    formPane.setLayoutX(300.0);
+    
+    FileInputStream inputLogo = null;
+    FileInputStream inputFullName = null;
+    FileInputStream inputEmail = null;
+    FileInputStream inputPassword = null;
+    FileInputStream inputUsername = null;
+	try {
+		inputEmail = new FileInputStream(
+				"@../../../PetsAnatomy/src/assets/email.png"
+				);
+		inputPassword = new FileInputStream(
+				"@../../../PetsAnatomy/src/assets/password.png"
+				);
+		inputLogo = new FileInputStream(
+			      "@../../../PetsAnatomy/src/assets/logo.png"
+			    );
+	    inputFullName = new FileInputStream(
+	    	      "@../../../PetsAnatomy/src/assets/user.png"
+	    	    );
+	    inputUsername = new FileInputStream(
+	    	      "@../../../PetsAnatomy/src/assets/user.png"
+	    	    );
+	} catch (FileNotFoundException e1) {
+		e1.printStackTrace();
+	}
 
-    FileInputStream inputLogo = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/logo.png"
-    );
     Image imageLogo = new Image(inputLogo);
     ImageView imageViewlogo = new ImageView(imageLogo);
     imageViewlogo.setLayoutX(40.0);
@@ -71,9 +98,6 @@ public class SignUpBoundary extends Application {
     tfFullname.setPromptText("Nome Completo");
     tfFullname.setFont(fontTextField);
 
-    FileInputStream inputFullName = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/user.png"
-    );
     Image imageFullName = new Image(inputFullName);
     ImageView imageViewFullName = new ImageView(imageFullName);
     imageViewFullName.setLayoutX(10.0);
@@ -89,9 +113,6 @@ public class SignUpBoundary extends Application {
     tfUsername.setPromptText("Username");
     tfUsername.setFont(fontTextField);
 
-    FileInputStream inputUsername = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/user.png"
-    );
     Image imageUsername = new Image(inputUsername);
     ImageView imageViewUsername = new ImageView(imageUsername);
     imageViewUsername.setLayoutX(10.0);
@@ -107,9 +128,6 @@ public class SignUpBoundary extends Application {
     tfEmail.setPromptText("Email");
     tfEmail.setFont(fontTextField);
 
-    FileInputStream inputEmail = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/email.png"
-    );
     Image imageEmail = new Image(inputEmail);
     ImageView imageViewEmail = new ImageView(imageEmail);
     imageViewEmail.setLayoutX(10.0);
@@ -124,9 +142,6 @@ public class SignUpBoundary extends Application {
     pfPassword.setPromptText("Senha");
     pfPassword.setStyle("-fx-border-color: #000E44;");
 
-    FileInputStream inputPassword = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/password.png"
-    );
     Image imagePassword = new Image(inputPassword);
     ImageView imageViewPassword = new ImageView(imagePassword);
     imageViewPassword.setLayoutX(10.0);
@@ -152,10 +167,10 @@ public class SignUpBoundary extends Application {
 
     tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
 
-    btnSignUp.setOnAction(
-      e -> {
+    btnSignUp.setOnAction((e) -> {
         control.signUp();
         tfPassword.setText("");
+        main.setPaneLeftAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
       }
     );
     btnSignUp.setLayoutX(10.0);
@@ -164,9 +179,8 @@ public class SignUpBoundary extends Application {
     btnSignUp.setFont(fontBtn);
     btnSignUp.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
-    btnLogin.setOnAction(
-      e -> {
-        control.login();
+    btnLogin.setOnAction((e) -> {
+    	main.setPaneLeftAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
       }
     );
     btnLogin.setLayoutX(67.0);
@@ -194,53 +208,7 @@ public class SignUpBoundary extends Application {
         btnSignUp
       );
 
-    designPane.setPrefHeight(768.0);
-    designPane.setPrefWidth(1066.0);
-    designPane.setStyle("-fx-background-color: #000E44;");
-    designPane.setLayoutX(300.0);
-
-    FileInputStream inputEstetoscopio = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/estetoscopio.png"
-    );
-    Image imageEstetoscopio = new Image(inputEstetoscopio);
-    ImageView imageViewEstetoscopio = new ImageView(imageEstetoscopio);
-    imageViewEstetoscopio.setLayoutX(367.0);
-    imageViewEstetoscopio.setFitHeight(284.0);
-    imageViewEstetoscopio.setFitWidth(333.0);
-    imageViewEstetoscopio.setPreserveRatio(true);
-
-    FileInputStream inputPata = new FileInputStream(
-      "@../../../PetsAnatomy/src/assets/pata.png"
-    );
-    Image imagePata = new Image(inputPata);
-    ImageView imageViewPata = new ImageView(imagePata);
-    imageViewPata.setLayoutX(409.0);
-    imageViewPata.setLayoutY(547.0);
-    imageViewPata.setFitHeight(221.0);
-    imageViewPata.setFitWidth(247.0);
-    imageViewPata.setPreserveRatio(true);
-
-    lblTitle.setLayoutX(221.0);
-    lblTitle.setLayoutY(337.0);
-    lblTitle.setMinSize(624.0, 119.0);
-    lblTitle.setFont(fontTitle);
-    lblTitle.setStyle("-fx-text-fill: white;");
-
-    designPane
-      .getChildren()
-      .addAll(imageViewEstetoscopio, imageViewPata, lblTitle);
-
-    mainPane.setLeftAnchor(formPane, 0.0);
-    mainPane.setRightAnchor(designPane, 0.0);
-    mainPane.getChildren().addAll(formPane, designPane);
-    mainPane.setPrefHeight(768.0);
-    mainPane.setPrefWidth(1366.0);
-
-    Scene scene = new Scene(mainPane, 1366, 768);
-    stage.setResizable(false);
-    stage.setScene(scene);
-    stage.show();
-    stage.setTitle("Clínica Veterinária PetsAnatomy");
+    return formPane;
   }
 
   private void binding() {
@@ -259,7 +227,4 @@ public class SignUpBoundary extends Application {
     );
   }
 
-  public static void main(String[] args) {
-    launch(args);
-  }
 }

@@ -7,10 +7,12 @@ import dao.interfaces.EmployeeDAO;
 import entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import utils.Security;
 
 public class SignUpControl {
 
   private EmployeeDAO service = new EmployeeDAOImpl();
+  private Security security = new Security();
 
   private StringProperty email = new SimpleStringProperty("");
   private StringProperty fullname = new SimpleStringProperty("");
@@ -19,22 +21,27 @@ public class SignUpControl {
 
   public void signUp() {
 		String password = passwordProperty().getValue();
-		if (passwordVerification(password)) {
+		if (security.passwordVerification(password)) {
 			createUser(
 				fullnameProperty().getValue(),
 				usernameProperty().getValue(),
 				emailProperty().getValue(),
 				password
 			);
+			JOptionPane.showMessageDialog(
+					null,
+					"Registration successful!",
+					"200 - OK",
+					JOptionPane.INFORMATION_MESSAGE
+					);
 		} else {
-			System.err.println("the password does not attend one of the rules or has invalid caracters.");
-      //-fx-text-box-border: red; -fx-focus-color: red;
+      JOptionPane.showMessageDialog(
+          null,
+          "The password does not attend one of the rules or has invalid caracters.",
+          "400 - Bad Request",
+          JOptionPane.INFORMATION_MESSAGE
+        );
 		}
-		
-  }
-
-  public void login() {
-    // Abre tela de login
   }
 
   public void createUser(
@@ -56,46 +63,6 @@ public class SignUpControl {
           JOptionPane.INFORMATION_MESSAGE
         );
 		}
-  }
-
-  public boolean passwordVerification(String password) {
-    /* 
-		rules:
-		- at least 8 characters
-		- must contain at least:
-    1 uppercase letter;
-    1 lowercase letter;
-    1 digit;
-    1 symbol/special char.
-		- up to 15 characters
-		 */
-    if (password.length() > 7 && password.length() < 16) {
-      String specialPattern = "!#$&*+_-@";
-
-      boolean hasLowercase = false;
-      boolean hasUppercase = false;
-      boolean hasDigit = false;
-      boolean hasSpecialCharacter = false;
-      // boolean hasInvalidCharacter = false;
-
-      for (char c : password.toCharArray()) {
-        if (
-          hasLowercase && hasUppercase && hasDigit && hasSpecialCharacter
-        ) break;
-
-        if (Character.isLowerCase(c)) hasLowercase = true; else if (
-          Character.isUpperCase(c)
-        ) hasUppercase = true; else if (Character.isDigit(c)) hasDigit =
-          true; else if (
-          specialPattern.contains(Character.toString(c))
-        ) hasSpecialCharacter = true; else return false; //has invalid characters
-      }
-
-      if (hasLowercase && hasUppercase && hasDigit && hasSpecialCharacter) {
-        return true;
-      }
-    }
-    return false; //the password does not attend one of the rules
   }
 
   private void clearFields() {

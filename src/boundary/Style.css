@@ -1,19 +1,25 @@
-.button {
-	-fx-background-color: #000C3A; 
+.radio-button {
 	-fx-text-fill: white;
-	-fx-cursor: hand; 
+  	-fx-border: none;
+  	-fx-background-color: #000C3A;
+  	-fx-cursor: hand;
+}
+
+.radio-button:selected {
+	-fx-background-color: #3D4C89;
+}
+
+.radio-button:hover {
+	-fx-background-color: #3D4C89;
 } 
 
-.button:hover { 
-	-fx-background-color: #3D4C89; 
-	-fx-text-fill: white;
-	-fx-cursor: hand; 
-} 
+.radio-button > .radio {
+  -fx-background-color: transparent;
+  -fx-background-insets: 0;
+  -fx-background-radius: 0px;
+  -fx-padding: 0.0em; /* 4 8 4 8 */
+}
 
-.button:focused{
-	-fx-background-color: #ffffff; 
-	-fx-border-color: #3D4C89; 
-	-fx-border-width: 3;
-	-fx-text-fill: #000C3A; 
-	-fx-cursor: hand; 
+.radio-button:selected > .radio > .dot {
+  -fx-background-color: transparent;
 }

@@ -54,7 +54,8 @@ public class PatientBoundary implements StrategyBoundary {
 	private Button btnFind = new Button("Pesquisar");
 	private Button btnCreate = new Button("Adicionar");
 	private Button btnDelete = new Button("Remover");
-	
+	private Button btnUpdateList = new Button("Atualizar Lista");
+
 	private static PatientControl control = new PatientControl();
 	private TableView<Patient> table = new TableView<Patient>();
 	  
@@ -291,7 +292,7 @@ public class PatientBoundary implements StrategyBoundary {
         
         formPane.getChildren().addAll(lblId, tfId, lblOwner, cbOwner, lblName, tfName, lblSpecies, cbSpecies, 
         		lblFamily, tfFamily, lblBloodtype, tfBloodtype, lblBirthdate, dpBirthdate, lblObs, 
-        		tfObs, lblLastVisit, tfLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, table);
+        		tfObs, lblLastVisit, tfLastVisit, lblTreatment, cbTreatment, btnCreate, btnFind, btnUpdate, btnDelete, btnClear, btnUpdateList, table);
         
         btnCreate.setOnAction((e) -> {
             control.create();
@@ -299,6 +300,33 @@ public class PatientBoundary implements StrategyBoundary {
         btnCreate.setLayoutX(15.0);
         btnCreate.setLayoutY(269.0);
         btnCreate.setFont(fontBtns);
+        
+        btnDelete.setOnAction((e) -> {
+        	if (tfId.getText() == "" || tfId.getText()== null) {
+        		JOptionPane.showMessageDialog(
+        				null,
+        				"Selecione um paciente!",
+        				"Erro",
+        				JOptionPane.ERROR_MESSAGE
+        				);
+        	} else {
+        		Alert alert = new Alert(Alert.AlertType.WARNING,
+        				"Você tem certeza que deseja remover o paciente? ", ButtonType.YES, ButtonType.CANCEL);
+        		Optional<ButtonType> clicked = alert.showAndWait();
+        		if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
+        			control.deleteById();
+        		}}
+        });
+        btnDelete.setLayoutX(105.0);
+        btnDelete.setLayoutY(269.0);
+        btnDelete.setFont(fontBtns);
+        
+        btnUpdate.setOnAction((e) -> {
+            control.updateById();
+        });
+        btnUpdate.setLayoutX(196.0);
+        btnUpdate.setLayoutY(269.0);
+        btnUpdate.setFont(fontBtns);
 		
         btnFind.setOnAction((e) -> {
             control.findByField();
@@ -306,38 +334,18 @@ public class PatientBoundary implements StrategyBoundary {
         btnFind.setLayoutX(281.0);
         btnFind.setLayoutY(269.0);
         btnFind.setFont(fontBtns);
-		
-        btnUpdate.setOnAction((e) -> {
-            control.updateById();
-        });
-        btnUpdate.setLayoutX(196.0);
-        btnUpdate.setLayoutY(269.0);
-        btnUpdate.setFont(fontBtns);
         
-		btnDelete.setOnAction((e) -> {
-	    	  if (tfId.getText() == "" || tfId.getText()== null) {
-	    		  JOptionPane.showMessageDialog(
-	    				  null,
-	    				  "Selecione um paciente!",
-	    				  "Erro",
-	    				  JOptionPane.ERROR_MESSAGE
-	    				  );
-	    	  } else {
-	    		  Alert alert = new Alert(Alert.AlertType.WARNING,
-	    				  "Você tem certeza que deseja remover o paciente? ", ButtonType.YES, ButtonType.CANCEL);
-	    		  Optional<ButtonType> clicked = alert.showAndWait();
-	    		  if (clicked.isPresent() && clicked.get().equals(ButtonType.YES)) {
-	    			  control.deleteById();
-	    		  }}
-	      });
-        btnDelete.setLayoutX(105.0);
-        btnDelete.setLayoutY(269.0);
-        btnDelete.setFont(fontBtns);
+        btnUpdateList.setOnAction((e) -> {
+        	control.listAll();
+        });
+        btnUpdateList.setLayoutX(380.0);
+        btnUpdateList.setLayoutY(269.0);
+        btnUpdateList.setFont(fontBtns);
         
         btnClear.setOnAction((e) -> {
             control.clearFields();
         });
-        btnClear.setLayoutX(450.0);
+        btnClear.setLayoutX(980.0);
         btnClear.setLayoutY(269.0);
 		btnClear.setFont(fontBtns);
 		

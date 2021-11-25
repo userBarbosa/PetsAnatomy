@@ -7,8 +7,9 @@ import entity.Appointment;
 
 public interface AppointmentDAO {
 	void insert(Appointment appointment);
-	Appointment findByID(String id);
-	boolean findScheduleAppointment(Date date, String employeeId); 
+	Appointment findById(String id);
+	List<Appointment> findManyById(String field, String id);
+	boolean findScheduleAppointment(String field, String id, Date dateGte); 
 	List<Appointment> findByField(String field, String data);
 	List<Appointment> findByDate(String field, Date dateGte, Date dateLt);
 	List<Appointment> getAllAppointments();

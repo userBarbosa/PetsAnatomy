@@ -20,6 +20,7 @@ import utils.Security;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
+  private Security security = new Security();
   MongoCollection<Document> employees;
 
   private void getCollection() {
@@ -33,7 +34,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       .append("fullname", employee.getFullname())
       .append(
         "password",
-        new Security().encryptPassword(employee.getPassword())
+        security.encryptPassword(employee.getPassword())
       )
       .append("role", employee.getRole())
       .append("telephoneNumber", employee.getTelephoneNumber())
@@ -157,7 +158,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
       e.printStackTrace();
     }
     if (query != null) {
-      String cipher = new Security().encryptPassword(password);
+      String cipher = security.encryptPassword(password);
       if (cipher.equals(query.get("password"))) {
         return query.get("role") == null ? "" : query.get("role").toString();
       } else {
@@ -237,7 +238,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   public void updatePassword(String id, String data) {
     BasicDBObject updatedData = new BasicDBObject(
       "password",
-      new Security().encryptPassword(data)
+      security.encryptPassword(data)
     );
     updatedData.append("updated", new Date());
 
@@ -255,7 +256,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   @Override
-  public boolean findForUpdatePassword(String username, String password) {
+  public String findAndUpdatePassword(String username, String password) {
     Document query = new Document();
     getCollection();
     try {
@@ -265,14 +266,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
     if (query != null) {
       if (
-        !query.containsKey("defaultPassword") ||
-        !query.getBoolean("defaultPassword")
+        query.containsKey("defaultPassword") ||
+        query.getBoolean("defaultPassword")
       ) {
         updatePassword(query.getObjectId("_id").toString(), password);
-        return true;
+        return query.getString("role");
       }
     }
-    return false;
+    return "401 - Unauthorized";
   }
 
   @Override

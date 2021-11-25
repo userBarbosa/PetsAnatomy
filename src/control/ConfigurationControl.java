@@ -1,7 +1,9 @@
 package control;
 
 import dao.impl.EmployeeDAOImpl;
+import dao.impl.ParametersDAOImpl;
 import dao.interfaces.EmployeeDAO;
+import dao.interfaces.ParametersDAO;
 import entity.Employee;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -14,7 +16,8 @@ public class ConfigurationControl {
 
   private ObservableList<Employee> listEmployees = FXCollections.observableArrayList();
   private EmployeeDAO service = new EmployeeDAOImpl();
-
+  private ParametersDAO serviceParameters = new ParametersDAOImpl();
+  
   private StringProperty id = new SimpleStringProperty("");
   private StringProperty email = new SimpleStringProperty("");
   private StringProperty username = new SimpleStringProperty("");
@@ -51,7 +54,6 @@ public class ConfigurationControl {
     email.set("");
     username.set("");
     role.set("");
-    this.listAll();
   }
 
   public ObservableList<Employee> getListEmployees() {
@@ -93,4 +95,9 @@ public class ConfigurationControl {
       JOptionPane.INFORMATION_MESSAGE
     );
   }
+
+  public void createPhrase(String phrase) {
+	  serviceParameters.insertPhrase(phrase);
+  }
+  
 }

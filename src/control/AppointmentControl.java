@@ -9,6 +9,7 @@ import dao.interfaces.EmployeeDAO;
 import dao.interfaces.OwnerDAO;
 import dao.interfaces.PatientDAO;
 import entity.Appointment;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
@@ -20,6 +21,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
+import javax.swing.JOptionPane;
 import org.bson.types.ObjectId;
 import utils.Formatters;
 
@@ -41,32 +43,19 @@ public class AppointmentControl {
   private StringProperty financialState = new SimpleStringProperty("");
   private DoubleProperty value = new SimpleDoubleProperty();
   private ObjectProperty date = new SimpleObjectProperty();
-  private ObjectProperty time = new SimpleObjectProperty();
-
-  private ObjectProperty dateGte = new SimpleObjectProperty();
-  private ObjectProperty dateLt = new SimpleObjectProperty();
+  private StringProperty time = new SimpleStringProperty("");
 
   public Appointment getEntity() {
-    ObjectId employeeId = new ObjectId(
-      getEmployeeIdByName(employeeIdProperty().getValue())
-    );
-    ObjectId patientId = new ObjectId(
-      getPatientIdByName(patientIdProperty().getValue())
-    );
-    ObjectId ownerId = new ObjectId(
-      getOwnerIdByName(ownerIdProperty().getValue())
-    );
-    Date date = fmt.stringToTimeDate(
-      dateProperty().getValue().toString(),
-      timeProperty().getValue().toString()
-    );
     double value = valueProperty().getValue();
 
     Appointment appointment = new Appointment(
-      employeeId,
-      patientId,
-      ownerId,
-      date,
+      new ObjectId(getEmployeeIdByName(employeeIdProperty().getValue())),
+      new ObjectId(getPatientIdByName(patientIdProperty().getValue())),
+      new ObjectId(getOwnerIdByName(ownerIdProperty().getValue())),
+      tryToGetDate(
+        (LocalDate) dateProperty().getValue(),
+        timeProperty().getValue().toString()
+      ),
       value
     );
     appointment.setId(tryToGetId(idProperty().getValue()));
@@ -80,39 +69,51 @@ public class AppointmentControl {
 
   public void setEntity(Appointment appointment) {
     id.set(appointment.getId().toString());
-    patientId.set(appointment.getPatientId().toString());
-    ownerId.set(appointment.getOwnerId().toString());
-    employeeId.set(appointment.getEmployeeId().toString());
+    patientId.set(getPatientNameById(appointment.getPatientId().toString()));
+    ownerId.set(getOwnerNameById(appointment.getOwnerId().toString()));
+    employeeId.set(getEmployeeNameById(appointment.getEmployeeId().toString()));
     obs.set(appointment.getObs());
     financialState.set(
       fmt.financialStateIntegerToString(appointment.getFinancialState())
     );
     state.set(fmt.stateIntegerToString(appointment.getState()));
     value.set(appointment.getValue());
-    date.set(appointment.getDate());
-    time.setValue(fmt.dateToLocal(appointment.getDate()));
+    date.set(fmt.dateToLocal(appointment.getDate()));
+    time.set(fmt.hourToString(appointment.getDate()));
   }
 
   public void create() {
     Appointment app = getEntity();
+
     if (
       !service.findScheduleAppointment(
-        app.getDate(),
-        app.getEmployeeId().toString()
+        "employeeId",
+        app.getEmployeeId().toString(),
+        app.getDate()
       ) &&
-      !servicePatient.findScheduleAppointments(
-        app.getDate(),
-        app.getPatientId().toString()
+      !service.findScheduleAppointment(
+        "patientId",
+        app.getPatientId().toString(),
+        app.getDate()
       )
     ) {
       service.insert(app);
-      servicePatient.updateLastVisit(app.getPatientId().toString(), app.getDate());
+      servicePatient.updateLastVisit(
+        app.getPatientId().toString(),
+        app.getDate()
+      );
       //should update owner lastVisit?
       // serviceOwner.updateLastVist(app.getOwnerId(), app.getDate());
+      this.listAll();
+      this.clearFields();
+    } else {
+      JOptionPane.showMessageDialog(
+        null,
+        "Médico ou pacientes ocupados nessa data e horario",
+        "Error",
+        JOptionPane.ERROR_MESSAGE
+      );
     }
-
-    this.listAll();
-    this.clearFields();
   }
 
   public void updateById() {
@@ -134,17 +135,20 @@ public class AppointmentControl {
   public void findByField() {
     listAppointments.clear();
     listAppointments.addAll(
-      service.findByField("patientId", patientIdProperty().getValue())
+      service.findManyById(
+        "patientId",
+        getPatientIdByName(patientIdProperty().getValue())
+      )
     );
   }
 
-  public void findByDate() {
+  public void findByDate(LocalDate dateGte, LocalDate dateLt) {
     listAppointments.clear();
     listAppointments.addAll(
       service.findByDate(
         "date",
-        (Date) dateGteProperty().getValue(),
-        (Date) dateLtProperty().getValue()
+        fmt.localToDate(dateGte),
+        fmt.localToDate(dateLt.plusDays(1))
       )
     );
     this.clearFields();
@@ -160,8 +164,7 @@ public class AppointmentControl {
     value.set(0);
     financialState.set("");
     date.set(null);
-    time.set(null);
-    this.listAll();
+    time.set("");
   }
 
   public ObservableList<String> getAllPatientIdAndNames() {
@@ -307,21 +310,21 @@ public class AppointmentControl {
     return date;
   }
 
-  public ObjectProperty timeProperty() {
+  public StringProperty timeProperty() {
     return time;
-  }
-
-  public ObjectProperty dateGteProperty() {
-    return dateGte;
-  }
-
-  public ObjectProperty dateLtProperty() {
-    return dateLt;
   }
 
   private ObjectId tryToGetId(String property) {
     return (property.isBlank() || property == null)
       ? new ObjectId()
       : new ObjectId(property);
+  }
+
+  private Date tryToGetDate(LocalDate dateProperty, String timeProperty) {
+    return fmt.stringToTimeDate(fmt.localToString(dateProperty), timeProperty);
+  }
+
+  public List<String> getPatientByOwnerName(String newer) {
+    return servicePatient.getPetsByOwner(getOwnerIdByName(newer));
   }
 }

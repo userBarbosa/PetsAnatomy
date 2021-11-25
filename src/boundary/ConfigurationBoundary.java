@@ -5,6 +5,7 @@ import entity.Employee;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ConfigurationBoundary implements StrategyBoundary  {
 
@@ -31,7 +34,17 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	private Button btnClear = new Button("Limpar");
 	private Button btnResetPassword = new Button("Resetar Senha");
 	private Button btnUpdate = new Button("Atualizar");
+	private Button btnUpdateList = new Button("Atualizar Lista");
 
+	Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
+	Font fontLbls = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
+	Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
+
+	private Label lblPhrase = new Label("Digite a frase:"); 
+	private TextField tfPhrase = new TextField();
+	private Button btnCreatePhrase = new Button("Adicionar Frase");
+	private Button btnDismiss = new Button("Confirmar");
+	
 	private static ConfigurationControl control = new ConfigurationControl();
 	private TableView<Employee> table = new TableView<Employee>();
 
@@ -70,10 +83,6 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 	@Override	
 	public Pane generateBoundaryStrategy() {
 		AnchorPane formPane = new AnchorPane(); 
-
-		Font fontBtns = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
-		Font fontLbls = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
-		Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
 
 		binding();
 
@@ -136,7 +145,7 @@ public class ConfigurationBoundary implements StrategyBoundary  {
         	this.generatedTable();
         }
 
-		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, table);
+		formPane.getChildren().addAll(lblId, tfId, lblEmail, tfEmail, lblUsername, tfUsername, lblRole, cbRole, btnResetPassword, btnUpdate, btnClear, btnCreatePhrase, btnUpdateList, table);
 
 		btnUpdate.setOnAction((e) -> {
 			control.updateRole();
@@ -144,13 +153,6 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		btnUpdate.setLayoutX(15.0);
 		btnUpdate.setLayoutY(151.0);
 		btnUpdate.setFont(fontBtns);
-
-		btnClear.setOnAction((e) -> {
-			control.clearFields();
-		});
-		btnClear.setLayoutX(440.0);
-		btnClear.setLayoutY(151.0);
-		btnClear.setFont(fontBtns);
 		
 		btnResetPassword.setOnAction((e) -> {
 			control.resetPassword();
@@ -158,8 +160,64 @@ public class ConfigurationBoundary implements StrategyBoundary  {
 		btnResetPassword.setLayoutX(105.0);
 		btnResetPassword.setLayoutY(151.0);
 		btnResetPassword.setFont(fontBtns);
+
+		btnCreatePhrase.setOnAction((e) -> {
+			this.popupCreatePhrase();
+		});
+		btnCreatePhrase.setLayoutX(230);
+		btnCreatePhrase.setLayoutY(151.0);
+		btnCreatePhrase.setFont(fontBtns);
+
+	    btnUpdateList.setOnAction((e) -> {
+	    	control.listAll();
+	    });
+	    btnUpdateList.setLayoutX(355.0);
+	    btnUpdateList.setLayoutY(151.0);
+	    btnUpdateList.setFont(fontBtns);
+		
+		btnClear.setOnAction((e) -> {
+			control.clearFields();
+		});
+		btnClear.setLayoutX(980.0);
+		btnClear.setLayoutY(151.0);
+		btnClear.setFont(fontBtns);
 		
 		return formPane;
+	}
+
+	private void popupCreatePhrase() {
+		Stage popup = new Stage();
+		popup.initModality(Modality.WINDOW_MODAL);
+		
+		AnchorPane pane = new AnchorPane();
+		Scene scene = new Scene(pane, 420, 140);
+		popup.setScene(scene);
+		
+		lblPhrase.setLayoutX(25.0);
+		lblPhrase.setLayoutY(20.0);
+		lblPhrase.setPrefHeight(17.0);
+		lblPhrase.setPrefWidth(150.0);
+		lblPhrase.setFont(fontLbls);
+		
+		tfPhrase.setLayoutX(25.0);
+		tfPhrase.setLayoutY(50.0);
+		tfPhrase.setPrefHeight(25.0);
+		tfPhrase.setPrefWidth(370.0);	
+		tfPhrase.setFont(fontTf);
+		
+		btnDismiss.setOnAction( (e) -> {
+			control.createPhrase(tfPhrase.getText());
+			popup.close();
+		});
+		btnDismiss.setLayoutX(25.0);
+		btnDismiss.setLayoutY(90.0);
+		btnDismiss.setFont(fontTf);
+		
+		pane.getChildren().addAll(lblPhrase, tfPhrase, btnDismiss);
+		
+		popup.setTitle("Cadastrar Frase");	
+		popup.setResizable(false);
+		popup.showAndWait();
 	}
 
 	private void binding() {
