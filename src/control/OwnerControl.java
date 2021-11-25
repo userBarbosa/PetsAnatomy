@@ -21,7 +21,7 @@ public class OwnerControl {
   private Formatters fmt = new Formatters();
 
   private StringProperty id = new SimpleStringProperty("");
-  private StringProperty patientsId = new SimpleStringProperty("");
+  private StringProperty patientsName = new SimpleStringProperty("");
   private StringProperty email = new SimpleStringProperty("");
   private StringProperty fullname = new SimpleStringProperty("");
   private StringProperty telephoneNumber = new SimpleStringProperty("");
@@ -36,7 +36,7 @@ public class OwnerControl {
       identificationNumberProperty().getValue()
     );
     owner.setId(tryToGetId(idProperty().getValue()));
-    owner.setPatientsId(patientsIdProperty().getValue());
+    owner.setPatientsName(patientsNameProperty().getValue());
     owner.setTelephoneNumber(telephoneNumberProperty().getValue());
     owner.setAddress(addressProperty().getValue());
     owner.setLastVisit(fmt.stringToDate(lastVisitProperty().getValue()));
@@ -45,7 +45,8 @@ public class OwnerControl {
 
   public void setEntity(Owner owner) { 
     id.set(owner.getId().toString());
-    patientsId.set(owner.getPatientsId());
+    patientsName.set(owner.getPatientsName());
+    System.out.println(owner.getPatientsName());
     email.set(owner.getEmail());
     fullname.set(owner.getFullname());
     telephoneNumber.set(owner.getTelephoneNumber());
@@ -84,7 +85,7 @@ public class OwnerControl {
 
   public void clearFields() {
     id.set("");
-    patientsId.set("");
+    patientsName.set("");
     email.set("");
     fullname.set("");
     telephoneNumber.set("");
@@ -115,8 +116,8 @@ public class OwnerControl {
     return id;
   }
 
-  public StringProperty patientsIdProperty() {
-    return patientsId;
+  public StringProperty patientsNameProperty() {
+    return patientsName;
   }
 
   public StringProperty emailProperty() {

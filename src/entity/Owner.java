@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 
 public class Owner {
 
-  String email, fullname, telephoneNumber, identificationNumber, address, patientsId;
+  String email, fullname, telephoneNumber, identificationNumber, address, patientsName;
   Date created, updated, lastVisit;
   ObjectId id;
 
@@ -90,12 +90,12 @@ public class Owner {
     this.id = id;
   }
 
-  public String getPatientsId() {
-    return this.patientsId;
+  public String getPatientsName() {
+    return this.patientsName;
   }
 
-  public void setPatientsId(String patientsId) {
-    this.patientsId = patientsId;
+  public void setPatientsName(String patientsName) {
+    this.patientsName = patientsName;
   }
   
 }

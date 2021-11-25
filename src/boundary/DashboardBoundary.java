@@ -14,10 +14,6 @@ public class DashboardBoundary implements StrategyBoundary {
 
   private Label lblDailyPhrase = new Label("Onde cuidar significa mais!");
 
-  //	private Label lblDailyPhrase = new Label("Onde as patas estão em boas mãos");
-
-  //	private Label lblDailyPhrase = new Label(control.getRandomPhrase());
-
   @Override
   public Pane generateBoundaryStrategy() {
     AnchorPane imagePane = new AnchorPane();
