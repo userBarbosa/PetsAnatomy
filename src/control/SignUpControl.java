@@ -28,6 +28,12 @@ public class SignUpControl {
 				emailProperty().getValue(),
 				password
 			);
+			JOptionPane.showMessageDialog(
+					null,
+					"Registration successful!",
+					"200 - OK",
+					JOptionPane.INFORMATION_MESSAGE
+					);
 		} else {
       JOptionPane.showMessageDialog(
           null,
@@ -35,13 +41,7 @@ public class SignUpControl {
           "400 - Bad Request",
           JOptionPane.INFORMATION_MESSAGE
         );
-      //-fx-text-box-border: red; -fx-focus-color: red;
 		}
-		
-  }
-
-  public void login() {
-    // Abre tela de login
   }
 
   public void createUser(
