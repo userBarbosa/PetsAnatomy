@@ -7,7 +7,6 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -28,8 +27,6 @@ public class LoginBoundary implements StrategyBoundary {
   private Button btnLogin = new Button("Login");
   private Button btnSignUp = new Button("Cadastrar-se");
   private Button btnForgotPassword = new Button("Esqueci minha senha");
-  private Label lblTitle = new Label("PetsAnatomy");
-
   Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
   Font fontTitle = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 96);
   Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);

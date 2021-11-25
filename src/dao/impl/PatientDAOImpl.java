@@ -5,8 +5,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import dao.interfaces.PatientDAO;
 import entity.Patient;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -201,12 +199,9 @@ public class PatientDAOImpl implements PatientDAO {
 
     getCollection();
 
-    patients.updateOne(
-      new BasicDBObject("_id", new ObjectId(id)),
-      updatedData
-      );
+    patients.updateOne(new BasicDBObject("_id", new ObjectId(id)), updatedData);
   }
-  
+
   @Override
   public void delete(String id) {
     getCollection();

@@ -4,7 +4,6 @@ import dao.impl.EmployeeDAOImpl;
 import dao.interfaces.EmployeeDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javax.swing.JOptionPane;
 import utils.Security;
 
 public class LoginControl {
@@ -26,7 +25,7 @@ public class LoginControl {
     if (security.passwordVerification(password)) {
       return service.findAndUpdatePassword(username, password);
     } else {
-    	return "Senha não atende os requisitos minimos.";
+      return "Senha não atende os requisitos minimos.";
     }
   }
 

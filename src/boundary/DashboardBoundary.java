@@ -1,8 +1,8 @@
 package boundary;
 
-import control.DashboardControl;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,8 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
 public class DashboardBoundary implements StrategyBoundary {
-
-  private static DashboardControl control = new DashboardControl();
 
   private Label lblDailyPhrase = new Label("Onde cuidar significa mais!");
 
@@ -24,14 +22,6 @@ public class DashboardBoundary implements StrategyBoundary {
   public Pane generateBoundaryStrategy() {
     AnchorPane imagePane = new AnchorPane();
 
-    Font fontBtnHome = Font.loadFont(
-      "file:resources/fonts/Poppins-Bold.ttf",
-      15
-    );
-    Font fontBtns = Font.loadFont(
-      "file:resources/fonts/Poppins-Regular.ttf",
-      14
-    );
     Font fontLblPhrase = Font.loadFont(
       "file:resources/fonts/Poppins-Bold.ttf",
       70

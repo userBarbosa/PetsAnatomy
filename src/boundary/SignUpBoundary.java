@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -25,8 +24,6 @@ public class SignUpBoundary implements StrategyBoundary {
 
   private Button btnSignUp = new Button("Cadastrar");
   private Button btnLogin = new Button("Já é cadastrado? Login");
-  private Label lblTitle = new Label("PetsAnatomy");
-
   private static SignUpControl control = new SignUpControl();
   static MainBoundary main = new MainBoundary();
   static StrategyBoundary login = new LoginBoundary();
@@ -42,7 +39,6 @@ public class SignUpBoundary implements StrategyBoundary {
       "file:resources/fonts/Poppins-Regular.ttf",
       14
     );
-    Font fontTitle = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 96);
     Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
     Font fontSmallText = Font.loadFont(
       "file:resources/fonts/Poppins-Regular.ttf",

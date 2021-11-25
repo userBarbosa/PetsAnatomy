@@ -5,8 +5,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import dao.interfaces.AppointmentDAO;
 import entity.Appointment;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -163,7 +161,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
   }
 
   @Override
-  public boolean findScheduleAppointment(String field, String id, Date dateGte) {
+  public boolean findScheduleAppointment(
+    String field,
+    String id,
+    Date dateGte
+  ) {
     Document query = new Document();
     getCollection();
 
