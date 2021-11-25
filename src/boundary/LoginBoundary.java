@@ -3,6 +3,9 @@ package boundary;
 import control.LoginControl;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import javax.swing.JOptionPane;
+
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
@@ -19,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class LoginBoundary extends Application {
+public class LoginBoundary implements StrategyBoundary {
 
 	private TextField tfUsername = new TextField();
 	private PasswordField pfPassword = new PasswordField();
@@ -29,36 +32,51 @@ public class LoginBoundary extends Application {
 	private Button btnSignUp = new Button("Cadastrar-se");
 	private Button btnForgotPassword = new Button("Esqueci minha senha");
 	private Label lblTitle = new Label("PetsAnatomy");
-	
+
 	Font fontTf = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 14);
 	Font fontTitle = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 96);
 	Font fontBtn = Font.loadFont("file:resources/fonts/Poppins-Bold.ttf", 14);
 	Font fontTxt = Font.loadFont("file:resources/fonts/Poppins-Regular.ttf", 12);
-	
+
 	TextField tfResetUsername = new TextField();
 	PasswordField pfResetPassword = new PasswordField();
 	TextField tfResetPassword = new TextField();
 	CheckBox cbResetPassword = new CheckBox("Mostrar/Esconder Senha");
-	Button btnDismiss = new Button("Confirmar");	
-
-	private static LoginControl control = new LoginControl();
-	private static SignUpBoundary signUp = new SignUpBoundary();
-	
-	@Override
-	public void start(Stage stage) throws Exception {
-		AnchorPane mainPane = new AnchorPane();
-		AnchorPane formPane = new AnchorPane();
-		AnchorPane designPane = new AnchorPane();
-
+	Button btnDismiss = new Button("Confirmar");
+  
+  private static LoginControl control = new LoginControl();
+  
+  static MainBoundary main = new MainBoundary();
+  static StrategyBoundary signUp = new SignUpBoundary();
+  static StrategyBoundary image = new ImageBoundary();
+  static SideMenuBoundary sideMenu = new SideMenuBoundary();
+  static StrategyBoundary dash = new DashboardBoundary();	
+  
+  @Override
+  public Pane generateBoundaryStrategy() {
+	AnchorPane formPane = new AnchorPane();	 
+		
 		binding();
 
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(300.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
 
-		FileInputStream inputLogo = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/logo.png"
-				);
+	    FileInputStream inputLogo = null;
+	    FileInputStream inputUser = null;
+	    FileInputStream inputPassword = null;
+
+	    try {
+	      inputLogo =
+	        new FileInputStream("@../../../PetsAnatomy/src/assets/logo.png");
+	      inputUser =
+	        new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
+	      inputPassword =
+	        new FileInputStream("@../../../PetsAnatomy/src/assets/lock.png");
+	    } catch (FileNotFoundException e) {
+	      e.printStackTrace();
+	    }
+	    
 		Image imageLogo = new Image(inputLogo);
 		ImageView imageViewlogo = new ImageView(imageLogo);
 		imageViewlogo.setLayoutX(40.0);
@@ -73,9 +91,6 @@ public class LoginBoundary extends Application {
 		tfUsername.setStyle("-fx-border-color: #000E44;");
 		tfUsername.setFont(fontTf);
 
-		FileInputStream inputUser = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/user.png"
-				);
 		Image imageUser = new Image(inputUser);
 		ImageView imageViewUser = new ImageView(imageUser);
 		imageViewUser.setLayoutX(10.0);
@@ -89,9 +104,6 @@ public class LoginBoundary extends Application {
 		pfPassword.setMinSize(240.0, 30.0);
 		pfPassword.setStyle("-fx-border-color: #000E44;");
 
-		FileInputStream inputPassword = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/lock.png"
-				);
 		Image imagePassword = new Image(inputPassword);
 		ImageView imageViewPassword = new ImageView(imagePassword);
 		imageViewPassword.setLayoutX(10.0);
@@ -116,14 +128,9 @@ public class LoginBoundary extends Application {
 		pfPassword.visibleProperty().bind(cbPassword.selectedProperty().not());
 
 		tfPassword.textProperty().bindBidirectional(pfPassword.textProperty());
-		
-		mainPane.setLeftAnchor(formPane, 0.0);
-		mainPane.setRightAnchor(designPane, 0.0);
-		mainPane.getChildren().addAll(formPane, designPane);
 
 		btnLogin.setOnAction((e) -> {
-			control.login();
-			tfPassword.setText("");	
+			identification(control.login());
 				});
 		btnLogin.setLayoutX(10.0);
 		btnLogin.setLayoutY(550.0);
@@ -132,10 +139,7 @@ public class LoginBoundary extends Application {
 		btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
 		btnSignUp.setOnAction((e) -> {
-			mainPane.getChildren().clear();
-			mainPane.setRightAnchor(designPane, 0.0);
-			mainPane.setLeftAnchor(signUp.formPane, 0.0);
-			mainPane.getChildren().addAll(signUp.formPane, designPane);
+			main.setPaneLeftAnchor(signUp.generateBoundaryStrategy(), image.generateBoundaryStrategy());
 		});
 		btnSignUp.setLayoutX(97.0);
 		btnSignUp.setLayoutY(590.0);
@@ -167,51 +171,70 @@ public class LoginBoundary extends Application {
 				btnLogin,
 				btnSignUp,
 				btnForgotPassword);
-
-		designPane.setPrefHeight(768.0);
-		designPane.setPrefWidth(1066.0);
-		designPane.setStyle("-fx-background-color: #000E44;");
-		designPane.setLayoutX(300.0);
-
-		FileInputStream inputEstetoscopio = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/estetoscopio.png"
-				);
-		Image imageEstetoscopio = new Image(inputEstetoscopio);
-		ImageView imageViewEstetoscopio = new ImageView(imageEstetoscopio);
-		imageViewEstetoscopio.setLayoutX(367.0);
-		imageViewEstetoscopio.setFitHeight(284.0);
-		imageViewEstetoscopio.setFitWidth(333.0);
-		imageViewEstetoscopio.setPreserveRatio(true);
-
-		FileInputStream inputPata = new FileInputStream(
-				"@../../../PetsAnatomy/src/assets/pata.png"
-				);
-		Image imagePata = new Image(inputPata);
-		ImageView imageViewPata = new ImageView(imagePata);
-		imageViewPata.setLayoutX(409.0);
-		imageViewPata.setLayoutY(547.0);
-		imageViewPata.setFitHeight(221.0);
-		imageViewPata.setFitWidth(247.0);
-		imageViewPata.setPreserveRatio(true);
-
-		lblTitle.setLayoutX(221.0);
-		lblTitle.setLayoutY(337.0);
-		lblTitle.setMinSize(624.0, 119.0);
-		lblTitle.setFont(fontTitle);
-		lblTitle.setStyle("-fx-text-fill: white;");
-
-		designPane
-		.getChildren()
-		.addAll(imageViewEstetoscopio, imageViewPata, lblTitle);
 		
-		mainPane.setPrefHeight(768.0);
-		mainPane.setPrefWidth(1366.0);
+		return formPane;
+  }
 
-		Scene scene = new Scene(mainPane, 1366, 768);
-		stage.setResizable(false);
-		stage.setScene(scene);
-		stage.show();
-		stage.setTitle("Clínica Veterinária PetsAnatomy");
+	private void identification(String role) {
+		tfUsername.setText("");
+		tfPassword.setText("");	
+		pfPassword.setText("");	
+
+	    switch (role) {
+	      case "admin":
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Seja bem vindo Administrador!",
+	          "Login",
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+	        break;
+	      case "receptionist":
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Seja bem vindo colaborador(a)!",
+	          "Login",
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+	        break;
+	      case "doctor":
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Seja bem vindo Doutor(a)!",
+	          "Login",
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+	        break;
+	      case "":
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Entre em contato com o Administrador!",
+	          "Login",
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+	        break;
+	      case "400 - Bad Request":
+	      case "401 - Unauthorized":
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Your data was not found, contact your system administrator",
+	          role,
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        break;
+	      default:
+	        JOptionPane.showMessageDialog(
+	          null,
+	          "Erro ao entrar",
+	          "Erro no Login",
+	          JOptionPane.INFORMATION_MESSAGE
+	        );
+	        break;
+	    }
 	}
 
 	public void popupForgotPassword() {
@@ -252,7 +275,7 @@ public class LoginBoundary extends Application {
 		cbResetPassword.setLayoutY(90.0);
 		
 		btnDismiss.setOnAction( (e) -> {
-	        control.forgotPassword(tfResetUsername.getText(), pfResetPassword.getText());
+	        identification(control.forgotPassword(tfResetUsername.getText(), pfResetPassword.getText()));
 			popup.close();
 			tfResetUsername.setText("");
 			pfResetPassword.setText("");
@@ -272,8 +295,5 @@ public class LoginBoundary extends Application {
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
 		Bindings.bindBidirectional(pfPassword.textProperty(),control.passwordProperty());
 	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
+	
 }
