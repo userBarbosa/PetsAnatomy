@@ -51,7 +51,7 @@ public class EmployeeControl {
     employee.setBankDetails(bankDetailsProperty().getValue());
     employee.setSpecialty(specialtyProperty().getValue());
     employee.setBirthDate(
-      fmt.localToDate((LocalDate) birthDateProperty().getValue())
+      localToDate((LocalDate) birthDateProperty().getValue())
     );
     employee.setRole(roleProperty().getValue());
     return employee;
@@ -67,7 +67,7 @@ public class EmployeeControl {
     bankDetails.set(employee.getBankDetails());
     specialty.set(employee.getSpecialty());
     role.set(employee.getRole());
-    birthDate.set(fmt.dateToLocal(employee.getBirthDate()));
+    birthDate.set(dateToLocal((Date) employee.getBirthDate()));
   }
 
   public void clearFields() {
@@ -128,9 +128,25 @@ public class EmployeeControl {
   }
 
   public String dateToString(Date value) {
-	  return fmt.dateToString(value);
+	  if (value != null) {
+      return fmt.dateToString(value);
+    }
+    return null;
   }
   
+  public LocalDate dateToLocal(Date value) {
+    if (value != null) {
+      return fmt.dateToLocal(value);
+    }
+    return null;
+  }
+  public Date localToDate(LocalDate value) {
+    if (value != null) {
+      return fmt.localToDate(value);
+    }
+    return null; 
+  }
+
   public String activeBooleanToString(Boolean value) {
 	return fmt.activeBooleanToString(value);
   }
@@ -178,5 +194,5 @@ public class EmployeeControl {
   public ObjectProperty birthDateProperty() {
     return birthDate;
   }
-
 }
+  
