@@ -3,6 +3,7 @@ package boundary;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import control.DashboardControl;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +14,6 @@ import javafx.scene.text.Font;
 public class DashboardBoundary implements StrategyBoundary {
 
   private Label lblDailyPhrase = new Label("Onde cuidar significa mais!");
-
-  //	private Label lblDailyPhrase = new Label("Onde as patas estão em boas mãos");
-
-  //	private Label lblDailyPhrase = new Label(control.getRandomPhrase());
 
   @Override
   public Pane generateBoundaryStrategy() {
