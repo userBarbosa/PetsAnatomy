@@ -42,7 +42,7 @@ public class LoginBoundary implements StrategyBoundary {
 	PasswordField pfResetPassword = new PasswordField();
 	TextField tfResetPassword = new TextField();
 	CheckBox cbResetPassword = new CheckBox("Mostrar/Esconder Senha");
-	Button btnDismiss = new Button("Confirmar");	
+	Button btnDismiss = new Button("Confirmar");
   
   private static LoginControl control = new LoginControl();
   

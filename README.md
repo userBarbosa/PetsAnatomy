@@ -38,12 +38,12 @@ Projeto foi desenvolvido durante a disciplina de **POO - Programação Orientada
 ---
 ## ⚙️ Funcionalidades
 
-- [ ] Login
-- [ ] Cadastro
-- [ ] Crud Agendamentos
-- [ ] Crud Pacientes
-- [ ] Crud Donos
-- [ ] Crud Funcionários
+- [x] Login
+- [x] Cadastro
+- [x] Crud Agendamentos
+- [x] Crud Pacientes
+- [x] Crud Donos
+- [x] Crud Funcionários
 
 ---
 
@@ -57,15 +57,11 @@ O layout da aplicação está disponível no Figma:
 
 <p align="center">
   <img alt="Login" title="#Login" src="./.github/login.png" width="1000px">
-  <img alt="Cadastro" title="#Cadastro" src="./.github/signUp.png" width="1000px">
-    <img alt="Cadastro" title="#Cadastro" src="./.github/dashboard.png" width="1000px">
+  <img alt="Dashboard" title="#dashboard" src="./.github/dashboard.png" width="1000px">
+    <img alt="Appointment" title="#appointment" src="./.github/appointment.png" width="1000px">
 </p>
 
 ---
-
-## 🎲 Modelo Conceitual
-
-
 
 ## 🚀 Como executar o projeto
 ### Pré-requisitos
