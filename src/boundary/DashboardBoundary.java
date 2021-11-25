@@ -3,7 +3,6 @@ package boundary;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import control.DashboardControl;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

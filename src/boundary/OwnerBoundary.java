@@ -66,7 +66,7 @@ public class OwnerBoundary implements StrategyBoundary {
 
     TableColumn<Owner, String> colPatients = new TableColumn<>("Pacientes");
     colPatients.setCellValueFactory(
-      new PropertyValueFactory<Owner, String>("petName")
+      new PropertyValueFactory<Owner, String>("patientsName")
     );
 
     TableColumn<Owner, String> colTelephoneNumber = new TableColumn<>(
@@ -101,13 +101,13 @@ public class OwnerBoundary implements StrategyBoundary {
     table
       .getColumns()
       .addAll(
-        colPatients,
         colEmail,
         colFullname,
         colTelephoneNumber,
         colAddress,
         colIdentificationNumber,
-        colLastVisit
+        colLastVisit,
+        colPatients
       );
 
     table.setItems(control.getListOwners());
@@ -364,7 +364,7 @@ public class OwnerBoundary implements StrategyBoundary {
     Bindings.bindBidirectional(tfId.textProperty(), control.idProperty());
     Bindings.bindBidirectional(
       tfPatients.textProperty(),
-      control.patientsIdProperty()
+      control.patientsNameProperty()
     );
     Bindings.bindBidirectional(tfEmail.textProperty(), control.emailProperty());
     Bindings.bindBidirectional(

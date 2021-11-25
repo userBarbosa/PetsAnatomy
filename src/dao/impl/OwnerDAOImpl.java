@@ -27,7 +27,7 @@ public class OwnerDAOImpl implements OwnerDAO {
       .append("identificationNumber", owner.getIdentificationNumber())
       .append("email", owner.getEmail())
       .append("telephoneNumber", owner.getTelephoneNumber())
-      .append("patientsId", owner.getPatientsId())
+      .append("patientsName", owner.getPatientsName())
       .append("identificationNumber", owner.getIdentificationNumber())
       .append("address", owner.getAddress())
       .append("lastVisit", owner.getLastVisit());
@@ -42,6 +42,7 @@ public class OwnerDAOImpl implements OwnerDAO {
     Owner o = new Owner(fullname, email, identificationNumber);
 
     o.setId(doc.getObjectId("_id"));
+    o.setPatientsName(doc.getString("patientsName"));
     o.setTelephoneNumber(doc.getString("telephoneNumber"));
     o.setAddress(doc.getString("address"));
     o.setCreated(doc.getDate("created"));
@@ -165,7 +166,7 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   @Override
-  public void updatePatientList(String ownerId, String patientId) {
+  public void updatePatientList(String ownerId, String patientName) {
     getCollection();
     Document owner = new Document();
 
@@ -176,16 +177,16 @@ public class OwnerDAOImpl implements OwnerDAO {
     }
 
     if (owner != null) {
-      String pList = owner.getString("patientsId");
-      patientId = patientId.concat(";");
+      String pList = owner.getString("patientsName");
+      patientName = patientName.concat(";");
       pList =
         (pList == null || pList.isBlank())
-          ? patientId
-          : pList.concat(patientId);
+          ? patientName
+          : pList.concat(" " + patientName);
 
       BasicDBObject updated = new BasicDBObject(
         "$set",
-        new BasicDBObject("patientsId", pList).append("updated", new Date())
+        new BasicDBObject("patientsName", pList).append("updated", new Date())
       );
       owners.updateOne(
         new BasicDBObject("_id", new ObjectId(ownerId)),
@@ -201,7 +202,7 @@ public class OwnerDAOImpl implements OwnerDAO {
   }
 
   @Override
-  public void deletePatientId(String ownerId, String patientId) {
+  public void deleteOnPatientList(String ownerId, String patientName) {
     getCollection();
     Document owner = new Document();
 
@@ -213,20 +214,20 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     if (owner != null) {
       String newList = "";
-      String oldList[] = owner.getString("patientsId").split(";");
+      String oldList[] = owner.getString("patientsName").split(";");
 
       if (oldList != null) {
         for (String each : oldList) {
           if (each != null && !each.isBlank()) {
-            if (!each.equals(patientId)) {
-              newList = newList.concat(each + ";");
+            if (!each.equals(patientName)) {
+              newList = newList.concat(each.trim() + "; ");
             }
           }
         }
 
         BasicDBObject updatedList = new BasicDBObject(
           "$set",
-          new BasicDBObject("patientsId", newList).append("updated", new Date())
+          new BasicDBObject("patientsName", newList).append("updated", new Date())
         );
         owners.updateOne(
           new BasicDBObject("_id", new ObjectId(ownerId)),

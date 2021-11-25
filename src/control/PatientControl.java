@@ -74,19 +74,23 @@ public class PatientControl {
     service.insert(p, p.getOwnerId().toString());
     serviceOwner.updatePatientList(
       p.getOwnerId().toString(),
-      p.getId().toString()
+      p.getName().toString()
     );
     this.listAll();
   }
 
   public void updateById() {
     service.update(idProperty().getValue(), getEntity());
+    serviceOwner.updatePatientList(
+      getIdByName(ownerIdProperty().getValue()),
+      nameProperty().getValue()
+    );
     this.listAll();
   }
 
   public void deleteById() {
     service.delete(idProperty().getValue());
-    serviceOwner.deletePatientId(
+    serviceOwner.deleteOnPatientList(
       getIdByName(ownerIdProperty().getValue()),
       idProperty().getValue()
     );
@@ -156,21 +160,20 @@ public class PatientControl {
   public String treatmentBooleanToString(Boolean value) {
     return fmt.treatmentBooleanToString(value);
   }
-  
+
   private ObjectId tryToGetId(String property) {
-	  return (property.isBlank() || property == null)
-			  ? new ObjectId()
-					  : new ObjectId(property);
+    return (property.isBlank() || property == null)
+      ? new ObjectId()
+      : new ObjectId(property);
   }
 
   private Date tryToGetLastVisit(String property) {
+    if (property == "" || property == null) {
+      return new Date();
+    }
+    String splittedDate[] = property.split(" às ");
 
-	  if (property == "" || property == null) {
-		  return new Date();
-	  }
-	  String splittedDate[] = property.split(" às ");
-
-	  return fmt.stringToTimeDate(splittedDate[0], splittedDate[1]);
+    return fmt.stringToTimeDate(splittedDate[0], splittedDate[1]);
   }
 
   public ObservableList<Patient> getListPatients() {
@@ -216,5 +219,4 @@ public class PatientControl {
   public StringProperty treatmentProperty() {
     return treatment;
   }
-
 }
