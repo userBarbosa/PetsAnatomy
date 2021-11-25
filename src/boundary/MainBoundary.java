@@ -56,7 +56,7 @@ public class MainBoundary extends Application {
 		Application.launch(MainBoundary.class, args);
 	}
 
-	public void setPaneLeftAnchor(Pane left, Pane right) {
+	public void setPaneLeftRightAnchor(Pane left, Pane right) {
 		mainPane.getChildren().clear();
 		mainPane.setLeftAnchor(left, 0.0);
 		mainPane.setRightAnchor(right, 0.0);

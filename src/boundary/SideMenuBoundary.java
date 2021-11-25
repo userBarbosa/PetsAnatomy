@@ -52,7 +52,7 @@ public class SideMenuBoundary {
   		btnHome.setMinSize(300.0, 55.0);
   		btnHome.setFont(fontBtnHome);
   		btnHome.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, dash.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, dash.generateBoundaryStrategy());
   			if (!btnHome.isSelected()) {
   				btnHome.setSelected(true);    
   			}
@@ -65,7 +65,7 @@ public class SideMenuBoundary {
   		btnAgenda.setMinSize(300.0, 50.0);
   		btnAgenda.setFont(fontBtns);
   		btnAgenda.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, appointment.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, appointment.generateBoundaryStrategy());
   			if (!btnAgenda.isSelected()) {
   				btnAgenda.setSelected(true);    
   			}
@@ -77,7 +77,7 @@ public class SideMenuBoundary {
   		btnPacientes.setMinSize(300.0, 50.0);
   		btnPacientes.setFont(fontBtns);
   		btnPacientes.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, patient.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, patient.generateBoundaryStrategy());
   			if(!btnPacientes.isSelected()) {
   				btnPacientes.setSelected(true);    
   			}
@@ -89,7 +89,7 @@ public class SideMenuBoundary {
   		btnClientes.setMinSize(300.0, 50.0);
   		btnClientes.setFont(fontBtns);
   		btnClientes.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, owner.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, owner.generateBoundaryStrategy());
   			if(!btnClientes.isSelected()) {
   				btnClientes.setSelected(true);    
   			}
@@ -101,7 +101,7 @@ public class SideMenuBoundary {
   		btnFuncionarios.setMinSize(300.0, 50.0);
   		btnFuncionarios.setFont(fontBtns);
   		btnFuncionarios.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, employee.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, employee.generateBoundaryStrategy());
   			if (!btnFuncionarios.isSelected()) {
   				btnFuncionarios.setSelected(true);    
   			}
@@ -113,7 +113,7 @@ public class SideMenuBoundary {
   		btnConfiguracoes.setMinSize(300.0, 50.0);
   		btnConfiguracoes.setFont(fontBtns);
   		btnConfiguracoes.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, configuration.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, configuration.generateBoundaryStrategy());
   			if (!btnConfiguracoes.isSelected()) {
   				btnConfiguracoes.setSelected(true);    
   			}
@@ -141,7 +141,7 @@ public class SideMenuBoundary {
   		btnHome.setMinSize(300.0, 55.0);
   		btnHome.setFont(fontBtnHome);
   		btnHome.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, dash.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, dash.generateBoundaryStrategy());
   			if (!btnHome.isSelected()) {
   				btnHome.setSelected(true);    
   			}
@@ -154,7 +154,7 @@ public class SideMenuBoundary {
   		btnAgenda.setMinSize(300.0, 50.0);
   		btnAgenda.setFont(fontBtns);
   		btnAgenda.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, appointment.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, appointment.generateBoundaryStrategy());
   			if (!btnAgenda.isSelected()) {
   				btnAgenda.setSelected(true);    
   			}
@@ -166,7 +166,7 @@ public class SideMenuBoundary {
   		btnPacientes.setMinSize(300.0, 50.0);
   		btnPacientes.setFont(fontBtns);
   		btnPacientes.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, patient.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, patient.generateBoundaryStrategy());
   			if(!btnPacientes.isSelected()) {
   				btnPacientes.setSelected(true);    
   			}
@@ -178,7 +178,7 @@ public class SideMenuBoundary {
   		btnClientes.setMinSize(300.0, 50.0);
   		btnClientes.setFont(fontBtns);
   		btnClientes.setOnAction((e) -> {
-  			main.setPaneLeftAnchor(sideMenu, owner.generateBoundaryStrategy());
+  			main.setPaneLeftRightAnchor(sideMenu, owner.generateBoundaryStrategy());
   			if(!btnClientes.isSelected()) {
   				btnClientes.setSelected(true);    
   			}
@@ -205,7 +205,7 @@ public class SideMenuBoundary {
     	  btnHome.setMinSize(300.0, 55.0);
     	  btnHome.setFont(fontBtnHome);
     	  btnHome.setOnAction((e) -> {
-    		  main.setPaneLeftAnchor(sideMenu, dash.generateBoundaryStrategy());
+    		  main.setPaneLeftRightAnchor(sideMenu, dash.generateBoundaryStrategy());
     		  if (!btnHome.isSelected()) {
     			  btnHome.setSelected(true);    
     		  }
@@ -218,7 +218,7 @@ public class SideMenuBoundary {
     	  btnAgenda.setMinSize(300.0, 50.0);
     	  btnAgenda.setFont(fontBtns);
     	  btnAgenda.setOnAction((e) -> {
-    		  main.setPaneLeftAnchor(sideMenu, appointment.generateBoundaryStrategy());
+    		  main.setPaneLeftRightAnchor(sideMenu, appointment.generateBoundaryStrategy());
     		  if (!btnAgenda.isSelected()) {
     			  btnAgenda.setSelected(true);    
     		  }
@@ -230,7 +230,7 @@ public class SideMenuBoundary {
     	  btnPacientes.setMinSize(300.0, 50.0);
     	  btnPacientes.setFont(fontBtns);
     	  btnPacientes.setOnAction((e) -> {
-    		  main.setPaneLeftAnchor(sideMenu, patient.generateBoundaryStrategy());
+    		  main.setPaneLeftRightAnchor(sideMenu, patient.generateBoundaryStrategy());
     		  if(!btnPacientes.isSelected()) {
     			  btnPacientes.setSelected(true);    
     		  }
@@ -257,7 +257,7 @@ public class SideMenuBoundary {
     	  btnHome.setMinSize(300.0, 55.0);
     	  btnHome.setFont(fontBtnHome);
     	  btnHome.setOnAction((e) -> {
-    		  main.setPaneLeftAnchor(sideMenu, dash.generateBoundaryStrategy());
+    		  main.setPaneLeftRightAnchor(sideMenu, dash.generateBoundaryStrategy());
     		  if (!btnHome.isSelected()) {
     			  btnHome.setSelected(true);    
     		  }
@@ -280,7 +280,6 @@ public class SideMenuBoundary {
     	  sideMenu.getChildren().addAll(btnHome, btnSair);
     	  sideMenu.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());       
     	  return sideMenu;
-		
 	}
 	return null;
 	}

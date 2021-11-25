@@ -43,40 +43,40 @@ public class LoginBoundary implements StrategyBoundary {
 	TextField tfResetPassword = new TextField();
 	CheckBox cbResetPassword = new CheckBox("Mostrar/Esconder Senha");
 	Button btnDismiss = new Button("Confirmar");
+
+	private static LoginControl control = new LoginControl();
+
+	static MainBoundary main = new MainBoundary();
+	static StrategyBoundary signUp = new SignUpBoundary();
+	static StrategyBoundary image = new ImageBoundary();
+	static SideMenuBoundary sideMenu = new SideMenuBoundary();
+	static StrategyBoundary dash = new DashboardBoundary();	
   
-  private static LoginControl control = new LoginControl();
-  
-  static MainBoundary main = new MainBoundary();
-  static StrategyBoundary signUp = new SignUpBoundary();
-  static StrategyBoundary image = new ImageBoundary();
-  static SideMenuBoundary sideMenu = new SideMenuBoundary();
-  static StrategyBoundary dash = new DashboardBoundary();	
-  
-  @Override
-  public Pane generateBoundaryStrategy() {
-	AnchorPane formPane = new AnchorPane();	 
-		
+	@Override
+	public Pane generateBoundaryStrategy() {
+		AnchorPane formPane = new AnchorPane();	 
+
 		binding();
 
 		formPane.setPrefHeight(768.0);
 		formPane.setPrefWidth(300.0);
 		formPane.setStyle("-fx-background-color: #ffffff;");
 
-	    FileInputStream inputLogo = null;
-	    FileInputStream inputUser = null;
-	    FileInputStream inputPassword = null;
+		FileInputStream inputLogo = null;
+		FileInputStream inputUser = null;
+		FileInputStream inputPassword = null;
 
-	    try {
-	      inputLogo =
-	        new FileInputStream("@../../../PetsAnatomy/src/assets/logo.png");
-	      inputUser =
-	        new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
-	      inputPassword =
-	        new FileInputStream("@../../../PetsAnatomy/src/assets/lock.png");
-	    } catch (FileNotFoundException e) {
-	      e.printStackTrace();
-	    }
-	    
+		try {
+			inputLogo =
+					new FileInputStream("@../../../PetsAnatomy/src/assets/logo.png");
+			inputUser =
+					new FileInputStream("@../../../PetsAnatomy/src/assets/user.png");
+			inputPassword =
+					new FileInputStream("@../../../PetsAnatomy/src/assets/lock.png");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		Image imageLogo = new Image(inputLogo);
 		ImageView imageViewlogo = new ImageView(imageLogo);
 		imageViewlogo.setLayoutX(40.0);
@@ -131,7 +131,7 @@ public class LoginBoundary implements StrategyBoundary {
 
 		btnLogin.setOnAction((e) -> {
 			identification(control.login());
-				});
+		});
 		btnLogin.setLayoutX(10.0);
 		btnLogin.setLayoutY(550.0);
 		btnLogin.setMinSize(280.0, 40.0);
@@ -139,7 +139,7 @@ public class LoginBoundary implements StrategyBoundary {
 		btnLogin.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
 		btnSignUp.setOnAction((e) -> {
-			main.setPaneLeftAnchor(signUp.generateBoundaryStrategy(), image.generateBoundaryStrategy());
+			main.setPaneLeftRightAnchor(signUp.generateBoundaryStrategy(), image.generateBoundaryStrategy());
 		});
 		btnSignUp.setLayoutX(97.0);
 		btnSignUp.setLayoutY(590.0);
@@ -157,7 +157,7 @@ public class LoginBoundary implements StrategyBoundary {
 		btnForgotPassword.setFont(fontTxt);
 		btnForgotPassword.setUnderline(true);
 		btnForgotPassword.setStyle("-fx-background-color: none; -fx-border-color: none; -fx-cursor: hand;");
-		
+
 		formPane
 		.getChildren()
 		.addAll(
@@ -171,87 +171,87 @@ public class LoginBoundary implements StrategyBoundary {
 				btnLogin,
 				btnSignUp,
 				btnForgotPassword);
-		
+
 		return formPane;
-  }
+	}
 
 	private void identification(String role) {
 		tfUsername.setText("");
 		tfPassword.setText("");	
 		pfPassword.setText("");	
 
-	    switch (role) {
-	      case "admin":
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Seja bem vindo Administrador!",
-	          "Login",
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
-	        break;
-	      case "receptionist":
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Seja bem vindo colaborador(a)!",
-	          "Login",
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
-	        break;
-	      case "doctor":
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Seja bem vindo Doutor(a)!",
-	          "Login",
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
-	        break;
-	      case "":
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Entre em contato com o Administrador!",
-	          "Login",
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        main.setPaneLeftAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
-	        break;
-	      case "400 - Bad Request":
-	      case "401 - Unauthorized":
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Your data was not found, contact your system administrator",
-	          role,
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        break;
-	      default:
-	        JOptionPane.showMessageDialog(
-	          null,
-	          "Erro ao entrar",
-	          "Erro no Login",
-	          JOptionPane.INFORMATION_MESSAGE
-	        );
-	        break;
-	    }
+		switch (role) {
+		case "admin":
+			JOptionPane.showMessageDialog(
+					null,
+					"Seja bem vindo Administrador!",
+					"Login",
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			main.setPaneLeftRightAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+			break;
+		case "receptionist":
+			JOptionPane.showMessageDialog(
+					null,
+					"Seja bem vindo colaborador(a)!",
+					"Login",
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			main.setPaneLeftRightAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+			break;
+		case "doctor":
+			JOptionPane.showMessageDialog(
+					null,
+					"Seja bem vindo Doutor(a)!",
+					"Login",
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			main.setPaneLeftRightAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+			break;
+		case "":
+			JOptionPane.showMessageDialog(
+					null,
+					"Entre em contato com o Administrador!",
+					"Login",
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			main.setPaneLeftRightAnchor(sideMenu.generateSideMenuStrategy(role), dash.generateBoundaryStrategy());
+			break;
+		case "400 - Bad Request":
+		case "401 - Unauthorized":
+			JOptionPane.showMessageDialog(
+					null,
+					"Your data was not found, contact your system administrator",
+					role,
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			break;
+		default:
+			JOptionPane.showMessageDialog(
+					null,
+					"Erro ao entrar",
+					"Erro no Login",
+					JOptionPane.INFORMATION_MESSAGE
+					);
+			break;
+		}
 	}
 
 	public void popupForgotPassword() {
 		Stage popup = new Stage();
 		popup.initModality(Modality.WINDOW_MODAL);
-		
+
 		AnchorPane pane = new AnchorPane();
 		Scene scene = new Scene(pane, 420, 160);
 		popup.setScene(scene);
-		
+
 		tfResetUsername.setLayoutX(25.0);
 		tfResetUsername.setLayoutY(10.0);
 		tfResetUsername.setPrefHeight(25.0);
 		tfResetUsername.setPrefWidth(370.0);	
 		tfResetUsername.setFont(fontTf);
 		tfResetUsername.setPromptText("Digite o usuário");
-		
+
 		tfResetPassword.setLayoutX(25.0);
 		tfResetPassword.setLayoutY(50.0);
 		tfResetPassword.setPrefHeight(25.0);
@@ -260,7 +260,7 @@ public class LoginBoundary implements StrategyBoundary {
 		tfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty());
 		tfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty());
 		tfResetPassword.textProperty().bindBidirectional(pfResetPassword.textProperty());
-		
+
 		pfResetPassword.setLayoutX(25.0);
 		pfResetPassword.setLayoutY(50.0);
 		pfResetPassword.setPrefHeight(25.0);
@@ -269,13 +269,13 @@ public class LoginBoundary implements StrategyBoundary {
 		pfResetPassword.managedProperty().bind(cbResetPassword.selectedProperty().not());
 		pfResetPassword.visibleProperty().bind(cbResetPassword.selectedProperty().not());
 		pfResetPassword.setPromptText("Digite a senha");
-		
+
 		cbResetPassword.setFont(fontTxt);
 		cbResetPassword.setLayoutX(25.0);
 		cbResetPassword.setLayoutY(90.0);
-		
+
 		btnDismiss.setOnAction( (e) -> {
-	        identification(control.forgotPassword(tfResetUsername.getText(), pfResetPassword.getText()));
+			identification(control.forgotPassword(tfResetUsername.getText(), pfResetPassword.getText()));
 			popup.close();
 			tfResetUsername.setText("");
 			pfResetPassword.setText("");
@@ -283,9 +283,9 @@ public class LoginBoundary implements StrategyBoundary {
 		btnDismiss.setLayoutX(25.0);
 		btnDismiss.setLayoutY(120.0);
 		btnDismiss.setFont(fontTf);
-		
+
 		pane.getChildren().addAll(tfResetUsername, pfResetPassword, cbResetPassword, tfResetPassword, btnDismiss);
-		
+
 		popup.setTitle("Esqueci minha senha");	
 		popup.setResizable(false);
 		popup.showAndWait();
@@ -295,5 +295,5 @@ public class LoginBoundary implements StrategyBoundary {
 		Bindings.bindBidirectional(tfUsername.textProperty(), control.usernameProperty());
 		Bindings.bindBidirectional(pfPassword.textProperty(),control.passwordProperty());
 	}
-	
+
 }

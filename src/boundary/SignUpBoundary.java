@@ -170,7 +170,7 @@ public class SignUpBoundary implements StrategyBoundary {
     btnSignUp.setOnAction((e) -> {
         control.signUp();
         tfPassword.setText("");
-        main.setPaneLeftAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
+        main.setPaneLeftRightAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
       }
     );
     btnSignUp.setLayoutX(10.0);
@@ -180,7 +180,7 @@ public class SignUpBoundary implements StrategyBoundary {
     btnSignUp.setStyle("-fx-background-color: #000E44; -fx-text-fill: white; -fx-cursor: hand;");
 
     btnLogin.setOnAction((e) -> {
-    	main.setPaneLeftAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
+    	main.setPaneLeftRightAnchor(login.generateBoundaryStrategy(), image.generateBoundaryStrategy());
       }
     );
     btnLogin.setLayoutX(67.0);
