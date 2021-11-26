@@ -219,7 +219,7 @@ public class OwnerDAOImpl implements OwnerDAO {
       if (oldList != null) {
         for (String each : oldList) {
           if (each != null && !each.isBlank()) {
-            if (!each.equals(patientName)) {
+            if (!each.contains(patientName)) {
               newList = newList.concat(each.trim() + "; ");
             }
           }
