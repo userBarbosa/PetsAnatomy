@@ -79,6 +79,11 @@ $ git clone git@github.com:CTRLMarcws/PetsAnatomy.git
 $ cd PetsAnatomy
 
 ```
+
+Mover o arquivo [AuthMDB.java](./.github/AuthMDB.java) para a pasta utils.
+
+<img alt="EstruturaUtils" title="#EstruturaUtils" src="./.github/EstruturaUtils.png" width="300px">
+
 ---
 
 ## 🛠 Tecnologias
